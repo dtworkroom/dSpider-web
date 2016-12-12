@@ -19,13 +19,15 @@ class CreateCrawlRecordsTable extends Migration
             $table->integer('spider_id')->unsigned();
             $table->text("config")->nullable();
             $table->tinyInteger("state")->default(-1);
-            $table->tinyInteger("platform");
             $table->mediumText("msg")->nullable();
-            $table->text("extra")->nullable();
+            $table->string("app_version",20)->nullable();
+            $table->string("sdk_version",20)->nullable();
+            $table->integer("device_id")->unsigned();
             $table->timestamps();
 
             $table->foreign("appKey_id")->references('id')->on('app_keys')->onDelete('cascade');
             $table->foreign("spider_id")->references('id')->on('spiders')->onDelete('cascade');
+            $table->foreign("device_id")->references('id')->on('devices')->onDelete('cascade');
         });
     }
 

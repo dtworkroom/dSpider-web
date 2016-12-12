@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'CreateAppKeysTable' => $baseDir . '/database/migrations/2016_12_01_093404_create_app_keys_table.php',
     'CreateCrawlRecordsTable' => $baseDir . '/database/migrations/2016_12_07_031352_create_crawl_records_table.php',
+    'CreateDevicesTable' => $baseDir . '/database/migrations/2016_12_12_055152_create_devices_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateSpiderConfigsTable' => $baseDir . '/database/migrations/2016_12_02_063620_create_spider_configs_table.php',
     'CreateSpidersTable' => $baseDir . '/database/migrations/2016_12_01_021056_create_spiders_table.php',

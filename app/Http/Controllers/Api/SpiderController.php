@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Common\JSMin;
 use App\Common\ResponseData;
 use App\CrawlRecord;
+use App\Device;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Spider;
@@ -101,7 +102,10 @@ class SpiderController extends Controller
         $data=$request->all();
         $validator = Validator::make($data, [
             'sid' => 'required',
-            "appkey" => 'required'
+            'appkey' => 'required',
+            'device_id'=>'required',
+            'sdk_version'=>'required'
+
         ]);
 
         if ($validator->fails()) {
@@ -137,10 +141,11 @@ class SpiderController extends Controller
         
         $crawRecords =new CrawlRecord();
         $crawRecords->spider_id=$sid;
-        $crawRecords->platform=$support;
         $crawRecords->appKey_id=$request->appkey;
         $crawRecords->config=$config->content??$spider->defaultConfig;
-        $crawRecords->extra=$data["extra"];
+        $crawRecords->device_id=$data["device_id"];
+        $crawRecords->sdk_version=$data["sdk_version"];
+        $crawRecords->app_version=$data["app_version"];
         $crawRecords->save();
         
         $ret=["id"=>$crawRecords->id,"startUrl"=>$spider->startUrl];
@@ -172,15 +177,16 @@ class SpiderController extends Controller
         $spider->save();
         $code = "!function(){\r\nvar _config=%s;\r\n%s;\r\n%s}()";
         $src="";
-        if($record->platform!=Spider::SUPPORT_PC){
+        $platform=$request->input("platform",Device::IPHONE);
+        if($platform<Device::WINDOWS){
             $src =file_get_contents(__DIR__ . "/Spiders/common/utils.js")."\r\n";
         }
-        if ($record->platform==Spider::SUPPORT_ANDROID) {
+        if ($platform==Device::ANDROID) {
             $src .= file_get_contents(__DIR__ . "/Spiders/common/jsBridgeAndroid.js");
-        } elseif ($record->platform==Spider::SUPPORT_IOS) {
+        } elseif ($platform==Device::IPHONE) {
             $src .= file_get_contents(__DIR__ . "/Spiders/common/jsBridgeIos.js");
         }
-        $src .= $spider->content . "\r\n";
+        $src .="\r\n".$spider->content . "\r\n";
         $scriptUrl='var _su="http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'"';
         $code = sprintf($code, $record->config??"{}",$scriptUrl, $src);
         if (!env("APP_DEBUG")) {

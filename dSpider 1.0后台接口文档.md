@@ -115,6 +115,28 @@ url: /spiders
 
 
 
+### 2.3 获取设备信息
+
+url: /device/{id}
+
+返回数据：
+
+```javascript
+{
+    "code": 0,
+    "data": {
+        "id": 1,
+        "identifier": "860076039858476",//设备唯一标识符
+        "os_type": 1,//1:android,2:iphone,3:windows,4:mac,5:linux
+        "os_version": "6.0",//系统版本
+        "model": "HUAWEI NXT-AL10",//机型
+        "created_at": "2016-12-12 07:28:54",
+        "updated_at": "2016-12-12 07:28:54"
+    },
+    "msg": "Ok"
+}
+```
+
 ## 3.个人中心
 
 ### 3.1 获取个人信息
@@ -266,7 +288,7 @@ url: profile/spider_config/save。
 
 每次爬取都会生成一条记录，可以通过其id获取记录详情。
 
-url: profile/record/{id}
+url: profile/records/{id}
 
 返回值：
 
@@ -279,9 +301,10 @@ url: profile/record/{id}
         "spider_id": 1,
         "config": null,//爬取时使用的配置
         "state": -1,//爬取结果状态，－1:任务初始化成功；－2:爬取中；0:爬取成功；大于0为失败
-        "msg": null,//错误信息，成功时为null,失败时为json字符串
-        "extra": －－,//sdk版本、系统版本、机型等信息
-        "platform": 2,//爬取的端，1:android; 2:ios; 4:pc
+        "msg":null,//错误信息，成功时为null,失败时为json字符串,结构见下文
+        "app_version":"1.0",//应用版本号
+        "sdk_version":"1.0",//dSpider sdk版本号
+        "device_id":1,//设备id
         "created_at": "2016-12-07 06:43:13",//爬取开始时间
         "updated_at": "2016-12-07 06:43:13"//爬取结束时间
     },
@@ -293,27 +316,41 @@ url: profile/record/{id}
 {
   "url":"xxx",//失败时的页面地址
   "msg":"",//错误描述
-  "content":"", //错误内容；错误内容可由脚本自行指定；如果脚本未指定，则默认为错误页面的整个dom树字符串
+  "args":"",//脚本执行时的参数，类型为对象  
 }
 ```
 
-extra为json字符串，不同平台不一样，下面是android下的数据：
+### 3.13 查看爬取记录
 
-```javascript
-{
-    "device": "HWNXT",
-    "version_name": "1.0",
-    "sdk_int": "23",
-    "id": "HUAWEINXT-AL10",
-    "fingerprint": "HUAWEI\/NXT-AL10\/HWNXT:6.0\/HUAWEINXT-AL10\/C00B368:user\/release-keys",
-    "brand": "HUAWEI",
-    "release": "6.0",
-    "version_code": "1",
-    "cpu_abi": "arm64-v8a",
-    "board": "NXT-AL10",
-    "model": "HUAWEI NXT-AL10"
-}
-```
+url:profile/records
+
+**支持分页**
+
+参数：支持3.12中任意字断组合筛选，比如：
+
+1. 获取appKey_id为1的爬取记录：
+
+   ```javascript
+   profile/records?appKey_id=1
+   ```
+
+
+2. 获取appKey_id为1下spider id为1的调用记录
+
+   ```javascript
+   profile/records?appKey_id=1&spider_id=1
+   ```
+
+3. 获取设备id为1的爬取记录：
+
+   ```javascript
+   profile/records?device_id=1
+   ```
+
+
+注：示例为了方便使用get方法，生产环境中参数请用post方法传递。此接口支持分页，故page、pageCount参数可用。
+
+返回：记录数组。
 
 ## 管理员权限(web 1.0先不考虑)
 

@@ -3,6 +3,10 @@
 //auth
 Route::get('/login', 'AuthController@login');
 
+//Upload device info
+Route::match(["get","post"],'/device/save',"DeviceController@save" );
+Route::match(["get","post"],'/device/{id}',"DeviceController@info" );
+
 //dispatch
 Route::match(["get","post"],'/script',"SpiderController@getScript" );
 Route::match(["get","post"],'/task',"SpiderController@getTask" );

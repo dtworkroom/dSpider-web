@@ -294,6 +294,7 @@ class ComposerStaticInit6023dd132c4c0634e49a44df2f9d8066
     public static $classMap = array (
         'CreateAppKeysTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_093404_create_app_keys_table.php',
         'CreateCrawlRecordsTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_07_031352_create_crawl_records_table.php',
+        'CreateDevicesTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_12_055152_create_devices_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
         'CreateSpiderConfigsTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_02_063620_create_spider_configs_table.php',
         'CreateSpidersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_021056_create_spiders_table.php',

@@ -23,19 +23,6 @@ function callHandler(){
     }
     bridge.callHandler.apply(bridge,arguments);
 }
-var dSpiderLocal = {
-    set: function (k, v) {
-        log("save called")
-        callHandler("save", {"key": k, "value": v})
-    },
-
-    get: function (k, f) {
-        log("read called")
-        callHandler("read",{"key":k} ,function (d) {
-            f && f(d)
-        })
-    }
-};
 
 function DataSession(key) {
     this.key = key;
@@ -58,14 +45,11 @@ DataSession.prototype = {
     _init: function (f) {
         var that=this;
         callHandler("get", {"sessionKey":this.key}, function (data) {
-            if(!data){
-                data={}
-            }
-            else if(typeof data==="string"){
-                data=JSON.parse(data || "{}");
-            }
-            that.data=data
-            f();
+            that.data=JSON.parse(data || "{}");
+            callHandler("read",{"key":that.key} ,function (data) {
+                that.local=JSON.parse(data || "{}");
+                f();
+            })
         })
     },
 
@@ -113,7 +97,8 @@ DataSession.prototype = {
                 var ob = {
                     url: location.href,
                     msg: errmsg,
-                    content: content||document.documentElement.outerHTML ,
+                    args:that._args
+                   // content: content||document.documentElement.outerHTML ,
                 }
                 stack&&(ob.stack=stack);
                 ret.result = code || 2;
@@ -168,12 +153,17 @@ DataSession.prototype = {
         }
         console.log("dSpider: "+str)
         callHandler("log",{"msg":encodeURIComponent(str)})
+    },
+    setLocal: function (k, v) {
+        log("save called")
+        this.local[k]=v;
+        callHandler("save", {"key": this.key, "value": JSON.stringify(this.local)})
+    },
+
+    getLocal: function (k) {
+        log("read called")
+        return this.local[k];
     }
 
 };
 apiInit();
-
-
-
-
-
