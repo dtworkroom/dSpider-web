@@ -63,10 +63,10 @@ class CrawlRecordsController extends Controller
             return $item['id'];
         }, $user->appKeys->toArray());
 
-        $page = $request->input("page", 1) - 1;
-        $pageCount = $request->input("pageCount", 20);
         $records = CrawlRecord::where($conditions)->whereIn('appKey_id', $appkeys)
-            ->skip($page * $pageCount)->take($pageCount)->get();
+            ->paginate($request->input("pageSize", 1));
+        $records->setPath($request->fullUrl());
+
         return ResponseData::okResponse($records);
     }
 

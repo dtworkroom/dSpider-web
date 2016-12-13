@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2016-12-13 11:03:11
+-- Generation Time: 2016-12-13 17:08:40
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.2
 
@@ -142,7 +142,8 @@ CREATE TABLE `spiders` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `content` text COLLATE utf8_unicode_ci,
-  `description` text COLLATE utf8_unicode_ci,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `readme` text COLLATE utf8_unicode_ci,
   `support` smallint(6) NOT NULL DEFAULT '7',
   `star` int(11) NOT NULL DEFAULT '0',
   `chargeType` smallint(6) NOT NULL DEFAULT '0',
@@ -153,6 +154,7 @@ CREATE TABLE `spiders` (
   `public` tinyint(1) NOT NULL DEFAULT '0',
   `access` int(11) NOT NULL DEFAULT '3',
   `startUrl` text COLLATE utf8_unicode_ci NOT NULL,
+  `ua` tinyint(4) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -161,8 +163,8 @@ CREATE TABLE `spiders` (
 -- 转存表中的数据 `spiders`
 --
 
-INSERT INTO `spiders` (`id`, `name`, `user_id`, `content`, `description`, `support`, `star`, `chargeType`, `freeLimits`, `price`, `defaultConfig`, `callCount`, `public`, `access`, `startUrl`, `created_at`, `updated_at`) VALUES
-(1, 'test', 1, 'dSpider("test", function(session,env,$) {\r\n log(env)\r\n session.upload("Hi, I am the test data!")\r\n session.finish() \r\n})', NULL, 7, 0, 0, 100, 0.00, NULL, 34, 0, 3, 'https://www.baidu.com', '2016-12-11 22:56:24', '2016-12-12 19:01:24');
+INSERT INTO `spiders` (`id`, `name`, `user_id`, `content`, `description`, `readme`, `support`, `star`, `chargeType`, `freeLimits`, `price`, `defaultConfig`, `callCount`, `public`, `access`, `startUrl`, `ua`, `created_at`, `updated_at`) VALUES
+(1, 'test', 1, 'dSpider("test", function(session,env,$) {\r\n log(env)\r\n session.upload("Hi, I am the test data!")\r\n session.finish() \r\n})', '测试脚本', NULL, 7, 0, 0, 100, 0.00, NULL, 34, 0, 3, 'https://www.baidu.com', 1, '2016-12-11 22:56:24', '2016-12-12 19:01:24');
 
 -- --------------------------------------------------------
 
@@ -209,7 +211,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'wendu', '824783146@qq.com', '$2y$10$yzVYVZ4j3yT365jXtLEJkO.KJtoG8oSNkyxcZPGjcFrhqiqAmiR2.', NULL, '2016-12-11 22:51:17', '2016-12-11 22:51:17');
+(1, 'wendu', '824783146@qq.com', '$2y$10$yzVYVZ4j3yT365jXtLEJkO.KJtoG8oSNkyxcZPGjcFrhqiqAmiR2.', 'xnzGJrPCe2utY88vmil5jMppx84jra6BlMmUMtpuZqHoLSmMchVLRSKCidOH', '2016-12-11 22:51:17', '2016-12-12 22:54:45');
 
 --
 -- Indexes for dumped tables
@@ -299,7 +301,7 @@ ALTER TABLE `migrations`
 -- 使用表AUTO_INCREMENT `spiders`
 --
 ALTER TABLE `spiders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- 使用表AUTO_INCREMENT `spider_configs`
 --

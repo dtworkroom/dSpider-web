@@ -19,16 +19,14 @@ class SpiderController extends Controller
 
     public function index(Request $request)
     {
-        $page = $request->input("page", 1) - 1;
-        $pageCount = $request->input("pageCount", 20);
-        $records = Spider::skip($page * $pageCount)->take($pageCount)->get()->toArray();
-        if (!$request->user()) {
-            $records = array_map(function ($item) {
-                $item["size"] = strlen($item["content"]);
-                unset($item["content"]);
-                return $item;
-            }, $records);
-        }
+        $records=Spider::paginate($request->input("pageSize", 20));
+        $records->map(function($item){
+            $item["size"] = strlen($item["content"]);
+            unset($item["content"]);
+            unset($item["readme"]);
+            return $item;
+        });
+        $records->setPath($request->fullUrl());
         return ResponseData::okResponse($records);
     }
 
@@ -38,7 +36,8 @@ class SpiderController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required|max:50',
             'content' => 'required',
-            'startUrl'=> 'required'
+            'startUrl'=> 'required',
+            "description"=>'required|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -89,12 +88,12 @@ class SpiderController extends Controller
 
     public function getAllByUser(Request $request)
     {
-
-        $records = array_map(function ($item) {
+        $records=$request->user()->spiders->map(function($item){
             $item["size"] = strlen($item["content"]);
             unset($item["content"]);
+            unset($item["readme"]);
             return $item;
-        }, $request->user()->spiders->toArray());
+        });
         return ResponseData::okResponse($records);
     }
 

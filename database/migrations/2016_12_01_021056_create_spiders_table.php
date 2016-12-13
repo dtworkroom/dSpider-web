@@ -19,7 +19,8 @@ class CreateSpidersTable extends Migration
             $table->string("name",50);
             $table->integer("user_id")->unsigned()->default(0);
             $table->text("content")->nullable();
-            $table->text("description")->nullable();
+            $table->string("description");
+            $table->text("readme")->nullable();
             $table->smallInteger("support")->default(7);
             $table->integer("star")->default(0);
             $table->smallInteger("chargeType")->default(0);
@@ -30,6 +31,7 @@ class CreateSpidersTable extends Migration
             $table->boolean("public")->default(false);
             $table->Integer("access")->default(3);
             $table->text("startUrl");
+            $table->tinyInteger("ua")->default(1);
             $table->timestamps();
             $table->foreign("user_id")->references('id')->on('users')->onDelete('cascade');
         });

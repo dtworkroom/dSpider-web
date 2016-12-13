@@ -25,6 +25,7 @@ API TEST
         $.post(prefix+"profile/spider/save",{
             name:"test",
             content:"dSpider(\"test\", function(session,env,$) {\r\nlog(session)\r\n log(env)\r\n})" ,
+            description:"测试脚本",
             startUrl:"https://www.baidu.com"
         }).done(log)
     }

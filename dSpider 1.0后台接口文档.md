@@ -39,10 +39,34 @@ version:1.0
 
 所有支持分页的接口中默认有两个请求参数
 
-| 字断名       | 类型   | 必需          | 说明    |
-| --------- | ---- | ----------- | ----- |
-| page      | int  | 否（省略时默认为1）  | 当前页数  |
-| pageCount | int  | 否（省略时默认为20） | 每页记录数 |
+| 字断名      | 类型   | 必需          | 说明    |
+| -------- | ---- | ----------- | ----- |
+| page     | int  | 否（省略时默认为1）  | 当前页数  |
+| pageSize | int  | 否（省略时默认为20） | 每页记录数 |
+
+标准分页返回结构：
+
+```javascript
+{
+    "code": 0,
+    "data": {
+            "total": 2,//spider总数
+            "per_page": 20,//每页的条数
+            "current_page": 1,//当前页号
+            "last_page": 1,//最后一页页号
+            "next_page_url": "xxx",//下一页的请求链接,可空
+            "prev_page_url": null,//上一页的链接
+            "from": 1,//当前页起始记录号
+            "to": 1,//当前页最后一条记录号
+            "data": [{}] //请求的对象数组
+	},
+    "msg": "Ok"
+}
+```
+
+**如果接口中注明支持分页的，请求中则默认支持标准分页参数，返回的数据符合标准分页返回结构格式。**
+
+
 
 ## 1.用户认证
 
@@ -66,17 +90,18 @@ url: login
 
 url: spider/{id}
 
-返回数据：
+返回数据：spider对象
 
 ```javascript
 {
     "code": 0,
-    "data": {
+    "data": { 
         "id": 1,
         "name": "test",//脚本名称
         "user_id": 1,//脚本作者id
         "content": "dSpider(){alert('xx')}",//脚本源代码，不一定存在，当前用户对该脚本具有读权限时存在。
-        "description": null,//脚本描述信息，string
+        "description": null,//脚本描述信息，string,简介
+        "readme":null,//脚本详细介绍。
         "support": 0,//支持的平台。按位与；1支持安卓; 1<<1:ios; 1<<2:pc
         "star": 0,//用户评星数
         "chargeType": 0,//收费方式：0:免费；1:一次性付费；2:按调用次数付费
@@ -85,7 +110,8 @@ url: spider/{id}
         "defaultConfig": null,//默认配置，string.
         "callCount": 39,//被执行的总次数
         "public":1,//是否公开，0代表私有脚本，1代表公开脚本，公开脚本可以被其它用户检索到。  
-        "startUrl":"xxxxx",//爬虫起始地址  
+        "startUrl":"xxxxx",//爬虫起始地址 ，
+        "ua":1,//默认爬取的起始ua，1:手机 2:pc  
         "access": 3,//脚本作者赋予使用者的权限 按位与；1:允许使用者调用; 1<<1:允许查看脚本源码
         "size" : 384,//脚本大小，单位B. 
         "created_at": "2016-12-03 11:02:18",
@@ -101,17 +127,20 @@ url: /spiders
 
 **支持分页。**
 
-返回数据: spider数组.
+返回数据: spider对象数组.
 
 ```javascript
 {
     "code": 0,
-    "data": [{},...],
+    "data": {
+            ... //标准分页返回参数
+            "data": [{}] //spider对象数组，此接口中的spider对象没有content属性
+	},
     "msg": "Ok"
 }
 ```
 
-注：此接口中的spider对象没有content属性。
+**注：此接口中的spider对象没有content和readme属性。**
 
 
 
@@ -233,7 +262,7 @@ url: profile/appkey/save
 
 | 字段名    | 类型     | 必选   | 描述                         |
 | ------ | ------ | ---- | -------------------------- |
-| secret | string | 否    | 空则自动生成密钥，否则需提供至少6位的密钥      |
+| secret | string | 否    | 为空时则自动生成密钥，否则需提供至少6位的密钥    |
 | name   | string | 是    | app 名字                     |
 | id     | int    | 否    | appkey id, 存在该字断时为更新，否则为新建 |
 
@@ -290,7 +319,7 @@ url: profile/spider_config/save。
 
 url: profile/records/{id}
 
-返回值：
+返回值：record对象
 
 ```javascript
 {
@@ -348,9 +377,9 @@ url:profile/records
    ```
 
 
-注：示例为了方便使用get方法，生产环境中参数请用post方法传递。此接口支持分页，故page、pageCount参数可用。
+注：示例为了方便使用get方法，生产环境中参数请用post方法传递。此接口支持分页，故page、pageSize参数可用。
 
-返回：记录数组。
+返回：record数组。
 
 ## 管理员权限(web 1.0先不考虑)
 

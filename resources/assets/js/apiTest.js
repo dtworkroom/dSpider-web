@@ -9,6 +9,7 @@ function addScript(){
     $.post(prefix+"profile/spider/save",{
         name:"test",
         content:"dSpider(\"test\", function(session,env,$) {\r\nlog(session)\r\n})" ,
+        description:"测试脚本",
         startUrl:"https://www.baidu.com"
     }).done(util.handle())
 }
