@@ -165,13 +165,18 @@ class SpiderController extends Controller
                 $validator->errors()->first());
         }
         $record=CrawlRecord::find($data["id"]);
-        if($record->appKey_id!=$data["appkey"]){
+        if(!($record&&$record->appKey_id==$data["appkey"])){
             return ResponseData::errorResponse("Illegal operation");
+        }
+        $spider=$record->spider;
+        if($request->method()=="GET"){
+            if($spider->user_id!=$record->appKey->user_id && !($spider->access & Spider::ACCESS_READ)) {
+                return ResponseData::errorResponse("No read permission for this spider source!");
+            }
         }
         $record->state=CrawlRecord::STATE_CRAWLING;
         $record->save();
 
-        $spider=$record->spider;
         //脚本总调用次数自增
         $spider->callCount = $spider->callCount + 1;
         $spider->save();

@@ -11,7 +11,7 @@ class CrawlRecord extends Model
     const STATE_SUCCEED=0;
 
     public function appKey(){
-        return $this->belongsTo('App\AppKey');
+        return $this->belongsTo('App\AppKey',"appKey_id");
     }
 
     public function spider(){
