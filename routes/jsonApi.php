@@ -7,10 +7,8 @@ Route::get('/login', 'AuthController@login');
 Route::match(["get","post"],'/device/save',"DeviceController@save" );
 Route::match(["get","post"],'/device/{id}',"DeviceController@info" );
 
-//dispatch
-Route::match(["get","post"],'/script',"SpiderController@getScript" );
-Route::match(["get","post"],'/task',"SpiderController@getTask" );
-Route::match(["get","post"],'/report',"CrawlRecordsController@reportState" );
+
+
 //
 Route::match(["get","post"],'/user/{id}', "UserController@index");
 Route::match(["get","post"],'/spiders',"SpiderController@index" );

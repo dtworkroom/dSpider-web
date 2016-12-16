@@ -34,7 +34,14 @@ function DataSession(key) {
 DataSession.getExtraData = function (f) {
     log("getExtraData called")
     callHandler("getExtraData", null, function (data) {
-        f && f(JSON.parse(data || "{}"))
+        f && f(data)
+    })
+}
+
+DataSession.getArguments= function (f) {
+    log("getArguments called")
+    callHandler("getArguments", null, function (data) {
+        f && f(data)
     })
 }
 
@@ -75,19 +82,9 @@ DataSession.prototype = {
         log("setProgress called")
         callHandler("setProgress", {"progress":progress});
     },
-    getProgress: function (f) {
-        log("getProgressMax called")
-        callHandler("getProgress",null, function (d) {
-            f && f(d)
-        })
-    },
-    showLoading: function (s) {
-        log("showLoading called")
-        callHandler("showLoading",{"s":encodeURIComponent(s || "正在处理,请耐心等待...")});
-    },
-    hideLoading: function () {
-        log("hideLoading called")
-        callHandler("hideLoading");
+    setProgressMsg:function(){
+        if(!str) return;
+        callHandler("setProgressMsg",{"msg":encodeURIComponent(str)})
     },
     finish: function (errmsg, content, code) {
         var that=this;
@@ -97,7 +94,7 @@ DataSession.prototype = {
                 var ob = {
                     url: location.href,
                     msg: errmsg,
-                    args:that._args
+                    args:that.getArguments()
                    // content: content||document.documentElement.outerHTML ,
                 }
                 stack&&(ob.stack=stack);
@@ -131,10 +128,6 @@ DataSession.prototype = {
         callHandler("setUserAgent",{"userAgent":str})
     },
 
-    openWithSpecifiedCore:function(){
-
-    },
-
     autoLoadImg:function(load){
         callHandler("autoLoadImg",{"load":load===true})
     },
@@ -142,17 +135,13 @@ DataSession.prototype = {
     string: function () {
         log(this.data)
     },
-    setProgressMsg:function(){
-        if(!str) return;
-        callHandler("setProgressMsg",{"msg":encodeURIComponent(str)})
-    },
-    log: function(str) {
+    log: function(str,type) {
         str=str||"";
         if(typeof str !="string") {
             str=JSON.stringify(str);
         }
         console.log("dSpider: "+str)
-        callHandler("log",{"msg":encodeURIComponent(str)})
+        callHandler("log",{"type":type||1,"msg":encodeURIComponent(str)})
     },
     setLocal: function (k, v) {
         log("save called")

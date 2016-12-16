@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+//Route::get('/user', function (Request $request) {
+//    return $request->user();
+//})->middleware('auth:api');
+
+//dispatch
+//Route::group(['middleware' => 'https'], function () {
+Route::group([], function () {
+    Route::match(["get","post"],'/test',function(){
+        return "test";
+    });
+    Route::match(["get","post"],'/script',"SpiderController@getScript" );
+    Route::match(["get","post"],'/task',"SpiderController@getTask" );
+    Route::match(["get","post"],'/report',"CrawlRecordsController@reportState" );
+});

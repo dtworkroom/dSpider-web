@@ -6,7 +6,12 @@ function DataSession(key) {
 
 DataSession.getExtraData = function (f) {
     f = safeCallback(f);
-    f && f(JSON.parse(_xy.getExtraData() || "{}"));
+    f && f(_xy.getExtraData());
+}
+
+DataSession.getArguments = function (f) {
+    f = safeCallback(f);
+    f && f(_xy.getArguments());
 }
 
 DataSession.prototype = {
@@ -36,16 +41,11 @@ DataSession.prototype = {
     setProgress: function (progress) {
         _xy.setProgress(progress);
     },
-    getProgress: function (f) {
-        f = safeCallback(f);
-        f && f(_xy.getProgress());
+    setProgressMsg:function(str){
+        if(!str) return;
+        _xy.setProgressMsg(str);
     },
-    showLoading: function (s) {
-        _xy.showLoading(s || "正在爬取,请耐心等待...")
-    },
-    hideLoading: function () {
-        _xy.hideLoading()
-    },
+
     finish: function (errmsg, content, code, stack) {
         this.finished = true;
         if (errmsg) {
@@ -53,7 +53,7 @@ DataSession.prototype = {
                 url: location.href,
                 msg: errmsg,
                 //content: content || document.documentElement.outerHTML,
-                args: this._args
+                args: this.getArguments()
             }
             stack && (ob.stack = stack);
             return _xy.finish(this.key || "", code || 2, JSON.stringify(ob));
@@ -77,26 +77,19 @@ DataSession.prototype = {
     setUserAgent: function (str) {
         _xy.setUserAgent(str)
     },
-    openWithSpecifiedCore: function (url, core) {
-        _xy.openWithSpecifiedCore(url, core)
-    },
     autoLoadImg: function (load) {
         _xy.autoLoadImg(load === true)
     },
     string: function () {
         log(this.data)
     },
-    setProgressMsg:function(str){
-        if(!str) return;
-        _xy.setProgressMsg(str);
-    },
-    log: function(str) {
-      str=str||"";
-      if(typeof str !="string") {
-         str=JSON.stringify(str);
-      }
-      console.log("dSpider: "+str)
-      _xy.log(str)
+    log: function(str,type) {
+        str=str||"";
+        if(typeof str !="string") {
+            str=JSON.stringify(str);
+        }
+        console.log("dSpider: "+str)
+        _xy.log(str,type||1)
     },
     setLocal: function (k, v) {
         this.local[k]=v
