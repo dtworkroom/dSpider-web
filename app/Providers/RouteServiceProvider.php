@@ -82,6 +82,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group([
             'middleware' => 'api',
+            'middleware' => 'sdkapi',
             'namespace' => $this->namespace.'\Api',
             'prefix' => '1.0',
         ], function ($router) {

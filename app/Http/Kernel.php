@@ -35,6 +35,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            'sdkapi'
         ],
     ];
 
@@ -49,6 +50,7 @@ class Kernel extends HttpKernel
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.api'=>\App\Http\Middleware\ApiAuthMiddleware::class,
         //'https'=>\App\Http\Middleware\Https::class,
+        'sdkapi'=>\App\Http\Middleware\SdkApi::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
