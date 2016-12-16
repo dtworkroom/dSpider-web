@@ -81,11 +81,12 @@
                 <div style='text-align: center; margin-bottom: 30px; color:grey; '>Writing spider with javascript! Support Android/Ios/Windows/OSX/Linux.</div>
 
                 <div class="links">
+                    <a href="#">Guide</a>
                     <a href="#">Documentation</a>
-                    <a href="#">Laracasts</a>
-                    <a href="#">News</a>
-                    <a href="#">Forge</a>
-                    <a href="#">GitHub</a>
+                    <a href="#">SDK</a>
+                    <a href="#">Development tool</a>
+                    <a href="#">Blog</a>
+                    <a href="#">About us</a>
                 </div>
             </div>
         </div>
