@@ -16,12 +16,10 @@ class SdkApi
      */
     public function handle($request, Closure $next)
     {
-        echo $request->getHost();
         if($request->getHost()=="api.dtworkroom.com"){
             return $next($request);
         }else{
             return ResponseData::errorResponse("Illegal call!");
         }
-
     }
 }
