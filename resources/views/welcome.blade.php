@@ -58,6 +58,7 @@
                 text-decoration: none;
                 text-transform: uppercase;
             }
+            div{ padding: 16px;}
 
             .m-b-md {
                 margin-bottom: 30px;
@@ -88,6 +89,7 @@
                     <a href="#">Blog</a>
                     <a href="#">About us</a>
                 </div>
+                <div style="margin-top: 80px; color: #333; font-size: 20px">All these are Coming soon!</div>
             </div>
         </div>
     </body>
