@@ -15,7 +15,7 @@
             html, body {
                 background-color: #fff;
                 color: #636b6f;
-                font-family: 'Raleway', sans-serif;
+                font-family: 'Raleway', "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier,sans-serif;
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
@@ -75,8 +75,10 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    dSpider
+                    Dspider
                 </div>
+
+                <div style='text-align: center; margin-bottom: 30px; color:grey; '>Writing spider with javascript! Support Android/Ios/Windows/OSX/Linux.</div>
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>
