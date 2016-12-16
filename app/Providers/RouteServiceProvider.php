@@ -85,7 +85,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace.'\Api',
             'prefix' => '1.0',
         ], function ($router) {
-            require base_path('routes/api.php');
+            require base_path('routes/sdkapi/1.0.php');
         });
     }
 }
