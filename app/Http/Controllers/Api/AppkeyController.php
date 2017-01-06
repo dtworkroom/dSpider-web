@@ -37,7 +37,6 @@ class AppKeyController extends Controller
         if ($validator->fails()) {
             return ResponseData::errorResponse($validator->errors()->first());
         }
-
         if (isset($data["id"])) {
             $appKey = AppKey::find($data["id"]);
             if($appKey->user_id!=$request->user()->id){
