@@ -33,7 +33,7 @@
                         <template v-for="(spider, index) in data.data">
                             <tr>
                                 <td style="padding-left: 15px">@{{index+1}}</td>
-                                <td><a :href='root+"spider/"+spider.id+"?name="+spider.name'>@{{spider.name}}</a></td>
+                                <td><a :href='root+"spider/"+spider.id'>@{{spider.name}}</a></td>
                                 <td>@{{spider.public?"是":"否"}}</td>
                                 <td>@{{spider.callCount}}</td>
                                 <td>@{{spider.updated_at}}</td>
@@ -41,11 +41,11 @@
                                 <a><span class="glyphicon glyphicon-edit"></span></a>
                                 </td>
                                 <td class="edit">
-                                <a :href='root+"spider/"+spider.id+"?name"+spider.name'><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a :href='root+"spider/"+spider.id'><span class="glyphicon glyphicon-eye-open"></span></a>
                                 </td>
                                 </td>
                                 <td class="edit">
-                                <a :href='root+"profile/record/spider/"+spider.id'><span class="glyphicon glyphicon-stats"></span></a>
+                                <a :href='root+"profile/record/spider/"+spider.id+"?name"+spider.name'><span class="glyphicon glyphicon-stats"></span></a>
                                 </td>
 
                             </tr>
