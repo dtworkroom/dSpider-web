@@ -21,4 +21,5 @@ class UserController extends Controller
         //$ob->email=$user->email;
         return ResponseData::okResponse($user) ;
     }
+
 }

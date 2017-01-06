@@ -23,7 +23,8 @@ Route::group([], function () {
     Route::match(["get","post"],'/test',function(){
         return "test";
     });
-    Route::match(["get","post"],'/script',"SpiderController@getScript" );
-    Route::match(["get","post"],'/task',"SpiderController@getTask" );
-    Route::match(["get","post"],'/report',"CrawlRecordsController@reportState" );
+    Route::match(["get","post"],'/script',"SdkController@getScript" );
+    Route::match(["get","post"],'/task',"SdkController@getTask" );
+    Route::match(["get","post"],'/report',"SdkController@reportState" );
+    Route::match(["get","post"],'/device/save',"SdkController@saveDevice" );
 });

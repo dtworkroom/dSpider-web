@@ -81,10 +81,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::group([
-            'middleware' => 'api',
-            'middleware' => 'sdkapi',
             'namespace' => $this->namespace.'\Api',
-            'prefix' => '1.0',
+            'prefix' => '1.0'
         ], function ($router) {
             require base_path('routes/sdkapi/1.0.php');
         });

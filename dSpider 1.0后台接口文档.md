@@ -186,6 +186,7 @@ url:profile
             "user_id": 1,//该appkey的用户id
             "secret": "xxxxxxxxxxx", //appkey的密钥
             "name": "dSpider",//该appkey 对应的app的名字
+            "package":"com.wendu.dspider",//包名，每个app有唯一的包名
             "state": 1,//该appkey的状态，1:正常；2:被禁用
             "created_at": "2016-12-03 11:03:59",
             "updated_at": "2016-12-03 11:03:59"
@@ -207,6 +208,7 @@ url:profile/spider/save
 | content       | string | 是    | 脚本源码                                     |
 | startUrl      | string | 是    | 爬虫的起始地址                                  |
 | id            | int    | 否    | spider id,存在时为更新，否则为新建                   |
+| ua            | int    | 否    | 1：手机 2:电脑  3：自动  默认为1                    |
 | description   | string | 否    | 描述信息，一般为脚本使用介绍                           |
 | support       | int    | 否    | 支持的平台，android:0b1; iOS:0b10; PC:0b100, 支持的平台按位或即为最终 support 。 默认为7,即0b111 |
 | chargeType    | int    | 否    | 计费方式， 0:免费；1:一次性付费；2:按调用次数付费。默认为0；       |
@@ -295,6 +297,8 @@ url: profile/spider_config/{id}
 
 ### 3.10 获取指定appkey下所有的配置信息
 
+url:profile/spider
+
 返回数据：配置信息数组，配置信息结构同3.9中data字断。
 
 ### 3.11 给指定appkey添加／更新配置
@@ -327,7 +331,7 @@ url: profile/records/{id}
     "data": {
         "id": 1, 
         "appKey_id": 2,
-        "spider_id": 1,
+        "spider_id": 1, 
         "config": null,//爬取时使用的配置
         "state": -1,//爬取结果状态，－1:任务初始化成功；－2:爬取中；0:爬取成功；大于0为失败
         "msg":null,//错误信息，成功时为null,失败时为json字符串,结构见下文

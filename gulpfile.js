@@ -14,8 +14,8 @@ require('laravel-elixir-vue-2');
  */
 
 elixir(mix => {
-    mix.sass('app.scss')
-       .webpack('app.js');
+    mix.sass('app.scss').webpack("util.js")
+       .webpack('app.js').sass('spider-edit.scss').webpack('spider-edit.js')
     //apiTest
     mix.webpack("apiTest.js")
 });

@@ -83,7 +83,7 @@
 
                 <div class="links">
                     <a href="#">Guide</a>
-                    <a href="#">Documentation</a>
+                    <a href="document">Documentation</a>
                     <a href="#">SDK</a>
                     <a href="#">Development tool</a>
                     <a href="#">Blog</a>

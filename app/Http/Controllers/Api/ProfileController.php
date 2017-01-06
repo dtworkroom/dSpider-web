@@ -22,4 +22,14 @@ class ProfileController extends Controller
         return ResponseData::okResponse($ob) ;
     }
 
+
+    public function update(Request $request){
+        $user=$request->user();
+        if($request->input("name","")){
+            $user->name=$request->input("name");
+            $user->save();
+        }
+        return ResponseData::okResponse("") ;
+    }
+
 }

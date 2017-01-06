@@ -18,6 +18,7 @@ class CreateAppKeysTable extends Migration
             $table->integer("user_id")->unsigned();
             $table->string("secret");
             $table->string("name");
+            $table->string("package");
             $table->tinyInteger("state")->default(1);
             $table->timestamps();
 

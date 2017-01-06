@@ -17,4 +17,8 @@ class CrawlRecord extends Model
     public function spider(){
         return $this->belongsTo('App\Spider');
     }
+
+    public function device(){
+        return $this->belongsTo('App\Device');
+    }
 }

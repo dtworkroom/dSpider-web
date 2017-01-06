@@ -9,6 +9,7 @@ use App\SpiderConfig;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 class SpiderConfigController extends Controller
 {
@@ -28,6 +29,13 @@ class SpiderConfigController extends Controller
         if(isset($data["id"])){
             $config=SpiderConfig::find($data["id"]);
         }else {
+            $config=SpiderConfig::where([
+                ["spider_id", $data["spider_id"]],
+                ["appKey_id", $data["appKey_id"]]
+            ])->first();
+            if($config){
+               return ResponseData::okResponse($config->id);
+            }
             $config = new SpiderConfig();
         }
         $spider=Spider::find($data["spider_id"]);
@@ -44,9 +52,13 @@ class SpiderConfigController extends Controller
 
     }
 
-    public function delete(Request $request, $id)
+    public function  delete(Request $request, $id)
     {
-        $config = SpiderConfig::find($id);
+        $user = $request->user();
+        $appkeys = array_map(function ($item) {
+            return $item['id'];
+        }, $user->appKeys->toArray());
+        $config= SpiderConfig::where("id", $id)->whereIn('appKey_id', $appkeys)->first();
         $config->delete();
         return ResponseData::okResponse($config->id);
     }
@@ -64,4 +76,5 @@ class SpiderConfigController extends Controller
 //        },$request->user()->appKeys->toArray());
         return ResponseData::okResponse();
     }
+
 }

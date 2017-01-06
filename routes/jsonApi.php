@@ -4,7 +4,7 @@
 Route::get('/login', 'AuthController@login');
 
 //Upload device info
-Route::match(["get","post"],'/device/save',"DeviceController@save" );
+
 Route::match(["get","post"],'/device/{id}',"DeviceController@info" );
 
 
@@ -19,10 +19,9 @@ Route::match(["get","post"],'/spider/{id}', "SpiderController@getById");
 Route::group(['middleware' => 'auth.api','prefix' => 'profile'], function () {
     //spider
     Route::group(['prefix' => 'spider'], function () {
-        Route::get('/',"SpiderController@getAllByUser" );
         Route::match(["get","post"],'/save', "SpiderController@save");
         Route::match(["get","post"],'/delete/{id}', "SpiderController@delete");
-       // Route::match(["get","post"],'/{id}', "SpiderController@getOwnById");
+        Route::match(["get","post"],'/{id}', "SpiderController@getById");
     });
 
     Route::group(['prefix' => 'spider_config'], function () {
@@ -33,8 +32,9 @@ Route::group(['middleware' => 'auth.api','prefix' => 'profile'], function () {
 
 
     Route::group(['prefix' => 'appkey'], function () {
-       // Route::match(["get","post"],'/', "AppKeyController@getAllByUser");
+        Route::match(["get","post"],'/', "AppKeyController@getAllByUser");
         Route::match(["get","post"],'/save', "AppKeyController@save");
+        Route::match(["get","post"],'/delete/{id}', "AppKeyController@delete");
         Route::match(["get","post"],'/{id}/configs', "AppKeyController@getConfigs");
         Route::match(["get","post"],'/{id}', "AppKeyController@getById");
 
@@ -42,16 +42,18 @@ Route::group(['middleware' => 'auth.api','prefix' => 'profile'], function () {
 
     Route::group(['prefix' => 'records'], function () {
          Route::match(["get","post"],'/', "CrawlRecordsController@getCrawlRecords");
+         Route::match(["get","post"],'/spider/{id}', "CrawlRecordsController@getCrawlRecordBySpiderId");
          Route::match(["get","post"],'/{id}', "CrawlRecordsController@getCrawlRecordById");
-    });
 
-   // Route::match(["get","post"],'/', "ProfileController@index");
+    });
+    Route::match(["get","post"],'/update', "ProfileController@update");
+    Route::match(["get","post"],'/', "ProfileController@index");
 });
 
 //todo 管理员身份认证
 Route::group(['middleware' => 'auth.api','prefix' => 'admin'], function () {
-    Route::match(["get","post"],'/spider_config/delete/{id}', "AppKeyController@delete");
-    Route::match(["get","post"],'/spider_config/save', "AppKeyController@save");
+    Route::match(["get","post"],'/appkey/delete/{id}', "AppKeyController@delete");
+    Route::match(["get","post"],'/appkey/save', "AppKeyController@save");
 });
 
 

@@ -86,7 +86,7 @@ DataSession.prototype = {
         if(!str) return;
         callHandler("setProgressMsg",{"msg":encodeURIComponent(str)})
     },
-    finish: function (errmsg, content, code) {
+    finish: function (errmsg, content, code,stack) {
         var that=this;
         DataSession.getExtraData(function (d) {
             var ret = {"sessionKey":that.key, "result": 0, "msg": ""}
@@ -136,10 +136,7 @@ DataSession.prototype = {
         log(this.data)
     },
     log: function(str,type) {
-        str=str||"";
-        if(typeof str !="string") {
-            str=JSON.stringify(str);
-        }
+        str=_logstr(str);
         console.log("dSpider: "+str)
         callHandler("log",{"type":type||1,"msg":encodeURIComponent(str)})
     },

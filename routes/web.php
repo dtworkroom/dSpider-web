@@ -12,7 +12,6 @@
 */
 
 
-
 //Route::get('t/{id}/{name?}', "Test@index")->where("id","[0-9]+")->where("name","[a-zA-z0-9]+");
 //
 //Route::group(['prefix' => 't'], function () {
@@ -22,6 +21,13 @@
 //});
 //Route::get('/test', "Account@login");
 
+//test
+
+Route::match(["get", "post"], '/test', function(){
+  return view("test");
+});
+
+
 //Auth
 Auth::routes();
 Route::get('/home', 'HomeController@index');
@@ -30,14 +36,45 @@ Route::get('/home', 'HomeController@index');
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/spider', function () {
+    return view('welcome');
+});
+Route::get('/spider/{id}',"PublicController@spider");
+
 Route::get('/apiTest', function () {
     return view('apiTest');
 });
+Route::get('/document/{id?}', "PublicController@doc");
+Route::get('/download/docs/{id}', "PublicController@downloadDoc");
+
 
 //web route
-Route::group(['middleware' => 'auth','prefix' => 'profile'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
 
-//    Route::match(["get","post"],'/{id}', "ProfileController@index");
+    Route::group(['middleware' => 'auth', 'prefix' => 'spider'], function () {
+        Route::get('/save/{id?}', function ($id=0) {
+            return view('profile.spider-edit',qs(['id'=>$id]));
+        });
+        Route::get('/', function () {
+            return view('profile.spiders');
+        });
+    });
+
+
+    Route::get('/appkey/save/{id?}', function($id=0){
+        return view('profile.appkey',qs(['id'=>$id]));
+    });
+
+    Route::get('/record/appkey/{id}', function($id=0){
+        return view('profile.records',qs(['id'=>$id]));
+    });
+
+    Route::get('/record/spider/{id}', "PublicController@getRecordsBySpiderId");
+
+    Route::get('/record/{id}', "PublicController@record");
+
+
+   // Route::get('/{id}', "ProfileController@index");
 
 });
 

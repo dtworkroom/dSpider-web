@@ -19,7 +19,7 @@ class SdkApi
         if($request->getHost()=="api.dtworkroom.com"){
             return $next($request);
         }else{
-            return ResponseData::errorResponse("Illegal call!");
+            return ResponseData::errorResponse("Domain error!");
         }
     }
 }

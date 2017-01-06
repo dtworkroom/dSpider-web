@@ -1,101 +1,136 @@
+/**
+ * Created by du on 16/8/17.
+ */
+var bridge=getJsBridge();
+function callHandler(){
+    var f=arguments[2];
+    if (f) {
+        arguments[2] = safeCallback(f)
+    }
+   return bridge.call.apply(bridge,arguments);
+}
 function DataSession(key) {
     this.key = key;
-    this.finished = false;
-    _xy.start(key);
+    log("start called")
+    this.finished=false;
+    callHandler("start", {sessionKey:key})
 }
 
 DataSession.getExtraData = function (f) {
-    f = safeCallback(f);
-    f && f(_xy.getExtraData());
+    log("getExtraData called")
+    return callHandler("getExtraData")
 }
 
-DataSession.getArguments = function (f) {
-    f = safeCallback(f);
-    f && f(_xy.getArguments());
+DataSession.getArguments= function (f) {
+    log("getArguments called")
+    return callHandler("getArguments")
 }
 
 DataSession.prototype = {
     _save: function () {
-        _xy.set(this.key, JSON.stringify(this.data));
-        _xy.save(this.key,JSON.stringify(this.local))
+        callHandler("set", {key: this.key, value: JSON.stringify(this.data)})
     },
-    _init: function (f) {
-        this.data = JSON.parse(_xy.get(this.key) || "{}");
-        this.local=JSON.parse(_xy.read(this.key)|| "{}")
-        f()
+    _init: function () {
+        var data=callHandler("get", {key:this.key});
+        this.data=JSON.parse(data || "{}");
+        this.local=JSON.parse(callHandler("read",{key:this.key})|| "{}");
     },
 
     get: function (key) {
+        log("get called")
         return this.data[key];
     },
     set: function (key, value) {
-        this.data[key] = value;
+        log("set called")
+        this.data[key]=value;
+        this._save();
     },
 
     showProgress: function (isShow) {
-        _xy.showProgress(isShow === undefined ? true : !!isShow);
+        log("showProgress called")
+        callHandler("showProgress", {show:isShow === undefined ? true : !!isShow});
     },
     setProgressMax: function (max) {
-        _xy.setProgressMax(max);
+        log("setProgressMax called")
+        callHandler("setProgressMax", {progress:max});
     },
     setProgress: function (progress) {
-        _xy.setProgress(progress);
+        log("setProgress called")
+        callHandler("setProgress", {progress:progress});
     },
-    setProgressMsg:function(str){
-        if(!str) return;
-        _xy.setProgressMsg(str);
+    setProgressMsg:function(msg){
+        if(!msg) return;
+        callHandler("setProgressMsg",{msg:msg})
     },
-
-    finish: function (errmsg, content, code, stack) {
-        this.finished = true;
+    finish: function (errmsg, content, code,stack) {
+        var ret = {sessionKey:this.key, result: 0, msg: ""}
         if (errmsg) {
             var ob = {
                 url: location.href,
                 msg: errmsg,
-                //content: content || document.documentElement.outerHTML,
-                args: this.getArguments()
+                args:this.getArguments()
+                // content: content||document.documentElement.outerHTML ,
             }
-            stack && (ob.stack = stack);
-            return _xy.finish(this.key || "", code || 2, JSON.stringify(ob));
+            stack&&(ob.stack=stack);
+            ret.result = code || 2;
+            ret.msg = JSON.stringify(ob);
         }
-        return _xy.finish(this.key || "", 0, "")
+        log("finish called")
+        this.finished=true;
+        callHandler("finish", ret);
+
     },
-    upload: function (value) {
+    upload: function (value,f) {
         if (value instanceof Object) {
             value = JSON.stringify(value);
         }
-        return _xy.push(this.key, value)
+        log("push called")
+        callHandler("push", {"sessionKey": this.key, "value": value});
     },
-    load: function (url, headers) {
-        headers = headers || {}
-        if (typeof headers !== "object") {
+    load:function(url,headers){
+        headers=headers||{}
+        if(typeof headers!=="object"){
             alert("the second argument of function load  must be Object!")
             return
         }
-        _xy.load(url, JSON.stringify(headers));
+        callHandler("load",{url:url,headers:headers});
     },
-    setUserAgent: function (str) {
-        _xy.setUserAgent(str)
+    setUserAgent:function(str){
+        callHandler("setUserAgent",{userAgent:str})
     },
-    autoLoadImg: function (load) {
-        _xy.autoLoadImg(load === true)
+
+    autoLoadImg:function(load){
+        callHandler("autoLoadImg",{load:load===true})
     },
+
     string: function () {
         log(this.data)
     },
     log: function(str,type) {
-        str=str||"";
-        if(typeof str !="string") {
-            str=JSON.stringify(str);
-        }
+        str=_logstr(str);
         console.log("dSpider: "+str)
-        _xy.log(str,type||1)
+        callHandler("log",{type:type||1,msg:str})
     },
     setLocal: function (k, v) {
-        this.local[k]=v
+        log("save called")
+        this.local[k]=v;
+        callHandler("save", {key: this.key, value: JSON.stringify(this.local)})
     },
     getLocal: function (k) {
+        log("read called")
         return this.local[k];
     }
 };
-apiInit();
+var withCheck = function (attr) {
+    var f = DataSession.prototype[attr];
+    return function () {
+        if (this.finished) {
+            log("call " + attr + " ignored, finish has been called! ")
+        } else {
+            return f.apply(this, arguments);
+        }
+    }
+}
+for (var attr in DataSession.prototype) {
+    DataSession.prototype[attr] = withCheck(attr);
+}

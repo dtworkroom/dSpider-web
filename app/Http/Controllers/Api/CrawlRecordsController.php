@@ -8,44 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\SpiderConfig;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CrawlRecordsController extends Controller
 {
-    //上报爬取结果
-    public function reportState(Request $request)
-    {
-        $data = $request->all();
-        $validator = Validator::make($data, [
-            'id' => 'required|Numeric',
-            'state' => 'required|Numeric',
-            "appkey" => 'required|Numeric',
-        ]);
-        if ($validator->fails()) {
-            return ResponseData::errorResponse(
-                $validator->errors()->first());
-        }
 
-        $record = CrawlRecord::find($data["id"]);
-        if ($record->appKey_id != $data["appkey"]) {
-            return ResponseData::errorResponse("Illegal operation");
-        }
-
-        $record->state = $data['state'];
-        if ($data['msg']) {
-            $record->msg = $data['msg'];
-        }
-        $record->save();
-
-        //该spider调用次数自增
-        $config = SpiderConfig::where([
-            ["spider_id", $record->spider_id],
-            ["appKey_id", $record->appKey_id]
-        ])->first();
-        $config->callCount = $config->callCount + 1;
-        $config->save();
-        return ResponseData::okResponse();
-    }
 
     //获取
     public function getCrawlRecords(Request $request)
@@ -63,8 +31,13 @@ class CrawlRecordsController extends Controller
             return $item['id'];
         }, $user->appKeys->toArray());
 
-        $records = CrawlRecord::where($conditions)->whereIn('appKey_id', $appkeys)
-            ->paginate($request->input("pageSize", 1));
+        $records = CrawlRecord::where($conditions)
+            ->where('crawl_records.state','>=' ,'0')
+            ->whereIn('appKey_id', $appkeys)
+            ->select("crawl_records.id","crawl_records.appKey_id","crawl_records.spider_id","crawl_records.state",
+                "crawl_records.app_version","crawl_records.sdk_version","crawl_records.device_id","crawl_records.updated_at")
+            ->orderBy('updated_at', 'desc')
+            ->paginate($request->input("pageSize", 20));
         $records->setPath($request->fullUrl());
 
         return ResponseData::okResponse($records);
@@ -81,6 +54,31 @@ class CrawlRecordsController extends Controller
             return ResponseData::okResponse($record);
         }
         return ResponseData::errorResponse("Incorrect Id");
+    }
+
+    public function getCrawlRecordBySpiderId(Request $request)
+    {
+        $user = $request->user();
+        $spiders = array_map(function ($item) {
+            return $item['user_id'];
+        }, $user->spiders->toArray());
+        $state=$request->input("state",1000);
+        $records= DB::table('crawl_records')
+            ->where("spider_id", $request->id)
+            ->where('crawl_records.state',$state==1000?'>=':"=" ,$state==1000?0:$state)
+            ->whereIn('spider_id', $spiders)
+            ->leftJoin('app_keys', 'appKey_id', '=', 'app_keys.id')
+            ->select("crawl_records.id","crawl_records.appKey_id","crawl_records.spider_id","crawl_records.state",
+                "crawl_records.app_version","crawl_records.sdk_version","crawl_records.device_id","crawl_records.updated_at","app_keys.name")
+            ->orderBy('updated_at', 'desc')
+            ->paginate($request->input("pageSize", 20));
+
+        if ($records) {
+             $records= json_decode(json_encode($records));
+             $records->app_count=CrawlRecord::distinct("spider_id")->count("spider_id");
+             return ResponseData::okResponse($records);
+        }
+        return ResponseData::errorResponse("Incorrect Request",404);
     }
 
 }
