@@ -6,7 +6,7 @@ log = console.log.bind(console);
 
 prefix="api/"
 root="/"
-if(location.href.domain.indexOf("dspider.")!=-1){
+if(location.hostname.indexOf("dspider.")!=-1){
     prefix = "/dSpider-web/api/"
     root="/dSpider-web/"
 }
