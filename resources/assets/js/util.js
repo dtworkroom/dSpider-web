@@ -4,8 +4,12 @@
 var ah = require("ajax-hook")
 log = console.log.bind(console);
 
-prefix = "/dSpider-web/api/"
-root="/dSpider-web/"
+prefix="api/"
+root="/"
+if(location.href.domain.indexOf("dspider.")!=-1){
+    prefix = "/dSpider-web/api/"
+    root="/dSpider-web/"
+}
 
 ah.hookAjax({
     onload: function (xhr) {
