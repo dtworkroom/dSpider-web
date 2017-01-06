@@ -4,7 +4,7 @@
 var ah = require("ajax-hook")
 log = console.log.bind(console);
 
-prefix="api/"
+prefix="/api/"
 root="/"
 if(location.hostname.indexOf("dspider.")==-1){
     prefix = "/dSpider-web/api/"
