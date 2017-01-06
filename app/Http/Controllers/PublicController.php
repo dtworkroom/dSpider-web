@@ -63,7 +63,7 @@ class PublicController extends Controller
     public function downloadDoc($id){
         $path=(public_path()."/docs/".$id.".md");
         $time=date("Ymd",filemtime($path));
-        return response()->download($path,$time.'_'.$id);
+        return response()->download($path,$time.'_'.$id.".md");
     }
 
 }
