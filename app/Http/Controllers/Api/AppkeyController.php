@@ -1,7 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: du
+ * Date: 17/1/6
+ * Time: 下午8:31
+ */
 
 namespace App\Http\Controllers\Api;
-
 use App\AppKey;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -10,14 +15,12 @@ use App\SpiderConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
 class AppKeyController extends Controller
 {
     public function index(Request $request)
     {
         return ResponseData::okResponse(AppKey::all());
     }
-
     public function getAllByUser(Request $request)
     {
         return ResponseData::okResponse($request->user()->appKeys);
@@ -33,7 +36,6 @@ class AppKeyController extends Controller
             'name'=>'required|max:255',
             'secret' => 'min:6|max:255',
         ]);
-
         if ($validator->fails()) {
             return ResponseData::errorResponse($validator->errors()->first());
         }
@@ -58,7 +60,6 @@ class AppKeyController extends Controller
             $config->save();
         }
         return ResponseData::okResponse($appKey->id);
-
     }
     public function delete(Request $request, $id)
     {
@@ -79,7 +80,6 @@ class AppKeyController extends Controller
             ->get();
         return ResponseData::okResponse(["appkey"=>$appkey,"configs"=>$configs]);
     }
-
     public function getConfigs(Request $request,$id)
     {
         $configs= DB::table('spider_configs')
@@ -89,6 +89,4 @@ class AppKeyController extends Controller
             ->get();
         return ResponseData::okResponse($configs);
     }
-
-
 }
