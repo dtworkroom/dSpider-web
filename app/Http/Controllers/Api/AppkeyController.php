@@ -61,17 +61,15 @@ class AppKeyController extends Controller
         return ResponseData::okResponse($appKey->id);
 
     }
-
     public function delete(Request $request, $id)
     {
         $appkey = AppKey::find($id);
         if($appkey->user_id!=$request->user()->id){
-            return ResponseData::errorResponse("No permission!");
+            return ResponseData::errorResponse("No permission !");
         }
         $appkey->delete();
         return ResponseData::okResponse($appkey->id);
     }
-
     public function getById(Request $request, $id)
     {
         $appkey = AppKey::find($id);
