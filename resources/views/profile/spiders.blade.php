@@ -45,7 +45,7 @@
                                 </td>
                                 </td>
                                 <td class="edit">
-                                <a :href='root+"profile/record/spider/"+spider.id+"?name"+spider.name'><span class="glyphicon glyphicon-stats"></span></a>
+                                <a :href='root+"profile/record/spider/"+spider.id+"?name="+spider.name'><span class="glyphicon glyphicon-stats"></span></a>
                                 </td>
 
                             </tr>
