@@ -26,7 +26,7 @@ class PublicController extends Controller
            // throw new ModelNotFoundException ;
             return view('errors.404');
         }
-       return view("spider",["spider"=>$ret->data]);
+       return view("spider",["spider"=>$ret->data,"title"=>$ret->data->name]);
 
     }
     public function record(Request $request, $id){
@@ -45,7 +45,8 @@ class PublicController extends Controller
 
         $spider=$record->spider;
         $device=$record->device;
-        return view("profile.record",compact('record','app','spider','device'));
+        $title="爬取记录#".$record->id;
+        return view("profile.record",compact('record','app','spider','device','title'));
 
     }
 

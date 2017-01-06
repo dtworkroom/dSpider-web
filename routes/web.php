@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
             return view('profile.spider-edit',qs(['id'=>$id]));
         });
         Route::get('/', function () {
-            return view('profile.spiders');
+            return view('profile.spiders',['title'=>"我的脚本"]);
         });
     });
 

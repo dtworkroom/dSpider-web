@@ -23,6 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('profile.home');
+        return view('profile.home',["title"=>"我的应用"]);
     }
 }
