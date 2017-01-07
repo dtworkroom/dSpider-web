@@ -50,8 +50,6 @@
             cursor: pointer;
         }
 
-
-
     </style>
 
     @yield('head')
@@ -83,13 +81,11 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav" id="nav">
                         <li><a href="{{url("/document")}}">文档中心</a></li>
                         <li><a href="#">SDK下载</a></li>
                         <li><a href="#">脚本市场</a></li>
                         <li><a href="#">帮助</a></li>
 
-                    </ul>
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">Login</a></li>

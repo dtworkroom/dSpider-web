@@ -40,6 +40,7 @@
             margin-bottom: 24px;
             border-radius: 3px;
             border: 1px solid #C3CCD0;
+            font-size: 10px;
             background-color: #fbfbfb
         }
 
@@ -65,9 +66,6 @@
             white-space: inherit;
         }
 
-        code.has-numbering {
-            padding-left: 21px;
-        }
 
         blockquote {
             margin: 20px 0;
@@ -89,20 +87,16 @@
             color: #AAA;
             text-align: center;
             margin-bottom: 0;
+            display: none;
         }
 
         .content > div {
             height: 100%;
         }
 
-        .left {
-            background: #fff;
-            position: fixed;
-            overflow-y: auto;
-            width: 330px;
-            padding: 20px 20px 150px 50px;
-            border-right: #f2f2f2 1px solid;
-            /*box-shadow: 2px 2px 5px #ccc;*/
+
+        .left{
+           padding-top: 20px;
         }
 
         .left a {
@@ -122,10 +116,43 @@
         }
 
         .right {
-            padding: 0 16px 50px 50px;
-            margin-left: 330px;
             max-width: 900px;
         }
+
+        /*#nav a{*/
+           /*padding-left: 15px;*/
+        /*}*/
+
+        @media (min-width: 768px) {
+            .right {
+                padding: 0 25px 50px 50px;
+                margin-left: 330px;
+            }
+
+            .left {
+                background: #fff;
+                position: fixed;
+                overflow-y: auto;
+                width: 330px;
+                padding: 20px 20px 150px 50px;
+                border-right: #f2f2f2 1px solid;
+                /*box-shadow: 2px 2px 5px #ccc;*/
+            }
+
+            .pre-numbering {
+                display: block;
+            }
+
+            code.has-numbering {
+                padding-left: 21px;
+            }
+            pre{
+                font-size: 13px;
+            }
+
+        }
+
+
 
         .newh2 {
             padding: 5px 0
@@ -147,15 +174,15 @@
 @endsection
 @section('content')
     <div class="container-fluid content">
-        <div class="hidden-xs left">
-            <a>DSpider 简介</a>
+        <div class="left">
+            <a href="{{url('document/introduction')}}">DSpider 简介</a>
             <a>IOS SDK集成</a>
             <a href="{{url('document/android')}}">Android SDK集成</a>
             <a href="{{url('document/js_api')}}">Javascript API文档</a>
-            <div class="menu">
+            <div class="menu" >
                 本页目录
             </div>
-            <a href="#doc">
+            <a href="#doc" class="hidden-xs">
                 <span class="glyphicon glyphicon-circle-arrow-up"></span>
                 返回顶部
             </a>
