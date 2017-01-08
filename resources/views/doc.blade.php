@@ -193,7 +193,7 @@
                 <div id="doc">
                     {{ $content."\r\n\r\n**最后更新时间:".$time."**"  }}
                 </div>
-                <a target="_blank" href="download/docs/{{$id}}" class="btn btn-default" style="margin-top: 20px">
+                <a target="_blank" href="{{url("download/docs/$id")}}" class="btn btn-default" style="margin-top: 20px">
                     <span class="glyphicon glyphicon-download-alt"></span>
                     下载本文档
                 </a>
