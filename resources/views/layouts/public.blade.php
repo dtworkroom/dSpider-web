@@ -37,9 +37,8 @@
         html, body {
             background-color: #fff;
             color: #636b6f;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 15px;
-            /*font-family:   "Hiragino Sans GB", "Microsoft Yahei", "WenQuanYi Micro Hei", sans-serif;*/
             min-height: 100vh;
             margin: 0;
             word-wrap:break-word;
