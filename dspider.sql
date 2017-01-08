@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2017-01-06 18:54:05
+-- Generation Time: 2017-01-08 14:23:19
 -- 服务器版本： 10.1.10-MariaDB
 -- PHP Version: 7.0.2
 
@@ -227,7 +227,22 @@ INSERT INTO `crawl_records` (`id`, `appKey_id`, `spider_id`, `config`, `state`, 
 (174, 1, 1, NULL, -2, NULL, '1.0', '1.0', 2, '2017-01-04 04:00:44', '2017-01-04 04:00:44'),
 (175, 1, 1, NULL, -2, NULL, '1.0', '1.0', 2, '2017-01-04 18:12:39', '2017-01-04 18:12:39'),
 (176, 1, 1, NULL, -2, NULL, '1.0', '1.0', 2, '2017-01-04 19:24:22', '2017-01-04 19:24:22'),
-(177, 1, 1, NULL, -2, NULL, '1.0', '1.0', 2, '2017-01-04 19:26:52', '2017-01-04 19:26:52');
+(177, 1, 1, NULL, -2, NULL, '1.0', '1.0', 2, '2017-01-04 19:26:52', '2017-01-04 19:26:52'),
+(178, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:06:51', '2017-01-07 21:06:51'),
+(179, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:10:26', '2017-01-07 21:10:26'),
+(180, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:11:08', '2017-01-07 21:11:08'),
+(181, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:12:16', '2017-01-07 21:12:16'),
+(182, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:15:51', '2017-01-07 21:15:51'),
+(183, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:16:50', '2017-01-07 21:16:50'),
+(184, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:17:33', '2017-01-07 21:17:33'),
+(185, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:17:50', '2017-01-07 21:17:50'),
+(186, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:19:45', '2017-01-07 21:19:45'),
+(187, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:20:25', '2017-01-07 21:20:25'),
+(188, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:21:20', '2017-01-07 21:21:20'),
+(189, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:21:40', '2017-01-07 21:21:40'),
+(190, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:23:01', '2017-01-07 21:23:01'),
+(191, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:26:00', '2017-01-07 21:26:00'),
+(192, 1, 1, NULL, -2, NULL, '1.0', '1.0', 3, '2017-01-07 21:31:38', '2017-01-07 21:31:38');
 
 -- --------------------------------------------------------
 
@@ -251,7 +266,29 @@ CREATE TABLE `devices` (
 
 INSERT INTO `devices` (`id`, `identifier`, `os_type`, `os_version`, `model`, `created_at`, `updated_at`) VALUES
 (1, '860076039858476', 1, '6.0', 'HUAWEI NXT-AL10', '2016-12-11 23:28:54', '2016-12-11 23:28:54'),
-(2, 'iphone1', 2, '8.0', 'iphone7', '2017-01-04 02:11:23', '2017-01-04 02:11:23');
+(2, 'iphone1', 2, '8.0', 'iphone7', '2017-01-04 02:11:23', '2017-01-04 02:11:23'),
+(3, '000000000000000', 1, '5.0.2', 'Android SDK built for x86_64', '2017-01-07 21:06:51', '2017-01-07 21:06:51');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `downloads`
+--
+
+CREATE TABLE `downloads` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `count` int(11) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 转存表中的数据 `downloads`
+--
+
+INSERT INTO `downloads` (`id`, `count`, `created_at`, `updated_at`) VALUES
+(1, 1, '2017-01-07 22:20:40', '2017-01-07 22:20:40'),
+(2, 3, '2017-01-07 22:16:26', '2017-01-07 22:20:35');
 
 -- --------------------------------------------------------
 
@@ -276,7 +313,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2016_12_01_093404_create_app_keys_table', 1),
 (5, '2016_12_02_063620_create_spider_configs_table', 1),
 (6, '2016_12_07_031352_create_devices_table', 1),
-(7, '2016_12_12_055152_create_crawl_records_table', 1);
+(7, '2016_12_12_055152_create_crawl_records_table', 1),
+(8, '2017_01_08_060256_create_downloads_table', 2);
 
 -- --------------------------------------------------------
 
@@ -323,7 +361,7 @@ CREATE TABLE `spiders` (
 --
 
 INSERT INTO `spiders` (`id`, `name`, `user_id`, `content`, `description`, `readme`, `support`, `star`, `chargeType`, `freeLimits`, `price`, `defaultConfig`, `callCount`, `public`, `access`, `startUrl`, `ua`, `created_at`, `updated_at`) VALUES
-(1, 'hello word', 1, 'dSpider("test", function(session,env,$){\n    var count=100;\n    session.showProgress();\n    session.setProgressMsg("正在初始化");\n    var timer=setInterval(function(){\n      var cur=100-(--count);\n      session.setProgress(100-(--count));\n      session.setProgressMsg("正在爬取第"+cur+"条记录");\n      if(count==0){\n       clearInterval(timer);\n       session.finish();\n      }\n    },50);\n})', '测试脚本', '1. 此脚本为测试脚本，每个新建的应用都会默认拥有调用此脚本的权限\n2. 这是一个最简单的爬虫，启动后直接将数据传给sdk,然后结束掉本身。', 7, 0, 0, 100, 0.00, NULL, 169, 1, 3, 'https://www.baidu.com', 1, '2016-12-11 22:56:24', '2017-01-04 19:26:52');
+(1, 'hello word', 1, 'dSpider("test", function(session,env,$){\n    var count=100;\n    session.showProgress();\n    session.setProgressMsg("正在初始化");\n    var timer=setInterval(function(){\n      var cur=100-(--count);\n      session.setProgress(100-(--count));\n      session.setProgressMsg("正在爬取第"+cur+"条记录");\n      if(count==0){\n       clearInterval(timer);\n       session.finish();\n      }\n    },50);\n})', '测试脚本', '1. 此脚本为测试脚本，每个新建的应用都会默认拥有调用此脚本的权限\n2. 这是一个最简单的爬虫，启动后直接将数据传给sdk,然后结束掉本身。', 7, 0, 0, 100, 0.00, NULL, 184, 1, 3, 'https://www.baidu.com', 1, '2016-12-11 22:56:24', '2017-01-07 21:31:38');
 
 -- --------------------------------------------------------
 
@@ -371,7 +409,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'wendu', '824783146@qq.com', '$2y$10$yzVYVZ4j3yT365jXtLEJkO.KJtoG8oSNkyxcZPGjcFrhqiqAmiR2.', 'ByULkGpguWDsxgaQfj3WV8wUyH1IivJh4CuGBnRIAtSMdPveVQ4X7l1rJ60B', '2016-12-11 22:51:17', '2016-12-19 03:10:24');
+(1, 'wendu', '824783146@qq.com', '$2y$10$yzVYVZ4j3yT365jXtLEJkO.KJtoG8oSNkyxcZPGjcFrhqiqAmiR2.', 'SlKZcIpqs1vCp3wtWTDQ9xSKogTsFEfDdKfmip9Ko7fseweRHGqQEEx2NOff', '2016-12-11 22:51:17', '2017-01-06 06:48:07');
 
 --
 -- Indexes for dumped tables
@@ -397,6 +435,12 @@ ALTER TABLE `crawl_records`
 -- Indexes for table `devices`
 --
 ALTER TABLE `devices`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `downloads`
+--
+ALTER TABLE `downloads`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -446,17 +490,22 @@ ALTER TABLE `app_keys`
 -- 使用表AUTO_INCREMENT `crawl_records`
 --
 ALTER TABLE `crawl_records`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=193;
 --
 -- 使用表AUTO_INCREMENT `devices`
 --
 ALTER TABLE `devices`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- 使用表AUTO_INCREMENT `downloads`
+--
+ALTER TABLE `downloads`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- 使用表AUTO_INCREMENT `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- 使用表AUTO_INCREMENT `spiders`
 --

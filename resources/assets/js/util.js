@@ -139,6 +139,7 @@ isJson = function (s, tip) {
     tip !== undefined && alert(tip + "<br><br>" + s);
     return false;
 }
+
 //解析权限为数组
 parseAccess = function (v) {
     if (!v) return [];
@@ -150,6 +151,7 @@ parseAccess = function (v) {
             return Math.pow(2, i++) * v;
         })
 }
+
 //合并权限
 getAccess = function (v) {
     return v.reduce(function (p, n) {

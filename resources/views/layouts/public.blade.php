@@ -17,6 +17,7 @@
     </script>
 
     <style>
+        ul,ol{ padding-left: 18px;}
         @media (min-width: 768px) {
             .modal-sm {
                 width: 400px;
@@ -36,9 +37,9 @@
         html, body {
             background-color: #fff;
             color: #636b6f;
-            font-weight: 100;
+            font-weight: 200;
             font-size: 15px;
-            font-family:  Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+            /*font-family:   "Hiragino Sans GB", "Microsoft Yahei", "WenQuanYi Micro Hei", sans-serif;*/
             min-height: 100vh;
             margin: 0;
             word-wrap:break-word;
@@ -135,8 +136,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-
     @yield('content')
 </div>
 <!-- Scripts -->

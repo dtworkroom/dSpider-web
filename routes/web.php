@@ -46,6 +46,7 @@ Route::get('/apiTest', function () {
 });
 Route::get('/document/{id?}', "PublicController@doc");
 Route::get('/download/docs/{id}', "PublicController@downloadDoc");
+Route::get('/download/open/{name}', "PublicController@downloadWithStatistic");
 
 
 //web route

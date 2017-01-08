@@ -13,6 +13,10 @@ class Spider extends Model
     const SUPPORT_IOS=1<<1;
     const SUPPORT_PC=1<<2;
 
+    const UA_MOBILE=1;
+    const UA_PC=2;
+    const UA_AUTO=3;
+
     public function author(){
         return $this->hasOne('App\User');
     }

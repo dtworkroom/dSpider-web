@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CrawlRecord;
+use App\Download;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
@@ -65,5 +66,23 @@ class PublicController extends Controller
         $time=date("Ymd",filemtime($path));
         return response()->download($path,$time.'_'.$id.".md");
     }
+    public function downloadWithStatistic($id){
+        $map=["sdk-android"=>1,"sdk-ios"=>2,"pc-tool"=>3];
+        if(isset($map[$id])){
+            $download=Download::find($map[$id]);
+            if(!$download){
+                $download=new Download();
+            }
+            $download->id=$map[$id];
+            $download->count++;
+            $download->save();
+            $path=(public_path()."/open/".$id.".zip");
+            if(file_exists($path)) {
+                $time=date("Ymd",filemtime($path));
+                return response()->download($path, $time . '-' . $id . ".zip");
+            }
+        }
+        return view("errors.404");
+     }
 
-}
+    }
