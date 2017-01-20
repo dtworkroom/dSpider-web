@@ -1,0 +1,384 @@
+ul, ol, li {
+  list-style: none;
+}
+
+a {
+
+  text-decoration: none;
+
+  color: #333
+
+}
+
+a:hover {
+  text-decoration: none;
+
+}
+
+fieldset, img {
+  border: 0;
+
+}
+
+button, input, select, textarea {
+  font-size: 100%;
+
+}
+
+table {
+  border-collapse: collapse;
+
+  border-spacing: 0;
+
+}
+
+img {
+  border: none;
+
+  vertical-align: middle
+}
+
+/*-----------自定义公共类---------*/
+
+body {
+  font-size: 16px;
+  color: #666;
+
+}
+
+.fl {
+  float: left;
+
+}
+
+.fr {
+  float: right
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  zoom: 1
+}
+
+/*-----------头部样式---------*/
+
+#stage {
+  width: 100%;
+  height: 400px;
+}
+
+.header {
+  width: 100%;
+
+  height: 400px;
+
+  z-index: 11;
+
+  position: relative;
+
+  color: white
+}
+
+.header-text {
+  position: absolute;
+  bottom: 100px;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+
+}
+
+.logo-c {
+  position: absolute;
+
+  top: 20px;
+
+  left: 30px
+}
+
+.name {
+  font-size: 30px;
+
+  letter-spacing: 3px;
+
+  display: inline-block;
+
+  line-height: 25px;
+
+}
+
+.en-name {
+  font-size: 13px;
+
+  letter-spacing: 3px;
+
+  line-height: 13px;
+
+}
+
+/*-----------banner轮播样式---------*/
+.swiper-container {
+  height: 100%;
+
+}
+
+/*-----------产品样式---------*/
+.introduce {
+  width: 90%;
+
+  margin: 20px auto;
+
+  max-width: 1100px;
+
+  text-align: center;
+
+}
+
+.introduce li {
+  margin-top: 16px
+}
+
+.glyphicon {
+  line-height: 90px;
+
+  display: inline-block;
+
+}
+
+.p1 {
+  display: inline-block;
+
+  margin-left: 10px;
+
+  font-size: 17px;
+
+  color: #999;
+
+}
+
+.p2 {
+  font-size: 13px;
+
+  display: block;
+
+  line-height: 26px;
+
+}
+
+.circle {
+  color: #408cce;
+
+  border: #408cce 2px solid;
+
+  border-radius: 100%;
+
+  display: inline-block;
+
+  width: 90px;
+
+  height: 90px;
+  text-align: center;
+  font-size: 48px;
+}
+
+@media (max-width: 480px) {
+  .name {
+    font-size: 30px;
+
+    letter-spacing: 8px;
+
+    line-height: 20px;
+
+  }
+
+  .glyphicon {
+    line-height: 70px;
+
+    margin-top: - 3 px
+  }
+
+  .p1 {
+    margin-left: 6px;
+
+    display: block;
+
+    margin-top: 10px;
+
+  }
+
+  .circle {
+    width: 70px;
+
+    height: 70px;
+
+    font-size: 32px;
+
+  }
+
+  .swiper-button-prev, .swiper-button-next {
+    display: none
+  }
+
+}
+
+.section {
+  padding-top: 80px;
+  padding-bottom: 80px;
+  text-align: center;
+  border-bottom: #e5e5e5 1px solid;
+
+}
+
+.title {
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 25px;
+  color: #555
+
+}
+
+#features > div {
+  padding: 56px 35px;
+  line-height: 2em;
+
+}
+
+.btn-m, .btn-m:visited, .btn-m:active {
+  border: #408cce 1px solid;
+  border-radius: 3px;
+  margin: 50px auto 0;
+  width: 200px;
+  padding: 12px;
+  color: #408cce;
+  transition: all .4s;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+
+}
+
+.btn-m:hover {
+  background: #408cce;
+  color: #eee;
+  box-shadow: #aaa 1px 1px 2px;
+  text-decoration: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+
+}
+
+.row {
+  margin-right: 0;
+
+}
+
+.intro {
+  margin-left: 0;
+
+}
+
+.footer-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  border: none;
+  margin-bottom: 10px;
+
+}
+
+#footer {
+  background: #000;
+  opacity: .7;
+  color: #fff;
+  border-bottom: none;
+
+}
+
+#footer a {
+  color: #fff;
+
+}
+
+#footer a:hover {
+  color: #408cce;
+
+}
+
+.navbar a {
+  color: white;
+
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #eee;
+
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background: #408cce;
+
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: white;
+  background: none;
+
+}
+
+.navbar-default {
+  border: none;
+
+}
+
+.navbar-collapse {
+  border: none;
+
+}
+
+#footer .col-md-4 {
+  margin-bottom: 30px;
+
+}
+
+@media (max-width: 768px) {
+  .navbar-right {
+    background: #408cce;
+    z-index: 1000;
+    position: absolute;
+    width: 100%;
+
+  }
+  .navbar-default .navbar-toggle .icon-bar {
+    background-color: #eee;
+
+  }
+  #features > div {
+    padding: 30px 20px;
+
+  }
+}
+
+@keyframes circle {
+  0% {
+    transform: rotate(0deg);
+
+  }
+
+  100% {
+    transform: rotate(360deg);
+
+  }
+
+}
+
+#logo {
+  font-size: 100px;
+  animation: circle 10s infinite linear;
+
+}

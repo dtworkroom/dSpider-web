@@ -102,7 +102,7 @@ function Observe(ob, options, callback) {
 }
 
 //爬取入口
-function dSpider(sessionKey, callback) {
+function dSpider(sessionKey, timeOut, callback) {
     //判断调用源,如果是在onSpiderInited中调用,则下发脚本中的dSpider函数不执行
     if (window.onSpiderInited && this != 5) {
         return;
@@ -118,9 +118,31 @@ function dSpider(sessionKey, callback) {
     $(window).on("beforeunload", onclose)
     window.curSession = session;
     session._init()
+    if (!callback) {
+        callback = timeOut;
+        timeOut = -1;
+    }
+    if (timeOut != -1) {
+        var startTime = session.get("startTime")
+        var now = new Date().getTime();
+        if (!startTime) {
+            session.set("startTime", now);
+            startTime=now
+        }
+        timeOut *= 1000;
+        var passed = (now - startTime);
+        var left = timeOut -passed;
+        left = left > 0 ? left : 0;
+        log("left:"+left)
+        setTimeout(function () {
+            log("time out");
+            if (!session.finished) {
+                session.finish("timeout ["+timeOut/1000+"s] ", "",4)
+            }
+        }, left);
+    }
     var extras = DataSession.getExtraData()
     extras = JSON.parse(extras || "{}")
-    var args = DataSession.getArguments()
     $(safeCallback(function () {
         $("body").on("click", "a", function () {
             $(this).attr("target", function (_, v) {
@@ -130,9 +152,6 @@ function dSpider(sessionKey, callback) {
         log("dSpider start!")
         session.getConfig = function () {
             return typeof _config === "object" ? _config : {}
-        }
-        session.getArguments = function () {
-            return JSON.parse(args)
         }
         callback(session, extras, $);
     }))
@@ -153,19 +172,19 @@ function dSpiderMail(sessionKey, callback) {
 /**
  * Created by du on 16/8/17.
  */
-var bridge=getJsBridge();
-function callHandler(){
-    var f=arguments[2];
+var bridge = getJsBridge();
+function callHandler() {
+    var f = arguments[2];
     if (f) {
         arguments[2] = safeCallback(f)
     }
-    return bridge.call.apply(bridge,arguments);
+    return bridge.call.apply(bridge, arguments);
 }
 function DataSession(key) {
     this.key = key;
     log("start called")
-    this.finished=false;
-    callHandler("start", {sessionKey:key})
+    this.finished = false;
+    callHandler("start", {sessionKey: key})
 }
 
 DataSession.getExtraData = function (f) {
@@ -173,19 +192,21 @@ DataSession.getExtraData = function (f) {
     return callHandler("getExtraData")
 }
 
-DataSession.getArguments= function (f) {
-    log("getArguments called")
-    return callHandler("getArguments")
-}
+
 
 DataSession.prototype = {
     _save: function () {
         callHandler("set", {key: this.key, value: JSON.stringify(this.data)})
     },
     _init: function () {
-        var data=callHandler("get", {key:this.key});
-        this.data=JSON.parse(data || "{}");
-        this.local=JSON.parse(callHandler("read",{key:this.key})|| "{}");
+        var data = callHandler("get", {key: this.key});
+        this.data = JSON.parse(data || "{}");
+        this.local = JSON.parse(callHandler("read", {key: this.key}) || "{}");
+    },
+
+    getArguments :function (f) {
+        log("getArguments called")
+        return JSON.parse(callHandler("getArguments"))
     },
 
     get: function (key) {
@@ -194,78 +215,78 @@ DataSession.prototype = {
     },
     set: function (key, value) {
         log("set called")
-        this.data[key]=value;
+        this.data[key] = value;
         this._save();
     },
 
     showProgress: function (isShow) {
         log("showProgress called")
-        callHandler("showProgress", {show:isShow === undefined ? true : !!isShow});
+        callHandler("showProgress", {show: isShow === undefined ? true : !!isShow});
     },
     setProgressMax: function (max) {
         log("setProgressMax called")
-        callHandler("setProgressMax", {progress:max});
+        callHandler("setProgressMax", {progress: max});
     },
     setProgress: function (progress) {
         log("setProgress called")
-        callHandler("setProgress", {progress:progress});
+        callHandler("setProgress", {progress: progress});
     },
-    setProgressMsg:function(msg){
-        if(!msg) return;
-        callHandler("setProgressMsg",{msg:msg})
+    setProgressMsg: function (msg) {
+        if (!msg) return;
+        callHandler("setProgressMsg", {msg: msg})
     },
-    finish: function (errmsg, content, code,stack) {
-        var ret = {sessionKey:this.key, result: 0, msg: ""}
+    finish: function (errmsg, content, code, stack) {
+        var ret = {sessionKey: this.key, result: 0, msg: ""}
         if (errmsg) {
             var ob = {
                 url: location.href,
                 msg: errmsg,
-                args:this.getArguments()
+                args: this.getArguments()
                 // content: content||document.documentElement.outerHTML ,
             }
-            stack&&(ob.stack=stack);
+            stack && (ob.stack = stack);
             ret.result = code || 2;
             ret.msg = JSON.stringify(ob);
         }
         log("finish called")
-        this.finished=true;
+        this.finished = true;
         callHandler("finish", ret);
 
     },
-    upload: function (value,f) {
+    upload: function (value, f) {
         if (value instanceof Object) {
             value = JSON.stringify(value);
         }
         log("push called")
         callHandler("push", {"sessionKey": this.key, "value": value});
     },
-    load:function(url,headers){
-        headers=headers||{}
-        if(typeof headers!=="object"){
+    load: function (url, headers) {
+        headers = headers || {}
+        if (typeof headers !== "object") {
             alert("the second argument of function load  must be Object!")
             return
         }
-        callHandler("load",{url:url,headers:headers});
+        callHandler("load", {url: url, headers: headers});
     },
-    setUserAgent:function(str){
-        callHandler("setUserAgent",{userAgent:str})
+    setUserAgent: function (str) {
+        callHandler("setUserAgent", {userAgent: str})
     },
 
-    autoLoadImg:function(load){
-        callHandler("autoLoadImg",{load:load===true})
+    autoLoadImg: function (load) {
+        callHandler("autoLoadImg", {load: load === true})
     },
 
     string: function () {
         log(this.data)
     },
-    log: function(str,type) {
-        str=_logstr(str);
-        console.log("dSpider: "+str)
-        callHandler("log",{type:type||1,msg:str})
+    log: function (str, type) {
+        str = _logstr(str);
+        console.log("dSpider: " + str)
+        callHandler("log", {type: type || 1, msg: str})
     },
     setLocal: function (k, v) {
         log("save called")
-        this.local[k]=v;
+        this.local[k] = v;
         callHandler("save", {key: this.key, value: JSON.stringify(this.local)})
     },
     getLocal: function (k) {
@@ -277,7 +298,7 @@ var withCheck = function (attr) {
     var f = DataSession.prototype[attr];
     return function () {
         if (this.finished) {
-            log("call " + attr + " ignored, finish has been called! ")
+            console.log("dSpider: call " + attr + " ignored, since finish has been called! ")
         } else {
             return f.apply(this, arguments);
         }

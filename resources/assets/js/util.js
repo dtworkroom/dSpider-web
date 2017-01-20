@@ -4,11 +4,11 @@
 var ah = require("ajax-hook")
 log = console.log.bind(console);
 
-prefix="/api/"
-root="/"
-if(location.hostname.indexOf("dspider.")==-1){
+prefix = "/api/"
+root = "/"
+if (location.hostname.indexOf("dspider.") == -1) {
     prefix = "/dSpider-web/api/"
-    root="/dSpider-web/"
+    root = "/dSpider-web/"
 }
 
 ah.hookAjax({
@@ -21,10 +21,10 @@ ah.hookAjax({
                     xhr.response = xhr.responseText = ret.data;
                 } else {
                     if (ret.code == -10) {
-                        location = root+"login"
+                        location = root + "login"
                         return true
-                    }else if(ret.code==404||ret.code==403){
-                        location= root+ret.code;
+                    } else if (ret.code == 404 || ret.code == 403) {
+                        location = root + ret.code;
                     }
                     else {
                         xhr.status = 4832;
@@ -32,7 +32,8 @@ ah.hookAjax({
                     }
                 }
             }
-        } catch (e) {}
+        } catch (e) {
+        }
     }
 })
 
@@ -61,7 +62,7 @@ $.ajax = function (_, __) {
         return _fail(callback)
     }
 
-    ob.error=_fail;
+    ob.error = _fail;
 
 
     return ob;
@@ -70,12 +71,12 @@ $.ajax = function (_, __) {
 dialog = function (msg, title) {
     var onOk, onCancel, onClose;
     var okBtn = "确定", cancelBtn = "";
-    var wrapper=function(callback){
-        return function (){
-            $("#dlg-close").off("click",onClose);
-            $("#dlg-ok").off("click",onOk);
-            $("#dlg-cancel").off("click",onCancel);
-            callback&&callback();
+    var wrapper = function (callback) {
+        return function () {
+            $("#dlg-close").off("click", onClose);
+            $("#dlg-ok").off("click", onOk);
+            $("#dlg-cancel").off("click", onCancel);
+            callback && callback();
         }
     }
     return {
@@ -93,7 +94,7 @@ dialog = function (msg, title) {
             onClose = wrapper(c);
             return this;
         },
-        show:function(){
+        show: function () {
             var cancel = $("#dlg-cancel")
             if (cancelBtn) {
                 cancel.text(cancelBtn).click(onCancel).show();
@@ -107,7 +108,7 @@ dialog = function (msg, title) {
             $("#alert").modal("show");
             return this
         },
-        hide:function(){
+        hide: function () {
             $("#alert").modal("hide");
         }
     }
@@ -160,9 +161,9 @@ getAccess = function (v) {
 }
 
 //导航激活
-$(".nav a").filter(function(){
-    var h=location.href
-    var r=$(this).attr("href")
+$(".nav a").filter(function () {
+    var h = location.href
+    var r = $(this).attr("href")
     return !(h.indexOf(r) && h.indexOf(r + "?"));
 
 }).parent().addClass("active")

@@ -4,10 +4,11 @@
 > 概述：dSpider javascript接口是爬取脚本与客户端通信的桥梁，主要功能有：数据存储、进度展示、判断执行环境、以及一些请求控制能力。dSpider 将每一个爬取任务抽象为一个session，每一个session有一个key用于标识当前爬取任务，不同的业务应有不同的key。而dSpider大多数接口都是挂载在session对象，用于表明所有的操作都是在某个session之上。
 
 
-## dSpider(sessionKey,callback)
+## dSpider(sessionKey,[timeOut],callback])
 
 - 功能: 爬取任务入口点，初始化爬取任务。
 - sessionKey: 当前爬取任务的key，类型为字符串，不同业务应有不同的key.
+- timeOut:脚本超时时间，单位为秒，如果不设置, 默认为－1，表示没有超时限制。
 - callback(session, env, dQuery):  爬取环境初始化成功后的回调，也就是真正的爬取代码的入口，需要你来提供。爬取任务初始化成功后，dSpider会回调此函数，同时将session, env, dQuery三个参数传递给callback，它们分别代表：
   1. session: 当前爬取会话对象，也是js api的主要挂载点。
   2. env : 当前爬取环境，如系统信息，sdk版本信息。
@@ -16,10 +17,18 @@
 典型的爬取模版如下：
 
 ```javascript
+//无超时限制
 dSpider("email",function(session,env,$){
   //place your code here
 })
+
+//设置超时为2分钟
+dSpider("email",60*2,function(session,env,$){
+  //place your code here
+})
 ```
+
+**注：没有特殊情况，建议所有脚本都加上超时时间！**
 
 下面我们来介绍session的所有方法：
 

@@ -17,5 +17,5 @@ elixir(mix => {
     mix.sass('app.scss').webpack("util.js")
        .webpack('app.js').sass('spider-edit.scss').webpack('spider-edit.js')
     //apiTest
-    mix.webpack("apiTest.js")
+    mix.webpack("apiTest.js").webpack("index.js").sass("index.scss")
 });

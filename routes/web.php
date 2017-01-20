@@ -44,7 +44,13 @@ Route::get('/spider/{id}',"PublicController@spider");
 Route::get('/apiTest', function () {
     return view('apiTest');
 });
+
+Route::get('/download',function(){
+    return view("download",["title"=>"下载"]);
+});
+
 Route::get('/document/{id?}', "PublicController@doc");
+
 Route::get('/download/docs/{id}', "PublicController@downloadDoc");
 Route::get('/download/open/{name}', "PublicController@downloadWithStatistic");
 
@@ -60,7 +66,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
             return view('profile.spiders',['title'=>"我的脚本"]);
         });
     });
-
 
     Route::get('/appkey/save/{id?}', function($id=0){
         return view('profile.appkey',qs(['id'=>$id]));

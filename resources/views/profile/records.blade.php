@@ -33,7 +33,7 @@
                     <div class="panel-heading">应用统计</div>
                     <div class="panel-body">
                         <div id="appinfo">
-                            应用名称:<span><a :href="'../appkey/save/'+app.id">@{{app.name}}</a></span>
+                            应用名称:<span><a :href="'../../appkey/save/'+app.id">@{{app.name}}</a></span>
                             App Id:<span>@{{app.id}}</span>
                             包名:<span> @{{app.package}} </span>
                         </div>

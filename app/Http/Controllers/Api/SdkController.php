@@ -138,7 +138,7 @@ class SdkController extends Controller
         if (!env("APP_DEBUG")) {
             $code = JSMin::minify($code);
         }
-        $ret = ["id" => $crawRecords->id,"ua"=>$spider->ua, "startUrl" => $spider->startUrl,"script"=>$code];
+        $ret = ["id" => $crawRecords->id,"ua"=>$spider->ua, "startUrl" => $spider->startUrl,"script"=>$code,"script_count"=>1];
         return ResponseData::okResponse($ret);
     }
 
