@@ -109,6 +109,11 @@
                     </div>
 
                     <div>
+                        <span>分类:</span>
+                        {{getCategories($spider->category)}}
+                    </div>
+
+                    <div>
                         <span>起始地址:</span>
                         {{$spider->startUrl}}
                     </div>

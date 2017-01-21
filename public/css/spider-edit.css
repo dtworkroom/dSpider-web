@@ -1,1 +1,13 @@
-body,html{background-color:#fff;color:#636b6f;font-weight:100;font-size:15px;font-family:Helvetica,Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;min-height:100vh;margin:0}a{cursor:pointer}
+html, body {
+  background-color: #fff;
+  color: #636b6f;
+  font-weight: 100;
+  font-size: 15px;
+  font-family: Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+  min-height: 100vh;
+  margin: 0; }
+
+a {
+  cursor: pointer; }
+
+/*# sourceMappingURL=spider-edit.css.map */

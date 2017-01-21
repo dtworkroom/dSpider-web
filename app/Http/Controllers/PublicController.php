@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\CrawlRecord;
 use App\Download;
+use App\Spider;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Request;
 
 class PublicController extends Controller
@@ -65,6 +67,30 @@ class PublicController extends Controller
         $path=(public_path()."/docs/".$id.".md");
         $time=date("Ymd",filemtime($path));
         return response()->download($path,$time.'_'.$id.".md");
+    }
+    public function store(){
+
+       //var_dump(DB::table("spiders")->select(DB::raw('category'))->groupBy("category")->get());
+        $all=[];
+//        $items=DB::select("select * from spiders a where (select count(*) from spiders b where a.category=b.category and a.id<b.id )<12 order by category asc, id asc");
+//        array_map(function($item) use(&$categories){
+//            $categories[getCategories($item->category)][]=$item;
+//            return $item;
+//        },$items);
+//
+        Spider::all()->map(function($item) use(&$all){
+            $all[getCategories($item->category)][]=$item;
+            return $item;
+        });
+        $categories=[];
+        foreach(getCategoryOrder() as $category){
+            if(isset($all[$category])){
+                $categories[$category]=$all[$category];
+            }
+        }
+        return view("store",compact('categories'));
+
+
     }
     public function downloadWithStatistic($id){
         $map=["sdk-android"=>1,"sdk-ios"=>2,"pc-tool"=>3];

@@ -188,12 +188,10 @@ body {
   font-size: 48px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 760px) {
   .name {
     font-size: 30px;
-
     letter-spacing: 8px;
-
     line-height: 20px;
 
   }
@@ -215,10 +213,9 @@ body {
 
   .circle {
     width: 70px;
-
     height: 70px;
-
     font-size: 32px;
+    margin-bottom: 10px;
 
   }
 
@@ -346,7 +343,7 @@ body {
 
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .navbar-right {
     background: #408cce;
     z-index: 1000;

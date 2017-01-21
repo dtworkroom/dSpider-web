@@ -16,6 +16,15 @@
                         <input class="form-control" v-model="spider.description" required
                                placeholder="一句话简介,不要超过200个字符">
                     </div>
+                    <div class="form-group">
+                        <label>分类</label>
+                        <select v-model="spider.category">
+                            <option value="0">无</option>
+                            <option value="1">征信</option>
+                            <option value="2">邮箱</option>
+                            <option value="3">小说</option>
+                        </select>
+                    </div>
 
                     <div class="form-group">
                         <label>起始地址</label>

@@ -84,15 +84,15 @@
         <div class="title" style="color:#408cce">DSpider简介</div>
         <div class="row intro">
             <div class="row col-md-10 col-md-offset-1 " id="features">
-                <div style="" class="col-md-4">
+                <div style="" class="col-sm-4 ">
                     <div class="title">突破IP限制</div>
                     与传统后台爬取不同的是,客户端每个设备ip都不相同,这将从根本上解决目标网站对于特定IP请求次数的限制。
                 </div>
-                <div style="" class="col-md-4">
+                <div style="" class="col-sm-4">
                     <div class="title">使用JavaScript</div>
                     爬取脚本使用Javascript语言,前端开发者可以直接上手,这不仅使操作网页更加容易,而且极大的提高了开发效率。
                 </div>
-                <div style="" class="col-md-4">
+                <div style="" class="col-sm-4">
                     <div class="title">云管理平台</div>
                     强大的云控平台,随时随地更新、发布脚本,监控应用状态,同时包含配置下发、错误分析、结果统计等众多功能。
                 </div>
@@ -110,25 +110,25 @@
         </div>
         <div style="position: relative;" class="introduce clearfix">
             <div class="row">
-                <li class="col-md-3 col-xs-6">
+                <li class="col-sm-3 col-xs-6">
                     <div class="circle"><span class="glyphicon glyphicon-credit-card"></span></div>
                     <div class="p1">信用卡账单
                         <sapn class="p2">45家银行</sapn>
                     </div>
                 </li>
-                <li class="col-md-3 col-xs-6">
+                <li class="col-sm-3 col-xs-6">
                     <div class="circle"><span class="glyphicon glyphicon-phone"></span></div>
                     <div class="p1">运营商
                         <sapn class="p2">移动/联通/电信</sapn>
                     </div>
                 </li>
-                <li class="col-md-3 col-xs-6">
+                <li class="col-sm-3 col-xs-6">
                     <div class="circle"><span class="glyphicon glyphicon-shopping-cart"></span></div>
                     <div class="p1">电商
                         <sapn class="p2">京东/支付宝/淘宝</sapn>
                     </div>
                 </li>
-                <li class="col-md-3 col-xs-6">
+                <li class="col-sm-3 col-xs-6">
                     <div class="circle"><span class="glyphicon glyphicon-envelope"></span></div>
                     <div class="p1">邮箱
                         <sapn class="p2">QQ/网易/新浪</sapn>
@@ -136,7 +136,7 @@
                 </li>
             </div>
 
-            <a  href="#" class="btn-m">
+            <a  href="store" class="btn-m">
                 脚本商店发现更多 》
             </a>
 

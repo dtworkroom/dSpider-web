@@ -31,6 +31,7 @@ class CreateSpidersTable extends Migration
             $table->boolean("public")->default(false);
             $table->Integer("access")->default(3);
             $table->text("startUrl");
+            $table->smallInteger("category")->default(0);
             $table->tinyInteger("ua")->default(1);
             $table->timestamps();
             $table->foreign("user_id")->references('id')->on('users')->onDelete('cascade');

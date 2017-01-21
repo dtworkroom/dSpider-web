@@ -38,3 +38,16 @@ function qs($array){
    return ['qs'=>$array] ;
 }
 
+function getCategories($i)
+{
+    $a=["其它","征信","邮箱","小说"];
+    if($i>count($a)-1){
+        $i=0;
+    }
+    return $a[$i];
+}
+
+function getCategoryOrder(){
+    return ["征信","邮箱","小说","其它"];
+}
+

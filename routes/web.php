@@ -39,6 +39,7 @@ Route::get('/', function () {
 Route::get('/spider', function () {
     return view('welcome');
 });
+Route::get('/store',"PublicController@store");
 Route::get('/spider/{id}',"PublicController@spider");
 
 Route::get('/apiTest', function () {
