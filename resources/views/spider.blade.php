@@ -189,7 +189,8 @@
                         <button id="add" data-id="{{$spider->id}}" data-uid="{{Request::user()?Request::user()->id:0}}" data-loading-text="Loading..." class="btn btn-middle btn-primary">
                             添加到我的应用
                         </button>
-                        @if(\Illuminate\Support\Facades\Request::user()->id==$spider->user_id)
+
+                        @if(!Auth::guest() &&  Auth::user()->id==$spider->user_id)
                             <a href="{{url("profile/spider/save/".$spider->id)}}" class="btn btn-middle btn-default">
                                 <span class="glyphicon glyphicon-edit"></span>
                                 编辑

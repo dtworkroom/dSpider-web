@@ -161,7 +161,7 @@ getAccess = function (v) {
 }
 
 //导航激活
-$(".nav a").filter(function () {
+$("#nav a").filter(function () {
     var h = location.href
     var r = $(this).attr("href")
     return !(h.indexOf(r) && h.indexOf(r + "?"));

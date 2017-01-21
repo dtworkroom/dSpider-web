@@ -43,6 +43,7 @@
         height: 165px;
         border: 1px solid #e8e8e8;
         transition: all .3s;
+        cursor: pointer;
     }
 
     .grid .row [class ^="col-"]:hover {
@@ -175,7 +176,7 @@
         @if($key%4==0)
            <div class="row">
         @endif
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-3 col-sm-6" data-id="{{$spider->id}}" >
                 <div class="clearfix">
                     <img src="public/img/icon/{{$spider->icon}}">
                     <div class="s-cap">
@@ -250,6 +251,10 @@
             }
         }
     }).trigger("hashchange")
+
+    $(".grid").on("click",".col-md-3",function(){
+        location.href="spider/"+$(this).data("id");
+    })
 
 </script>
 <script src="{{ url('public/js/store.js')}}"></script>

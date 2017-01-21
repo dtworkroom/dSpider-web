@@ -15,13 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PublicController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public function pn(...$arg){
         foreach($arg as $a){
             echo $a."<br>";
         }
     }
-
     public function spider(Request $request, $id){
         $controller=new Api\SpiderController;
         $ret=json_decode($controller->getById($request,$id)->getContent());
