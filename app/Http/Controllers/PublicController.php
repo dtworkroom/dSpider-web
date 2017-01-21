@@ -79,6 +79,13 @@ class PublicController extends Controller
 //        },$items);
 //
         Spider::all()->map(function($item) use(&$all){
+
+            $path=public_path()."/img/icon/".$item->id;
+            if(file_exists($path)) {
+                $item->icon=$item->id;
+            }else{
+                $item->icon="default.png";
+            }
             $all[getCategories($item->category)][]=$item;
             return $item;
         });

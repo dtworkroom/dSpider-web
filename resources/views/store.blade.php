@@ -59,12 +59,16 @@
         margin-left: 10px;
     }
     .s-title{
-        font-size: 15px;
+        font-size: 16px;
         color: #333;
-        line-height: 1.8em;
+        line-height: 2em;
         overflow: hidden;
         width: 120px;
-        height: 1.8em;
+        height: 2em;
+    }
+    .s-title-bottom{
+        font-size: 14px;
+        overflow: hidden;
     }
     .s-des{
         margin-top: 10px;
@@ -173,10 +177,10 @@
         @endif
             <div class="col-md-3 col-sm-6">
                 <div class="clearfix">
-                    <img src="public/img/icon/email.png">
+                    <img src="public/img/icon/{{$spider->icon}}">
                     <div class="s-cap">
                         <div class="s-title">{{$spider->name}}</div>
-                        <div>调用次数: {{$spider->callCount}}</div>
+                        <div class="s-title-bottom">调用次数: {{$spider->callCount}}</div>
                     </div>
                 </div>
                 <div class="s-des">
