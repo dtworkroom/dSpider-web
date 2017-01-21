@@ -92,6 +92,9 @@ class SpiderController extends Controller
         $spider->size = strlen($spider->content);
         //该脚本作者不是当前用户时鉴权
         if (!($request->user() && $request->user()->id==$spider->user_id)) {
+            if(!$spider->public){
+                return ResponseData::errorResponse("No permission for this spider!");
+            }
             if (!($spider->access & Spider::ACCESS_READ)) {
                 unset($spider->content);
             }

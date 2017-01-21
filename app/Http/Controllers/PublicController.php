@@ -76,7 +76,7 @@ class PublicController extends Controller
 //            return $item;
 //        },$items);
 //
-        Spider::all()->map(function($item) use(&$all){
+        Spider::where("public",1)->get()->map(function($item) use(&$all){
 
             $path=public_path()."/img/icon/".$item->id;
             if(file_exists($path)) {

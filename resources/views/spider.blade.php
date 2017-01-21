@@ -124,7 +124,7 @@
                     </div>
                     <div>
                         <span>默认User-Agent:</span>
-                        {{$spider->public==1?"手机":$spider==2?"电脑":"自动"}}
+                        {{$spider->ua==1?"手机":$spider==2?"电脑":"自动"}}
                     </div>
 
                     <div>
