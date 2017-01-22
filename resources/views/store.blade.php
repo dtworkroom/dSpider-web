@@ -53,7 +53,7 @@
     .grid .row img{
         height: 60px;
         float: left;
-        opacity: .9;
+        border-radius: 3px;
     }
     .s-cap{
         float: left;
@@ -178,7 +178,7 @@
         @endif
             <div class="col-md-3 col-sm-6" data-id="{{$spider->id}}" >
                 <div class="clearfix">
-                    <img src="public/img/icon/{{$spider->icon}}">
+                    <img src="{{"storage/app/img/icon/".$spider->icon}}">
                     <div class="s-cap">
                         <div class="s-title">{{$spider->name}}</div>
                         <div class="s-title-bottom">调用次数: {{$spider->callCount}}</div>

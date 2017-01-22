@@ -11,6 +11,7 @@ use App\Http\Requests;
 use App\Spider;
 use App\SpiderConfig;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class SpiderController extends Controller
@@ -31,13 +32,24 @@ class SpiderController extends Controller
 
     public function save(Request $request)
     {
-        $data = $request->all();
+        $formData = $request->all();
+        $data=json_decode($formData["spider"],true);
         $validator = Validator::make($data, [
             'name' => 'required|max:50',
             'content' => 'required',
             'startUrl' => 'required',
             "description" => 'required|max:255'
         ]);
+
+        if ($request->file('icon')&&$request->file('icon')->isValid()){
+            $folder="img/icon";
+            $path=$folder."/".$data["icon"];
+            if($data["icon"]&&Storage::exists($path)) {
+                Storage::delete($path);
+            }
+            $path = $request->icon->store($folder);
+            $data["icon"]=substr($path,strlen($folder)+1);
+        }
 
         unset($data['size']);
         $data["public"] = $data["public"] == "false" ? false : true;

@@ -32,6 +32,7 @@ class CreateSpidersTable extends Migration
             $table->Integer("access")->default(3);
             $table->text("startUrl");
             $table->smallInteger("category")->default(0);
+            $table->string("icon",100)->nullable();
             $table->tinyInteger("ua")->default(1);
             $table->timestamps();
             $table->foreign("user_id")->references('id')->on('users')->onDelete('cascade');

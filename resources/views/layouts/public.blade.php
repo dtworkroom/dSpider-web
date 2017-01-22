@@ -9,7 +9,7 @@
     <meta name="x5-fullscreen" content="true">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="full-screen" content="yes">
-    {{--<title>{{$title??""}}</title>--}}
+    <title>{{$title??""}}</title>
     <script src="//cdn.bootcss.com/vue/2.1.6/vue.js"></script>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
     {{--<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.css" rel="stylesheet">--}}
@@ -88,7 +88,7 @@
                     <!-- Left Side Of Navbar -->
                         <li><a href="{{url("/document")}}">文档中心</a></li>
                         <li><a href="#">SDK下载</a></li>
-                        <li><a href="#">脚本市场</a></li>
+                        <li><a href="{{url("/store")}}">脚本市场</a></li>
                         <li><a href="#">帮助</a></li>
 
                     <!-- Authentication Links -->

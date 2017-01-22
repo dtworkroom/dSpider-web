@@ -48,6 +48,16 @@
         a{
             cursor: pointer;
         }
+
+        select {
+          width: 100px;
+            height: 30px;
+            background: #fff;
+        }
+
+
+        /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+        select::-ms-expand { display: none; }
     </style>
 
     @yield('head')
@@ -80,7 +90,7 @@
                     <li><a href="{{url("/home")}}">我的应用</a></li>
                     <li><a href="{{url("/profile/spider")}}">我的脚本</a></li>
                     <li><a href="/home">应用统计</a></li>
-                    <li><a href="#">脚本市场</a></li>
+                    <li><a href="{{url("/store")}}">脚本市场</a></li>
                     <li><a href="{{url("/document")}}">文档中心</a></li>
                     <li><a href="/home">帮助</a></li>
 
