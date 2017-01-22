@@ -101,7 +101,7 @@
             <div class="col-md-10 col-md-offset-1">
                 <div id="spider">
                     <div>
-                        <span>脚本图标:</span> <img style="width: 30px; border-radius: 2px;" src="{{url("storage/app/img/icon/".($spider->icon??"default.png"))}}">
+                        <span>脚本图标:</span> <img style="width: 30px; border-radius: 2px;" src="{{$spider->icon?url("storage/app/img/icon/".$spider->icon):url("public/img/icon/spider_default.png")}}">
                     </div>
                     <div>
                         <span>脚本名称:</span> {{$spider->name}}

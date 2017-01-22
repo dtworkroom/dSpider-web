@@ -77,9 +77,6 @@ class PublicController extends Controller
 //        },$items);
 //
         Spider::where("public",1)->get()->map(function($item) use(&$all){
-            if(!$item->icon){
-                $item->icon="default.png";
-            }
             $all[getCategories($item->category)][]=$item;
             return $item;
         });

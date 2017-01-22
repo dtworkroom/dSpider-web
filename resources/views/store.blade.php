@@ -178,7 +178,7 @@
         @endif
             <div class="col-md-3 col-sm-6" data-id="{{$spider->id}}" >
                 <div class="clearfix">
-                    <img src="{{"storage/app/img/icon/".$spider->icon}}">
+                    <img src="{{$spider->icon?url("storage/app/img/icon/".$spider->icon):url("public/img/icon/spider_default.png")}}">
                     <div class="s-cap">
                         <div class="s-title">{{$spider->name}}</div>
                         <div class="s-title-bottom">调用次数: {{$spider->callCount}}</div>
