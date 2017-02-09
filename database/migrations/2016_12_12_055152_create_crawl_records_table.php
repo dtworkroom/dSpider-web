@@ -17,11 +17,13 @@ class CreateCrawlRecordsTable extends Migration
             $table->increments('id');
             $table->integer('appKey_id')->unsigned();
             $table->integer('spider_id')->unsigned();
+            $table->integer('script_id')->unsigned()->default(0);
             $table->text("config")->nullable();
             $table->tinyInteger("state")->default(-1);
             $table->mediumText("msg")->nullable();
             $table->string("app_version",20)->nullable();
             $table->string("sdk_version",20)->nullable();
+            $table->tinyInteger("os_type");
             $table->integer("device_id")->unsigned();
             $table->timestamps();
 

@@ -297,6 +297,7 @@ class ComposerStaticInit6023dd132c4c0634e49a44df2f9d8066
         'CreateDevicesTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_07_031352_create_devices_table.php',
         'CreateDownloadsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_08_060256_create_downloads_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+        'CreateScriptsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_23_015316_create_scripts_table.php',
         'CreateSpiderConfigsTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_02_063620_create_spider_configs_table.php',
         'CreateSpidersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_021056_create_spiders_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',

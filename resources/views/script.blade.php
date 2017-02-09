@@ -1,4 +1,4 @@
-@extends('layouts.profile')
+@extends('layouts.public')
 @section('head')
     <style>
         #spider > div > span {
@@ -13,6 +13,10 @@
             line-height: 2em;
         }
 
+        #spider{
+            padding-top: 20px;
+        }
+
         #btn_group {
             margin: 30px 0 50px;
         }
@@ -20,15 +24,14 @@
         #btn_group a {
             margin-left: 20px;
         }
-
-        .appitem {
-            padding: 8px 5px;
-            color: #337ab7;
+        .appitem{
+            padding:8px 5px;
+            color:#337ab7 ;
             cursor: pointer;
             border-bottom: #f3f3f3 1px solid;
         }
 
-        .appitem:hover {
+        .appitem:hover{
             background: #f7f7f7;
         }
 
@@ -44,6 +47,7 @@
             position: relative;
             margin-bottom: 24px;
             border-radius: 3px;
+            word-wrap: normal;
             border: 1px solid #C3CCD0;
             background-color: #fbfbfb
         }
@@ -71,20 +75,20 @@
         }
 
         code.has-numbering {
-            margin-left: 21px;
+            margin-left: 30px;
         }
 
         .pre-numbering {
             position: absolute;
             top: 0;
             left: 0;
-            width: 20px;
-            padding: 10px 2px 9px 0;
+            width: 27px;
+            padding: 10px 0px 9px 0;
             border-right: 1px solid #C3CCD0;
             border-radius: 3px 0 0 3px;
             background-color: #EEE;
             text-align: right;
-            font-size: 0.8em;
+            font-size: 12px;
             line-height: 20px;
             color: #AAA;
             text-align: center;
@@ -95,94 +99,68 @@
 @section('content')
     <div class="container">
         <div class="row">
+
             <div class="col-md-10 col-md-offset-1">
+
                 <div id="spider">
+                    <h3>基本信息</h3>
                     <div>
-                        <span>App名称:</span>
-                        <a title="查看应用详情" href="{{url("profile/appkey/save/".$app->id)}}">{{$app->name}}</a>
+                        <span>所属Spider:</span>
+                        <a href="{{url("spider/".$script->spider->id)}}">{{$script->spider->name}}</a>
                     </div>
                     <div>
-                        <span>App包名:</span>
-                        <a title="查看应用详情" href="{{url("profile/appkey/save/".$app->id)}}">{{$app->package}}</a>
+                        <span>本脚本ID:</span>
+                        {{$script->spider->id}}
                     </div>
                     <div>
-                        <span>App版本:</span>
-                        {{$record->app_version}}
+                        <span>支持SDK的最低版本:</span>
+                        {{$script->min_sdk}}
                     </div>
                     <div>
-                        <span>Sdk版本:</span>
-                        {{$record->sdk_version}}
+                        <span>优先级:</span>
+                        {{$script->priority}}
                     </div>
                     <div>
-                        <span>执行spider:</span>
-                        <a title="查看spider详情" href="{{url("spider/".$spider->id)}}">{{$spider->name}}</a>
-                    </div>
-                    <div>
-                        <span>脚本id:</span>
-                        <a title="查看脚本详情" href="{{url("script/".$record->script_id)}}">{{$record->script_id}}</a>
-                    </div>
-
-
-                    <div>
-                        <span>设备ID:</span>
-                        {{$device->id}}
+                        <span>状态:</span>
+                        {!!  $script->online?"已上线":"<span style='color:red'>未上线</span>" !!}
                     </div>
 
                     <div>
-                        <span>设备UID:</span>
-                        {{$device->identifier}}
+                        <span>被调次数:</span>
+                        {{$script->callCount}}
+                    </div>
+                    <div>
+                        <span>创建时间:</span>
+                        {{$script->created_at}}
                     </div>
 
                     <div>
-                        <span>设备系统:</span>
-                        <?php
-                        $type=[1=>'Android',2=>"Ios",3=>'Windows',4=>'Osx',5=>'Linux'];
-                        echo $type[$device->os_type]." ".$device->os_version
-                        ?>
+                        <span>更新时间:</span>
+                        {{$script->updated_at}}
                     </div>
 
-                    <div>
-                        <span>设备机型:</span>
-                        {{$device->model??"--"}}
-                    </div>
-
-                    <div>
-                        <span>爬取时间:</span>
-                        {{$record->updated_at}}
-                    </div>
-
-                    <div class="{{$record->content?"form-group":""}} code">
-                        <span>爬取配置:</span>
-                        @if (trim($record->content)):
-                        <pre><code> <?php
-                                $json = json_decode($record->content);
-                                echo json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
-                                ?></code></pre>
+                    <div class="form-group code">
+                        <h3>脚本源码</h3>
+                        @if(isset($script->content))
+                        <pre><code>{{trim($script->content)}} </code></pre>
                         @else
-                            原脚本默认
+                        作者未公开源码.
                         @endif
                     </div>
 
+
                     <div>
-                        <span>爬取状态:</span>
-                        {!! $record->state==0?"<span style='color:green'>成功</span>":"<span style='color:red'>失败</span>" !!}
+                        @if(!Auth::guest() &&  Auth::user()->id==$script->spider->user_id)
+                            <a href="{{url("profile/script/save/".$script->spider_id."/".$script->id."?sn=".$script->spider->name)}}" class="btn btn-middle btn-primary">
+                                <span class="glyphicon glyphicon-edit"></span>
+                                编辑
+                            </a>
+                        @endif
                     </div>
-
-                    @if($record->state>0)
-                        <div class="form-group code">
-                           <span>错误信息:</span>
-                           <pre><code><?php
-                                   $json = json_decode($record->msg);
-                                  echo  str_replace("\\n","\n\t\t",json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
-                                   ?></code></pre>
-                        </div>
-                    @endif
-
                 </div>
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('footer')
@@ -201,7 +179,6 @@
             })
             return t.html()
         }
-
         hljs.initHighlightingOnLoad();
         $(".code").html(function (_, html) {
             return addRowNo(html)

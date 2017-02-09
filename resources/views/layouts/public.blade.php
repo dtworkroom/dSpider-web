@@ -87,8 +87,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Left Side Of Navbar -->
                         <li><a href="{{url("/document")}}">文档中心</a></li>
-                        <li><a href="#">SDK下载</a></li>
-                        <li><a href="{{url("/store")}}">脚本市场</a></li>
+                        <li><a href="{{url("/store")}}" target="_blank">{{ config('wording.store', 'Laravel') }}</a></li>
                         <li><a href="#">帮助</a></li>
 
                     <!-- Authentication Links -->

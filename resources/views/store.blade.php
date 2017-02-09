@@ -8,7 +8,7 @@
     <meta name="x5-fullscreen" content="true">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="full-screen" content="yes">
-    <title>脚本市场</title>
+    <title>{{ config('wording.store', 'Laravel') }}</title>
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     {{--<link rel="stylesheet" href="{{ url('public/css/index.css')}}">--}}
 </head>
@@ -25,16 +25,12 @@
         color: #333;
     }
 
-    @media (min-width: 768px) {
-
-    }
-
     .grid .row {
-        padding: 16px;
+        padding: 0 16px;
     }
 
     .grid .row:not(:first-child) {
-        top: -33px;
+        top: -1px;
         position: relative;
     }
 
@@ -81,18 +77,25 @@
         overflow: hidden;
     }
     .s-tag{
-        font-size:13px; position: absolute;right: 0; bottom: 0; padding:3px 5px; background:#e8e8e8;
+        font-size:13px; position: absolute;right: 0; bottom: 0; padding:3px 5px;
+        color: #333;
+        border-left: #e8e8e8 1px solid;
+        border-top: #e8e8e8 1px solid;
     }
 
     .tit {
         border-left: #333 4px solid;
         padding-left: 5px;
         font-weight: bold;
-        margin-left: 2px;
+        margin: 26px 0 10px 2px;
     }
 
-    @media (min-width: 992px) {
-        .container {
+
+    @media (min-width: 1050px) {
+        .navbar>.container{
+            width: 1024px;
+        }
+        .container{
             width: 960px;
         }
 
@@ -108,7 +111,7 @@
     }
 
 </style>
-<body data-spy="scroll" data-target=".navbar-fixed-top" data-offset="71">
+<body data-spy="scroll" data-target=".navbar-fixed-top" data-offset="80">
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -120,7 +123,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" id="navbar-brand" href="#" ><span class="glyphicon glyphicon-fire"></span> 脚本商店</a>
+            <a class="navbar-brand" href="{{url('/')}}" id="navbar-brand" href="#" ><span class="glyphicon glyphicon-home"></span></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -129,6 +132,7 @@
                 <li><a href="#1"><span class="glyphicon glyphicon-credit-card" style="top: 2px"></span> 征信</a></li>
                 <li><a href="#2"><span class="glyphicon glyphicon-envelope"></span> 邮箱</a></li>
                 <li><a href="#3"><span class="glyphicon glyphicon-book"></span> 小说</a></li>
+                <li><a href="#4"><span class="glyphicon glyphicon-book"></span> 其它</a></li>
 
             </ul>
             <div class="navbar-form navbar-left" role="search">
@@ -138,7 +142,6 @@
                 </div>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="./"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
                 @if (Auth::guest())
                     <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-user"></span> 登录</a></li>
                 @else
@@ -168,7 +171,7 @@
     </div><!-- /.container-fluid -->
 </nav>
 <?php $i=1; ?>
-<div class="container"  style="margin: 70px auto;">
+<div class="container"  style="margin: 50px auto;">
   @foreach($categories as $name=>$category)
    <div class="tit" id="{{$i++}}">{{$name}}</div>
      <div class="grid">
@@ -187,7 +190,7 @@
                 <div class="s-des">
                     {{$spider->description}}
                 </div>
-                <div class="s-tag">{{$spider->user_id==0?"官方":"开发者提供"}}</div>
+                <div class="s-tag" {!! $spider->user_id==1? 'style="color:#34b58a"':"" !!}>{{$spider->user_id==1?"官方认证":"开发者提供"}}</div>
             </div>
        @if($key%4==3||$key==count($category)-1)
             </div>
@@ -236,8 +239,9 @@
         {{--</div>--}}
     {{--</div>--}}
 {{--</div>--}}
-<div style="border-top: #e8e8e8 1px solid; text-align: center; padding: 40px">
-    版权所有
+<div style="border-top: #e8e8e8 1px solid; text-align: center; padding: 40px;line-height: 2em; color: #333; font-size: 14px;">
+    本站脚本由开发者上传,如有侵权,请邮件(duwen32767@163.com)告知,本站将予以处理。<br/>
+    Copyright © 2016 {{config("app.name")}}(dspider.dtworkroom.com) All Rights Reserved.所有爬虫
 </div>
 <script src="//cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -253,7 +257,7 @@
     }).trigger("hashchange")
 
     $(".grid").on("click",".col-md-3",function(){
-        location.href="spider/"+$(this).data("id");
+        window.open("spider/"+$(this).data("id"),"_blank");
     })
 
 </script>

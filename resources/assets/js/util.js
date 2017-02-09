@@ -114,6 +114,14 @@ dialog = function (msg, title) {
     }
 }
 
+//解决弹出多次时遮罩冲突
+$(function(){
+    $('#alert').on('hidden.bs.modal', function (e) {
+        $(".modal-backdrop").first().remove();
+    })
+})
+
+
 var _alert = alert;
 alert = function (msg, title) {
     if ($ && $("#alert-text")[0]) {

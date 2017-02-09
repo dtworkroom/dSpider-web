@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\AppKey;
 use App\Common\JSMin;
-use App\Common\ResponseData;
+use App\Common\SdkResponseData;
 use App\Http\Controllers\Controller;
 use App\CrawlRecord;
 use App\Device;
@@ -31,7 +31,8 @@ class SdkController extends Controller
             $data['identifier']=$data['mac_id'];
         }
         if(isset($data['os'])){
-            $data['os_type']=$data['os'];
+            $os= ["android"=>1,"ios"=>2,"pc"=>4][$data['os']];
+            $data['os_type']=$os;
         }
         $validator = Validator::make($data, [
             'os_type' => 'required',
@@ -41,7 +42,7 @@ class SdkController extends Controller
 
         ]);
         if ($validator->fails()) {
-            die (ResponseData::errorResponse($validator->errors()->first())->getContent());
+            die (SdkResponseData::errorResponse($validator->errors()->first())->getContent());
         }
         $device = Device::where([
             ["os_type", $data['os_type']],
@@ -61,7 +62,7 @@ class SdkController extends Controller
 
     public function saveDevice(Request $request){
 
-        return ResponseData::okResponse($this->_saveDevice($request));
+        return SdkResponseData::okResponse($this->_saveDevice($request));
     }
 
     public function getTask(Request $request)
@@ -71,20 +72,25 @@ class SdkController extends Controller
         if(isset($data['bundle_id'])){
             $data['package']=$data['bundle_id'];
         }
+        if(isset($data['soft_version'])){
+            $data['app_version']=$data["soft_version"];
+        }
         $validator = Validator::make($data, [
             'sid' => 'required',
             'package' => 'required',
-            'sdk_version' => 'required'
+            'retry'=>'required|Numeric',
+            'sdk_version' => 'required',
+            'app_version'=>'required'
         ]);
 
         if ($validator->fails()) {
-            return ResponseData::errorResponse($validator->errors()->first());
+            return SdkResponseData::errorResponse($validator->errors()->first());
         }
         $sid = $data["sid"];
         $spider = Spider::find($sid);
         $app=AppKey::where("package",$data['package'])->first();
         if(!$app){
-            return ResponseData::errorResponse("The app {$data['package']} is not exist!");
+            return SdkResponseData::errorResponse("The app {$data['package']} is not exist!");
         }
         $config = SpiderConfig::where([
             ["spider_id", $sid],
@@ -92,14 +98,24 @@ class SdkController extends Controller
         ])->first();
 
         if (!($config && ($spider->access & Spider::ACCESS_DISPATCH))) {
-            return ResponseData::errorResponse("No permission for this script!");
+            return SdkResponseData::errorResponse("No permission for this script!");
         }
 
         if (!$config->online) {
-            return ResponseData::errorResponse("The script is offline!");
+            return SdkResponseData::errorResponse("The script is offline!");
         }
 
-        $platform = $request->input("os");
+        $scripts=array_filter($spider->scripts->all(),function($item){
+            if($item->online) return true;
+        });
+
+        $scriptsCount=count($scripts);
+        if($scriptsCount==0||$data["retry"]>$scriptsCount){
+            return SdkResponseData::errorResponse("No more script!");
+        }
+
+
+        $platform = ["android"=>1,"ios"=>2,"pc"=>4][$request->input("os")];
         if ($platform ==Device::ANDROID) {
             $support = Spider::SUPPORT_ANDROID;
         } elseif ($platform ==Device::IPHONE) {
@@ -109,7 +125,7 @@ class SdkController extends Controller
         }
         //是否支持当前平台
         if (!($spider->support & $support)) {
-            return ResponseData::errorResponse("The spider doesn't support " . $platform);
+            return SdkResponseData::errorResponse("The spider doesn't support " . $platform);
         }
 
         $crawRecords = new CrawlRecord();
@@ -120,86 +136,44 @@ class SdkController extends Controller
         $crawRecords->sdk_version = $data["sdk_version"];
         $crawRecords->app_version = $data["app_version"];
         $crawRecords->state=CrawlRecord::STATE_CRAWLING;
-        $crawRecords->save();
+        $crawRecords->os_type=$support;
         //分发脚本
         $spider = $crawRecords->spider;
         $spider->callCount = $spider->callCount + 1;
         $config->callCount= $config->callCount+1;
         $spider->save();
+        $config->save();
+
         $code = "!function(){\r\nvar _config=%s;\r\n%s;\r\n%s}()";
         $src = "";
 
+        //选取脚本,按优先级排序
+        usort($scripts,function($pre,$after){
+         if($after->priority==$pre->priority){
+             return 0;
+         }
+          return  $after->priority>$pre->priority?1:-1;
+        });
+        $script=$scripts[intval($data["retry"])-1];
+        $script->callCount= $script->callCount+1;
+        $script->save();
+        $crawRecords->script_id=$script->id;
+        $crawRecords->save();
         if ($platform < Device::WINDOWS) {
             $src = file_get_contents(__DIR__ . "/Spiders/common/sdk.js") . "\r\n";
         }
-        $src .= "\r\n" . $spider->content . "\r\n";
+
+        $src .= "\r\n" . $script["content"] . "\r\n";
         $scriptUrl = 'var _su="http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"';
         $code = sprintf($code, $crawRecords->config??"{}", $scriptUrl, $src);
         if (!env("APP_DEBUG")) {
             $code = JSMin::minify($code);
         }
-        $ret = ["id" => $crawRecords->id,"ua"=>$spider->ua, "startUrl" => $spider->startUrl,"script"=>$code,"script_count"=>1];
-        return ResponseData::okResponse($ret);
+        $ret = ["id" => $crawRecords->id, "script_id"=>$script["id"], "ua"=>$spider->ua,
+            "login_url" => $spider->startUrl,"script"=>$code,"script_count"=>$scriptsCount];
+        return SdkResponseData::okResponse($ret);
     }
 
-    public function getScript(Request $request)
-    {
-        $data = $request->all();
-        //兼容bundle_id
-        if(isset($data['bundle_id'])){
-            $data['package']=$data['bundle_id'];
-        }
-
-        $validator = Validator::make($data, [
-            'id' => 'required|Numeric',
-            "package" => 'required|Numeric',
-        ]);
-        if ($validator->fails()) {
-            return ResponseData::errorResponse(
-                $validator->errors()->first());
-        }
-
-
-        $app=AppKey::where("package",$data['package'])->first();
-        if(!$app){
-            return ResponseData::errorResponse("The app {$data['package']} is not exist!");
-        }
-        $record = CrawlRecord::find($data["id"]);
-        echo $record->config;
-        if (!($record && $record->appKey_id == $app->id)) {
-            return ResponseData::errorResponse("Illegal operation");
-        }
-        $spider = $record->spider;
-        if ($request->method() == "GET") {
-            if ($spider->user_id != $record->appKey->user_id && !($spider->access & Spider::ACCESS_READ)) {
-                return ResponseData::errorResponse("No read permission for this spider source!");
-            }
-        }
-        $record->state = CrawlRecord::STATE_CRAWLING;
-        $record->save();
-
-        //脚本总调用次数自增
-        $spider->callCount = $spider->callCount + 1;
-        $spider->save();
-        $code = "!function(){\r\nvar _config=%s;\r\n%s;\r\n%s}()";
-        $src = "";
-        $platform = $request->input("platform", Device::IPHONE);
-        if ($platform < Device::WINDOWS) {
-            $src = file_get_contents(__DIR__ . "/Spiders/common/utils.js") . "\r\n";
-        }
-        if ($platform == Device::ANDROID) {
-            $src .= file_get_contents(__DIR__ . "/Spiders/common/jsBridgeAndroid.js");
-        } elseif ($platform == Device::IPHONE) {
-            $src .= file_get_contents(__DIR__ . "/Spiders/common/jsBridgeIos.js");
-        }
-        $src .= "\r\n" . $spider->content . "\r\n";
-        $scriptUrl = 'var _su="http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"';
-        $code = sprintf($code, $record->config??"{}", $scriptUrl, $src);
-        if (!env("APP_DEBUG")) {
-            $code = JSMin::minify($code);
-        }
-        return response($code)->header("Content-Type", "text/javascript; charset=utf-8");
-    }
 
     //上报爬取结果
     public function reportState(Request $request)
@@ -211,31 +185,31 @@ class SdkController extends Controller
         }
 
         $validator = Validator::make($data, [
-            'id' => 'required|Numeric',
+            'task_id' => 'required|Numeric',
             'state' => 'required|Numeric',
-            'package' => 'required|Numeric',
+            'package' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return ResponseData::errorResponse(
+            return SdkResponseData::errorResponse(
                 $validator->errors()->first());
         }
         $app=AppKey::where("package",$data['package'])->first();
         if(!$app){
-            return ResponseData::errorResponse("The app {$data['package']} is not exist!");
+            return SdkResponseData::errorResponse("The app {$data['package']} is not exist!");
         }
 
-        $record = CrawlRecord::find($data["id"]);
+        $record = CrawlRecord::find($data["task_id"]);
         if ($record->appKey_id != $app->id) {
-            return ResponseData::errorResponse("Illegal operation");
+            return SdkResponseData::errorResponse("Illegal operation");
         }
 
         $record->state = $data['state'];
-        if ($data['msg']) {
+        if (isset($data['msg'])) {
             $record->msg = $data['msg'];
         }
         $record->save();
-        return ResponseData::okResponse();
+        return SdkResponseData::okResponse();
     }
 
 }

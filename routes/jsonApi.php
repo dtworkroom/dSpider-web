@@ -24,6 +24,12 @@ Route::group(['middleware' => 'auth.api','prefix' => 'profile'], function () {
         Route::match(["get","post"],'/{id}', "SpiderController@getById");
     });
 
+    Route::group(['prefix' => 'script'], function () {
+        Route::match(["get","post"],'/save', "ScriptController@save");
+        Route::match(["get","post"],'/delete/{id}', "ScriptController@delete");
+        Route::match(["get","post"],'/{id}', "ScriptController@getById");
+    });
+
     Route::group(['prefix' => 'spider_config'], function () {
         Route::match(["get","post"],'/save', "SpiderConfigController@save");
         Route::match(["get","post"],'/delete/{id}', "SpiderConfigController@delete");

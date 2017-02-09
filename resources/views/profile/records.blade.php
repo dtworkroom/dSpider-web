@@ -74,11 +74,12 @@
                         <thead>
                         <tr>
                             <th>序号</th>
-                            <th>脚本名</th>
+                            <th>Spider</th>
                             <th>状态</th>
                             <th>app版本</th>
                             <th>时间</th>
-                            <th>sdk版本</th>
+                            <th>OS</th>
+                            <th>SDK版本</th>
                             <th>详情</th>
                         </tr>
                         </thead>
@@ -92,6 +93,7 @@
                                 </td>
                                 <td>@{{record.app_version}}</td>
                                 <td>@{{record.updated_at}}</td>
+                                <td>@{{record.os_type}}</td>
                                 <td>@{{record.sdk_version}}</td>
                                 <td>
                                     <a :href="root+'profile/record/'+record.id"><span class="glyphicon glyphicon-eye-open"></span></a>
@@ -178,6 +180,8 @@
             data.data.forEach(function (item) {
                 item.name = names[item.spider_id]
                 item.state = item.state >0 ? "失败" : "成功";
+                console.log(item.os_type)
+                item.os_type=["","Android","IOS","PC"][item.os_type]
                 return item
             })
             return data;

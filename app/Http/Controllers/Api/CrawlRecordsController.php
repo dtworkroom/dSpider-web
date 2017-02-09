@@ -24,7 +24,20 @@ class CrawlRecordsController extends Controller
             if(strpos($key, "page") === 0){
                 continue;
             }
-            $conditions[] = [$key, $value];
+            if($key=="state"){
+                $state=$value;
+                $re=">=";
+                $t=0;
+                if($state==0){
+                    $re="=";
+                    $t=0;
+                }elseif($state==1){
+                    $t=1;
+                }
+                $conditions[] = [$key,$re, $t];
+            }else {
+                $conditions[] = [$key, $value];
+            }
         }
         $user = $request->user();
         $appkeys = array_map(function ($item) {
@@ -34,7 +47,7 @@ class CrawlRecordsController extends Controller
         $records = CrawlRecord::where($conditions)
             ->where('crawl_records.state','>=' ,'0')
             ->whereIn('appKey_id', $appkeys)
-            ->select("crawl_records.id","crawl_records.appKey_id","crawl_records.spider_id","crawl_records.state",
+            ->select("crawl_records.id","crawl_records.appKey_id","crawl_records.spider_id","crawl_records.os_type","crawl_records.state",
                 "crawl_records.app_version","crawl_records.sdk_version","crawl_records.device_id","crawl_records.updated_at")
             ->orderBy('updated_at', 'desc')
             ->paginate($request->input("pageSize", 20));
@@ -60,15 +73,23 @@ class CrawlRecordsController extends Controller
     {
         $user = $request->user();
         $spiders = array_map(function ($item) {
-            return $item['user_id'];
-        }, $user->spiders->toArray());
+            return $item->id;
+        }, $user->spiders->all());
         $state=$request->input("state",1000);
+        $re=">=";
+        $t=0;
+        if($state==0){
+            $re="=";
+            $t=0;
+        }elseif($state==1){
+            $t=1;
+        }
         $records= DB::table('crawl_records')
             ->where("spider_id", $request->id)
-            ->where('crawl_records.state',$state==1000?'>=':"=" ,$state==1000?0:$state)
+            ->where('crawl_records.state',$re ,$t)
             ->whereIn('spider_id', $spiders)
             ->leftJoin('app_keys', 'appKey_id', '=', 'app_keys.id')
-            ->select("crawl_records.id","crawl_records.appKey_id","crawl_records.spider_id","crawl_records.state",
+            ->select("crawl_records.id","crawl_records.appKey_id","crawl_records.spider_id","crawl_records.os_type","crawl_records.state",
                 "crawl_records.app_version","crawl_records.sdk_version","crawl_records.device_id","crawl_records.updated_at","app_keys.name")
             ->orderBy('updated_at', 'desc')
             ->paginate($request->input("pageSize", 20));

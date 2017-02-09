@@ -54,6 +54,9 @@ class Handler extends ExceptionHandler
 //        }
 
         if($request->ajax()){
+            //return parent::render($request, $exception);
+           // var_dump($exception);
+            die($exception);
             return ResponseData::errorResponse($exception->getMessage()?$exception->getMessage():"Server error !",$exception->getMessage()?"":(string)$exception);
         }else {
             return parent::render($request, $exception);

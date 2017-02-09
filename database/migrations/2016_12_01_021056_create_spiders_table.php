@@ -18,7 +18,6 @@ class CreateSpidersTable extends Migration
             $table->increments('id');
             $table->string("name",50);
             $table->integer("user_id")->unsigned()->default(0);
-            $table->text("content")->nullable();
             $table->string("description");
             $table->text("readme")->nullable();
             $table->smallInteger("support")->default(7);
@@ -31,7 +30,7 @@ class CreateSpidersTable extends Migration
             $table->boolean("public")->default(false);
             $table->Integer("access")->default(3);
             $table->text("startUrl");
-            $table->smallInteger("category")->default(0);
+            $table->smallInteger("category")->unsigned()->default(0);
             $table->string("icon",100)->nullable();
             $table->tinyInteger("ua")->default(1);
             $table->timestamps();

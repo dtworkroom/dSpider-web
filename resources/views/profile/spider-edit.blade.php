@@ -6,6 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9 col-md-offset-1">
+                <div v-show="old_browser" style="display: none" class="alert alert-danger" role="alert">由于您使用的浏览器太旧,本页功能将不能正常使用,推荐使用Chrome浏览器!</div>
                 <form role="form" @submit.prevent="submit" enctype="multipart/form-data" id="spider">
                     <div class="form-group">
                         <label>脚本名称</label>
@@ -29,9 +30,9 @@
                       <input type="file" id="file" onchange="onfileChange(this)"  style="display: none; width: 100%;height: 100% ">
                     </a>
                     <div>
-                        <img v-show="spider.icon" :src="root+'storage/app/img/icon/'+spider.icon" style="display: none; margin-top: 15px; width: 90px; height: 90px;" id="preview">
+                        <img  :src="spider.icon?root+'storage/app/img/icon/'+spider.icon:root+'public/img/icon/spider_default.png'" style=" margin-top: 15px; width: 90px; height: 90px;" id="preview">
                     </div>
-                    <p class="file-help-block" style="margin-top: 5px;">图标可选,但公开脚本必须有图标,尺寸120*120;</p>
+                    <p class="file-help-block" style="margin-top: 5px;">图标可选,但公开脚本必须有图标,尺寸168*168;</p>
                     </div>
                     <div class="form-group">
                         <label>分类 </label>
@@ -83,12 +84,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label>脚本源代码</label>
-                        <textarea class="form-control" rows="10" v-model.trim="spider.content" required
-                                  placeholder="将代码粘贴到此处"></textarea>
-                    </div>
-
-                    <div class="form-group">
                         <label>默认配置</label>
                         <textarea class="form-control" rows="10" v-model.trim="spider.defaultConfig"
                                   placeholder="必须为合法的json对象字符串,可以不填"></textarea>
@@ -130,10 +125,6 @@
                   if(e.files && e.files[0]){
                       dataURL = windowURL.createObjectURL(e.files[0]);
                       $img.attr('src',dataURL);
-                  }else{
-                      var imgObj = $img[0];
-                      imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
-                      imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = filePath;
                   }
                   $img.show();
                   return false;
@@ -152,17 +143,19 @@
 
         //初始化数据 后面不应该再使用
         var spider = {
-            "public": 1,//是否公开，0代表私有脚本，1代表公开脚本，公开脚本可以被其它用户检索到。
+            "public": true,//是否公开，0代表私有脚本，1代表公开脚本，公开脚本可以被其它用户检索到。
             "ua": 2,//默认爬取的起始ua，1:手机 2:pc
             "access": 3,
-            "support": 0
+            "support": 0,
+
         }
 
         var app = new Vue({
-            el: '#spider',
+            el: '#app',
             data: {
                 spider: {},
-                root:root
+                root:root,
+                "old_browser":!(FormData&&$("#file")[0].files)
             },
             computed: {
                 access: {

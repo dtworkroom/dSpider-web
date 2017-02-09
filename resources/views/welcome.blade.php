@@ -16,7 +16,7 @@
 <div class="header">
     <div id="stage"></div>
     <div class="logo-c">
-        <span class="name">小人数据<br/> <span class="en-name" style="padding-left: 3px;"> XIAOREN DATA</span></span>
+        <span class="name">沧云数据<br/> <span class="en-name" style="padding-left: 3px;"> CANGYUN DATA</span></span>
     </div>
     <div style="position: absolute; top:10px; width: 100%;">
         <nav class="navbar navbar-default" style="background: none"  >
@@ -38,8 +38,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Left Side Of Navbar -->
                         <li><a href="{{url("/document")}}">文档中心</a></li>
-                        <li><a href="#">SDK下载</a></li>
-                        <li><a href="#">脚本市场</a></li>
+                        <li><a href="{{url("/store")}}">{{ config('wording.store', 'Laravel') }}</a></li>
                         <li><a href="#">帮助</a></li>
 
                         <!-- Authentication Links -->
@@ -144,12 +143,16 @@
     </div>
 
     <div class="section">
-        <div class="title">SDK下载</div>
-        <div style="padding: 20px; line-height: 2em">我们提供了IOS/ANDROID SDK, 同时也提供了PC测试工具。</div>
-
-        <a href="#" class="btn-m">
-            下载中心 》
+        <div class="title">快速集成</div>
+        <div style="padding: 20px; line-height: 2em">我们提供了IOS/ANDROID SDK,只需集成对应的SDK到你的应用中,便可轻松使用。 </div>
+        <div style=" border: #408cce 1px solid;width: 300px; margin: 0 auto; border-radius: 3px">
+        <a href="{{url("document/android")}}" class="btn-sdk" style="border-right: #408cce 1px solid;"  title="Android sdk集成">
+           <img src="{{url('public/img/android.svg')}}" style="width: 40px;"> Android
         </a>
+        <a href="{{url("document/android")}}" class="btn-sdk" title="Ios sdk集成">
+            <img src="{{url('public/img/ios.svg')}}" style="width: 40px;"> <span style="position: relative; top: 2px">IOS</span>
+        </a>
+        </div>
     </div>
 
     <div class="section" id="footer">

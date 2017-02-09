@@ -3,10 +3,20 @@
  */
 
 var $ = dQuery;
+
+String.prototype.format = function () {
+    var args = Array.prototype.slice.call(arguments);
+    var count = 0;
+    return this.replace(/%s/g, function (s, i) {
+        return args[count++];
+    });
+};
+
 function _logstr(str) {
     str = str || " "
     return typeof str == "object" ? JSON.stringify(str) : (new String(str)).toString()
 }
+
 function log(str) {
     var s = window.curSession
     if (s) {
@@ -22,7 +32,7 @@ function errorReport(e) {
     var msg = "语法错误: " + e.message + "\nscript_url:" + _su + "\n" + stack
     if (window.curSession) {
         curSession.log(msg);
-        curSession.finish(e.message, "", 3, msg);
+        curSession.finish(e.message, "", 2, msg);
     }
 }
 
@@ -33,7 +43,7 @@ String.prototype.endWith = function (str) {
 
 //queryString helper
 window.qs = [];
-var s = decodeURI(location.search.substr(1));
+var s = location.search.substr(1);
 var a = s.split('&');
 for (var b = 0; b < a.length; ++b) {
     var temp = a[b].split('=');
@@ -162,16 +172,6 @@ $(function () {
     f && f(dSpider.bind(5))
 })
 
-//邮件爬取入口
-function dSpiderMail(sessionKey, callback) {
-    dSpider(sessionKey, function (session, env, $) {
-        callback(session.getLocal("u"), session.getLocal("wd"), session, env, $);
-    })
-}
-
-/**
- * Created by du on 16/8/17.
- */
 var bridge = getJsBridge();
 function callHandler() {
     var f = arguments[2];
@@ -192,7 +192,10 @@ DataSession.getExtraData = function (f) {
     return callHandler("getExtraData")
 }
 
-
+var getArguments =function () {
+    log("getArguments called")
+    return JSON.parse(callHandler("getArguments")||'{}')
+};
 
 DataSession.prototype = {
     _save: function () {
@@ -204,9 +207,16 @@ DataSession.prototype = {
         this.local = JSON.parse(callHandler("read", {key: this.key}) || "{}");
     },
 
-    getArguments :function (f) {
-        log("getArguments called")
-        return JSON.parse(callHandler("getArguments"))
+    getArguments :getArguments,
+
+    addArgument: function(key,value){
+        var t=this.getArguments();
+        t[key]=value;
+        this.setArguments(t);
+    },
+
+    setArguments: function(object){
+        callHandler("setArguments",{args:JSON.stringify(object)})
     },
 
     get: function (key) {
@@ -236,6 +246,7 @@ DataSession.prototype = {
         callHandler("setProgressMsg", {msg: msg})
     },
     finish: function (errmsg, content, code, stack) {
+        log("finish called")
         var ret = {sessionKey: this.key, result: 0, msg: ""}
         if (errmsg) {
             var ob = {
@@ -248,7 +259,6 @@ DataSession.prototype = {
             ret.result = code || 2;
             ret.msg = JSON.stringify(ob);
         }
-        log("finish called")
         this.finished = true;
         callHandler("finish", ret);
 

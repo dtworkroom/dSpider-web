@@ -88,9 +88,9 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav" id="nav">
                     <li><a href="{{url("/home")}}">我的应用</a></li>
-                    <li><a href="{{url("/profile/spider")}}">我的脚本</a></li>
+                    <li><a href="{{url("/profile/spider")}}">我的爬虫</a></li>
                     <li><a href="/home">应用统计</a></li>
-                    <li><a href="{{url("/store")}}">脚本市场</a></li>
+                    <li><a href="{{url("/store")}}" target="_blank">{{ config('wording.store', 'Laravel') }}</a></li>
                     <li><a href="{{url("/document")}}">文档中心</a></li>
                     <li><a href="/home">帮助</a></li>
 

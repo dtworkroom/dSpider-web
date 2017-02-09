@@ -41,6 +41,8 @@ Route::get('/spider', function () {
 });
 Route::get('/store',"PublicController@store");
 Route::get('/spider/{id}',"PublicController@spider");
+Route::get('/script/{id}',"PublicController@script");
+
 
 Route::get('/apiTest', function () {
     return view('apiTest');
@@ -68,6 +70,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
         });
     });
 
+    Route::group(['middleware' => 'auth', 'prefix' => 'script'], function () {
+        Route::get('/save/{spider_id}/{id?}', function ($spider_id,$id=0) {
+            return view('profile.script-edit',qs(['spider_id'=>$spider_id,'id'=>$id,"sn"=>$_GET["sn"]??""]));
+        });
+    });
+
     Route::get('/appkey/save/{id?}', function($id=0){
         return view('profile.appkey',qs(['id'=>$id]));
     });
@@ -83,6 +91,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
 
    // Route::get('/{id}', "ProfileController@index");
 
+});
+
+Route::group(['prefix' => 'imp'], function () {
+    Route::get('/email', function(){
+        return view("imp.email ");
+    });
 });
 
 

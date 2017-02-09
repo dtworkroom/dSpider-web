@@ -11,6 +11,7 @@ return array(
     'CreateDevicesTable' => $baseDir . '/database/migrations/2016_12_07_031352_create_devices_table.php',
     'CreateDownloadsTable' => $baseDir . '/database/migrations/2017_01_08_060256_create_downloads_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+    'CreateScriptsTable' => $baseDir . '/database/migrations/2017_01_23_015316_create_scripts_table.php',
     'CreateSpiderConfigsTable' => $baseDir . '/database/migrations/2016_12_02_063620_create_spider_configs_table.php',
     'CreateSpidersTable' => $baseDir . '/database/migrations/2016_12_01_021056_create_spiders_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',

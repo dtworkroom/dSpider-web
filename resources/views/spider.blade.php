@@ -100,11 +100,15 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div id="spider">
+                    <h3>基本信息</h3>
                     <div>
-                        <span>脚本图标:</span> <img style="width: 30px; border-radius: 2px;" src="{{$spider->icon?url("storage/app/img/icon/".$spider->icon):url("public/img/icon/spider_default.png")}}">
+                        <span>图标:</span> <img style="width: 30px; border-radius: 2px;" src="{{$spider->icon?url("storage/app/img/icon/".$spider->icon):url("public/img/icon/spider_default.png")}}">
                     </div>
                     <div>
-                        <span>脚本名称:</span> {{$spider->name}}
+                        <span>名称:</span> {{$spider->name}}
+                    </div>
+                    <div>
+                        <span>爬虫Id:</span> {{$spider->id}}
                     </div>
                     <div>
                         <span>介绍:</span>
@@ -127,7 +131,7 @@
                     </div>
                     <div>
                         <span>默认User-Agent:</span>
-                        {{$spider->ua==1?"手机":$spider==2?"电脑":"自动"}}
+                        {{$spider->ua==1?"手机":($spider->ua==2?"电脑":"自动")}}
                     </div>
 
                     <div>
@@ -174,13 +178,78 @@
                         @endif
                     </div>
 
-                    <div class="form-group code">
-                        <span>脚本源代码:</span>
-                        <pre><code>{{trim($spider->content)}} </code></pre>
-                    </div>
+                    <h3>所有脚本</h3>
 
+                    @if(count($spider->scripts))
+
+                    <table class="table" v-if="data.appKey&&data.appKey.length>0" style="margin-bottom:-10px">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>ID</th>
+                            <th>SDK支持</th>
+                            <th>优先级</th>
+                            @if($own)
+                            <th>被调次数</th>
+                            <th>状态</th>
+                            <th>编辑</th>
+                            <th>删除</th>
+                            @endif
+                            <th>查看</th>
+
+                            <th>更新日期</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                       @foreach($spider->scripts as $index=>$script)
+                            <tr>
+                                <td>{{$index+1}}</td>
+                                <td>{{$script->id}}</td>
+                                <td>>= {{$script->min_sdk}}</td>
+                                <td>{{$script->priority}}</td>
+                                @if($own)
+                                <td>{{$script->callCount}}</td>
+                                <td>{!! $script->online?"<span style='color:#337ab7'>已上线</span>":"未上线"!!}</td>
+                                <td>
+                                    <a href="{{url("./profile/script/save/".$spider->id."/".$script->id."?sn=".$spider->name)}}">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a>
+                                     <span data-id="{{$script->id}}" class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                 </td>
+                                @endif
+                                <td>
+                                    <a href="{{url("./script/".$script->id)}}">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </a>
+                                </td>
+
+                                <td>
+                                    {{$script->updated_at}}
+                                </td>
+
+                            </tr>
+                         @endforeach
+
+                        </tbody>
+                    </table>
+                    @else
+                        还没有脚本!
+                    @endif
+
+                    @if($own)
+                        <br>
+                        <a style="margin-top: 10px" href="{{url("profile/script/save/".$spider->id)}}?sn={{$spider->name}}" class="btn btn-middle btn-default">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            添加脚本
+                        </a>
+                    @endif
+
+                    <h3>脚本文档</h3>
                     <div class="{{trim($spider->defaultConfig)?"form-group":""}}">
-                        <span>脚本文档:</span>
                         @if (trim($spider->readme))
                             <div id="doc">{{trim($spider->readme)}}</div>
                         @else
@@ -193,7 +262,7 @@
                             添加到我的应用
                         </button>
 
-                        @if(!Auth::guest() &&  Auth::user()->id==$spider->user_id)
+                        @if($own)
                             <a href="{{url("profile/spider/save/".$spider->id)}}" class="btn btn-middle btn-default">
                                 <span class="glyphicon glyphicon-edit"></span>
                                 编辑
@@ -275,6 +344,15 @@
 
             }
 
+        })
+
+        $(".glyphicon-trash").click(function(){
+            var id=$(this).data("id")
+            dialog("确定要删除此脚本(id#"+id+")? 删除后不可恢复。").setCancel("取消").setOk("删除", function () {
+                $.post(prefix+"profile/script/delete/"+id).done(function () {
+                  location.reload();
+                })
+            }).show()
 
         })
 

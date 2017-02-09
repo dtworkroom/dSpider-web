@@ -20,4 +20,9 @@ class Spider extends Model
     public function author(){
         return $this->hasOne('App\User');
     }
+
+    public function scripts()
+    {
+        return $this->hasMany('App\Script');
+    }
 }

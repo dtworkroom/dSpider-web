@@ -82,10 +82,10 @@
                 </template>
 
                 <h2 v-if="configs.length==0&&app.id" style="margin-top: 30px;margin-bottom: 30px">该应用没有在使用的脚本</h2>
-                <button v-if="app.id"  class="btn btn-default">
+                <a v-if="app.id" :href="root+'store'" class="btn btn-default">
                     <span class="glyphicon glyphicon-plus"> </span>
                     添加脚本
-                </button>
+                </a>
                 <a v-if="app.id" :href="root+'profile/record/appkey/'+app.id"  class="btn btn-default">
                     <span class="glyphicon glyphicon-eye-open"> </span>
                     爬取记录

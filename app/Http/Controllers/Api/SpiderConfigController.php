@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Common\ResponseData;
+use App\Http\Controllers\Controller;
+use App\Http\Requests;
 use App\Spider;
 use App\SpiderConfig;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
 class SpiderConfigController extends Controller
 {
 
@@ -26,39 +25,50 @@ class SpiderConfigController extends Controller
             return ResponseData::errorResponse($validator->errors()->first());
         }
 
-        if(isset($data["id"])){
-            $config=SpiderConfig::find($data["id"]);
-        }else {
-            $config=SpiderConfig::where([
+        //鉴权,是否本人操作
+        $user = $request->user();
+        $appkeys = array_map(function ($item) {
+            return $item['id'];
+        }, $user->appKeys->toArray());
+
+        if (!in_array($data["appKey_id"], $appkeys)) {
+            return ResponseData::errorResponse("No permission for this operation  !");
+        }
+
+
+        if (isset($data["id"])) {
+            $config = SpiderConfig::find($data["id"]);
+        } else {
+            $config = SpiderConfig::where([
                 ["spider_id", $data["spider_id"]],
                 ["appKey_id", $data["appKey_id"]]
             ])->first();
-            if($config){
-               return ResponseData::okResponse($config->id);
+            if ($config) {
+                return ResponseData::okResponse($config->id);
             }
             $config = new SpiderConfig();
         }
-        $spider=Spider::find($data["spider_id"]);
+        $spider = Spider::find($data["spider_id"]);
 
-        if($spider->user_id!=$request->user()->id && $spider->public){
+        if ($spider->user_id != $request->user()->id && $spider->public) {
             return ResponseData::errorResponse("The spider is not public!");
         }
 
         $config->spider_id = $data["spider_id"];
-        $config->content=$data["content"]??null;
-        $config->appKey_id=$data["appKey_id"];
+        $config->content = $data["content"]??null;
+        $config->appKey_id = $data["appKey_id"];
         $config->save();
         return ResponseData::okResponse($config->id);
 
     }
 
-    public function  delete(Request $request, $id)
+    public function delete(Request $request, $id)
     {
         $user = $request->user();
         $appkeys = array_map(function ($item) {
             return $item['id'];
         }, $user->appKeys->toArray());
-        $config= SpiderConfig::where("id", $id)->whereIn('appKey_id', $appkeys)->first();
+        $config = SpiderConfig::where("id", $id)->whereIn('appKey_id', $appkeys)->first();
         $config->delete();
         return ResponseData::okResponse($config->id);
     }
