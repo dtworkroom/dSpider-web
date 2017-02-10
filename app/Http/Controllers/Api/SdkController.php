@@ -98,7 +98,7 @@ class SdkController extends Controller
         ])->first();
 
         if (!($config && ($spider->access & Spider::ACCESS_DISPATCH))) {
-            return SdkResponseData::errorResponse("没有该spider的权限,请确保已将该spider添加到您的应用并该爬虫允许下发。");
+            return SdkResponseData::errorResponse("没有该spider的权限,请确保已将该spider添加到了您的应用并该爬虫允许下发。");
         }
 
         if (!$config->online) {
