@@ -34,16 +34,16 @@
         position: relative;
     }
 
-    .grid .row [class ^="col-"] {
+    .grid .row [class ^="col-"]{
         padding: 20px 16px;
         height: 165px;
         border: 1px solid #e8e8e8;
-        transition: all .3s;
+        /*transition: all .3s;*/
         cursor: pointer;
-    }
 
-    .grid .row [class ^="col-"]:hover {
-      background: #f8f8f8;
+    }
+    .grid .row [class ^="col-"]:hover{
+        background: #f8f8f8;
     }
 
     .grid .row img{
@@ -77,12 +77,16 @@
         overflow: hidden;
     }
     .s-tag{
-        font-size:13px; position: absolute;right: 0; bottom: 0; padding:3px 5px;
+        font-size:13px; position: absolute;right: -1px; bottom: -1px; padding:3px 5px;
+        z-index: 2;
         color: #333;
         border-left: #e8e8e8 1px solid;
         border-top: #e8e8e8 1px solid;
+        transition: all .3s;
     }
-
+    .s-tag:hover{
+        text-decoration: underline;
+    }
     .tit {
         border-left: #333 4px solid;
         padding-left: 5px;
@@ -190,7 +194,7 @@
                 <div class="s-des">
                     {{$spider->description}}
                 </div>
-                <div class="s-tag" {!! $spider->user_id==1? 'style="color:#34b58a"':"" !!}>{{$spider->user_id==1?"官方认证":"开发者提供"}}</div>
+                <div class="s-tag" onclick="event.stopPropagation()"  {!! $spider->user_id==1? 'style="color:#34b58a"':"" !!}>{{$spider->user_id==1?"官方认证":"开发者提供"}}</div>
             </div>
        @if($key%4==3||$key==count($category)-1)
             </div>
@@ -259,6 +263,11 @@
     $(".grid").on("click",".col-md-3",function(){
         window.open("spider/"+$(this).data("id"),"_blank");
     })
+
+    $(".s-tag").click(function(){
+        alert("帮助")
+    })
+
 
 </script>
 <script src="{{ url('public/js/store.js')}}"></script>

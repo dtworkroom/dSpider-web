@@ -30,6 +30,20 @@ class SpiderController extends Controller
         return ResponseData::okResponse($records);
     }
 
+    public function mySpiders(Request $request)
+    {
+        $records = Spider::where("user_id",$request->user()->id)
+            ->paginate($request->input("pageSize", 20));
+        $records->map(function ($item) {
+            $item["size"] = strlen($item["content"]);
+            unset($item["content"]);
+            unset($item["readme"]);
+            return $item;
+        });
+        $records->setPath($request->fullUrl());
+        return ResponseData::okResponse($records);
+    }
+
     public function save(Request $request)
     {
         $formData = $request->all();

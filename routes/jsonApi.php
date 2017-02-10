@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth.api','prefix' => 'profile'], function () {
     Route::group(['prefix' => 'spider'], function () {
         Route::match(["get","post"],'/save', "SpiderController@save");
         Route::match(["get","post"],'/delete/{id}', "SpiderController@delete");
+        Route::match(["get","post"],'/mine', "SpiderController@mySpiders");
         Route::match(["get","post"],'/{id}', "SpiderController@getById");
     });
 

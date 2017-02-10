@@ -3,15 +3,15 @@
 @section('head')
     <style>
         #appinfo {
-            color: #000;
             padding: 20px 0;
             margin-bottom: 20px;;
             text-align: center;
             background: #fcfcfc;
+            border-radius: 4px;
             border: #f5f5f5 1px solid;
         }
 
-        #appinfo span {
+        #appinfo>span {
             margin-left: 3px;
             margin-right: 20px;
             color: #555;
@@ -19,6 +19,7 @@
 
         label{
             margin-right: 10px;
+            font-weight: normal;
         }
         a{cursor: pointer}
     </style>
@@ -29,48 +30,50 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 ">
-                <div class="panel panel-default">
-                    <div class="panel-heading">应用统计</div>
-                    <div class="panel-body">
+
+                    <h2>应用统计</h2>
+
                         <div id="appinfo">
                             应用名称:<span><a :href="'../../appkey/save/'+app.id">@{{app.name}}</a></span>
-                            App Id:<span>@{{app.id}}</span>
+                            APP ID:<span>@{{app.id}}</span>
                             包名:<span> @{{app.package}} </span>
-                        </div>
-                        <div class="form-group">
-                            <label>脚本筛选: </label>
-                            <div class="dropdown" style="display:inline-block;">
-                                <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu1"
-                                        data-toggle="dropdown">
-                                    <span id="spider_text">全部脚本</span>
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                    <li @click="ch_spider(0)"><a>全部脚本</a></li>
-                                    <li v-for="config of configs"  @click="ch_spider(config.spider_id,config.name)"><a>@{{config.name}}</a></li>
-                                </ul>
+                            <div class="form-group" style="margin-top: 30px">
+                                <label>脚本筛选: </label>
+                                <div class="dropdown" style="display:inline-block;">
+                                    <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu1"
+                                            data-toggle="dropdown">
+                                        <span id="spider_text">全部脚本</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li @click="ch_spider(0)"><a>全部脚本</a></li>
+                                        <li v-for="config of configs"  @click="ch_spider(config.spider_id,config.name)"><a>@{{config.name}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>结果状态: </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="state" @click="ch_state(1000)"  v-model="state" value="1000"> 全部
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="state" @click="ch_state(0)" v-model="state" value="0"> 成功
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="state" @click="ch_state(1)" v-model="state" value="1"> 失败
+                                </label>
+
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>结果状态: </label>
-                            <label class="radio-inline">
-                                 <input type="radio" name="state" @click="ch_state(1000)"  v-model="state" value="1000"> 全部
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="state" @click="ch_state(0)" v-model="state" value="0"> 成功
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="state" @click="ch_state(1)" v-model="state" value="1"> 失败
-                            </label>
 
-                        </div>
 
-                        <div style="font-weight: bold; font-size: 18px;">
-                            @{{data.total>0?"共"+data.total+"条记录。":"暂无爬取记录。"}}
-                        </div>
 
-                    </div>
-                    <table class="table table-striped" v-if="data.data.length>0">
+
+
+                <h2>详细列表 <span style=" font-size: 18px; color: #000;margin-left: 20px">
+                            @{{data.total>0?"共 "+data.total+" 条记录。":"暂无爬取记录。"}}
+                        </span></h2>
+                    <table class="table" v-if="data.data.length>0">
                         <thead>
                         <tr>
                             <th>序号</th>
@@ -119,7 +122,6 @@
                 </nav>
 
             </div>
-        </div>
     </div>
 @endsection
 
@@ -189,6 +191,7 @@
 
         $.post(prefix + "profile/appkey/" + qs.id).done(function (data) {
             app.app = data.appkey;
+            $("title").text(app.app.name+"爬取记录");
             app.configs = data.configs
             data.configs.forEach(function (item) {
                 names[item.spider_id] = item.name;
@@ -210,7 +213,7 @@
            }else{
                w.text(names[args.spider_id])
            }
-           args= $.extend({appKey_id: qs.id, pageSize: 40,page:1},args);
+           args= $.extend({appKey_id: qs.id, pageSize: 20,page:1},args);
            if(JSON.stringify(args)!=JSON.stringify(lastArgs)) {
                lastArgs=args
                $.post(prefix + "profile/records",args).done(function (data) {
@@ -218,7 +221,6 @@
                })
            }
        }
-
 
     </script>
 @endsection

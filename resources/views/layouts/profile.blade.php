@@ -35,6 +35,11 @@
         .table .glyphicon {
             margin-left: 7px;
         }
+
+        .table > tbody > tr > td{
+        vertical-align: middle;
+        }
+
         html, body {
             background-color: #fff;
             color: #636b6f;
@@ -55,6 +60,9 @@
             background: #fff;
         }
 
+        #app>.container,#app{
+            min-height: 75vh;
+        }
 
         /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
         select::-ms-expand { display: none; }
@@ -89,7 +97,6 @@
                 <ul class="nav navbar-nav" id="nav">
                     <li><a href="{{url("/home")}}">我的应用</a></li>
                     <li><a href="{{url("/profile/spider")}}">我的爬虫</a></li>
-                    <li><a href="/home">应用统计</a></li>
                     <li><a href="{{url("/store")}}" target="_blank">{{ config('wording.store', 'Laravel') }}</a></li>
                     <li><a href="{{url("/document")}}">文档中心</a></li>
                     <li><a href="/home">帮助</a></li>
@@ -151,6 +158,9 @@
 
 
     @yield('content')
+</div>
+<div style="border-top: #e8e8e8 1px solid; text-align: center; padding: 40px;line-height: 2em; margin-top: 50px; color: #333; font-size: 14px;">
+    Copyright © 2016-2017 {{config("app.name")}}(dspider.dtworkroom.com) All Rights Reserved.
 </div>
 <!-- Scripts -->
 <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>

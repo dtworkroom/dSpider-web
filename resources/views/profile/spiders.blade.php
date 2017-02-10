@@ -8,23 +8,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 ">
-                <div class="panel panel-default">
-                    <div class="panel-heading">我的爬虫</div>
-                    <div class="panel-body">
-                        <span style="margin-right: 30px; color: #000">脚本共计: @{{data.total}} </span>
-                        <button @click="save()" type="button" class="btn btn-default btn-middle">
-                        <span class="glyphicon glyphicon-plus"></span> 新建
+                <h2>新建爬虫</h2>
+                    <div style="padding: 15px 5px">
+                        <button @click="save()" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus"></span> 添加
                         </button>
+                        <div v-if="data.total==0" style="margin-top: 10px">暂无爬虫,点击"添加"创建一个!</div>
+
                     </div>
+                <h2 v-if="data.total>0">全部<span style="color: #000; font-size: 18px; margin-left: 20px">共@{{data.total}}只</span></h2>
                     <table class="table" v-if="data.total>0">
                         <thead>
                         <tr>
-                            <th>序号</th>
+                            <th>图标</th>
                             <th>名称</th>
                             <th>公开</th>
                             <th>被调次数</th>
                             <th>更新时间</th>
-                            <th>脚本</th>
+                            <th>添加脚本</th>
                             <th>编辑</th>
                             <th>详情</th>
                             <th>统计</th>
@@ -33,7 +34,7 @@
                         <tbody>
                         <template v-for="(spider, index) in data.data">
                             <tr>
-                                <td style="padding-left: 15px">@{{index+1}}</td>
+                                <td style="padding-left: 15px"><img style="width: 30px; border-radius: 3px " :src="spider.icon?root+'storage/app/img/icon/'+spider.icon:root+'public/img/icon/spider_default.png'"></td>
                                 <td><a :href='root+"spider/"+spider.id'>@{{spider.name}}</a></td>
                                 <td>@{{spider.public?"是":"否"}}</td>
                                 <td>@{{spider.callCount}}</td>
@@ -72,7 +73,6 @@
                 </nav>
 
             </div>
-        </div>
     </div>
 @endsection
 
@@ -95,7 +95,7 @@
             }
         })
 
-        $.post(prefix + "spiders").done(function (data) {
+        $.post(prefix + "profile/spider/mine",{page:qs["page"]}).done(function (data) {
             app.data = data;
         })
 

@@ -139,6 +139,7 @@
         if (qs.id) {
             $.post(prefix + "profile/appkey/" + qs.id).done(function (data) {
                 app.app = data.appkey;
+                $("title").text(app.app.name);
                 app.configs=data.configs
             })
         }

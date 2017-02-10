@@ -122,7 +122,7 @@
 
                     <div>
                         <span>起始地址:</span>
-                        {{$spider->startUrl}}
+                        <a href="{{$spider->startUrl}}">{{$spider->startUrl}}</a>
                     </div>
 
                     <div>

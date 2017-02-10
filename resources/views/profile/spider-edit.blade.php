@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <label>起始地址</label>
                         <input type="url" class="form-control" v-model="spider.startUrl" required
-                               placeholder="起始页面url">
+                               placeholder="爬取起始页面url">
                     </div>
                     <div class="form-group">
                     <label>图标</label>
@@ -144,9 +144,11 @@
         //初始化数据 后面不应该再使用
         var spider = {
             "public": true,//是否公开，0代表私有脚本，1代表公开脚本，公开脚本可以被其它用户检索到。
-            "ua": 2,//默认爬取的起始ua，1:手机 2:pc
+            "ua": 1,//默认爬取的起始ua，1:手机 2:pc
             "access": 3,
-            "support": 0,
+            "support": 3,
+            "category":0,
+
 
         }
 
@@ -204,14 +206,6 @@
                             $btn.button('reset')
                         }
                     });
-//                    $.post(prefix + "profile/spider/save", this.spider).done(function (data) {
-//                        alert("更新成功")
-//                        dialog("更新成功!去查看?").setOk("去查看", function () {
-//                            location=root+"spider/"+data;
-//                        }).setCancel("留在本页").show();
-//                    }).always(function(){
-//                        $btn.button('reset')
-//                    })
 
                 }
             }
@@ -219,9 +213,11 @@
         if (qs.id) {
             $.post(prefix + "spider/" + qs.id).done(function (data) {
                 app.spider = data;
+                $("title").text(data.name)
             })
         } else {
             app.spider = spider;
+            $("title").text("新建爬虫")
         }
 
     </script>
