@@ -96,7 +96,7 @@ class CrawlRecordsController extends Controller
 
         if ($records) {
              $records= json_decode(json_encode($records));
-             $records->app_count=CrawlRecord::distinct("spider_id")->count("spider_id");
+             $records->app_count=SpiderConfig::where("spider_id",$request->id)->count();
              return ResponseData::okResponse($records);
         }
         return ResponseData::errorResponse("Incorrect Request",404);

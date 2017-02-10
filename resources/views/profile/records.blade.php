@@ -70,7 +70,7 @@
 
 
 
-                <h2>详细列表 <span style=" font-size: 18px; color: #000;margin-left: 20px">
+                <h2>详细列表 <span style=" font-size: 15px; color: #000;margin-left: 20px">
                             @{{data.total>0?"共 "+data.total+" 条记录。":"暂无爬取记录。"}}
                         </span></h2>
                     <table class="table" v-if="data.data.length>0">

@@ -16,7 +16,7 @@
                         <div v-if="data.total==0" style="margin-top: 10px">暂无爬虫,点击"添加"创建一个!</div>
 
                     </div>
-                <h2 v-if="data.total>0">全部<span style="color: #000; font-size: 18px; margin-left: 20px">共@{{data.total}}只</span></h2>
+                <h2 v-if="data.total>0">全部<span style="color: #000; font-size: 15px; margin-left: 20px">共@{{data.total}}只</span></h2>
                     <table class="table" v-if="data.total>0">
                         <thead>
                         <tr>
