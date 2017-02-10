@@ -265,8 +265,8 @@
     })
 
     $(".s-tag").click(function(){
-        alert("帮助")
-    })
+       window.open("md/help#7","_blank")
+    }).attr("title","这是什么意思?")
 
 
 </script>

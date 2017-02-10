@@ -135,6 +135,13 @@
             })
             return t.html()
         }
+        var renderer = new marked.Renderer();
+
+        var idc=1;
+        renderer.heading = function (text, level) {
+            return '<h' + level + ' id="'+(idc++)+'">'+
+                    text + '</h' + level + '>';
+        },
         marked.setOptions({
             breaks: true,
             highlight: function (code) {
@@ -142,7 +149,7 @@
             }
         });
 
-        marked($("#doc").text(), function (t, b) {
+        marked($("#doc").text(),{ renderer: renderer }, function (t, b) {
             $("#doc").html(addRowNo(b, 1))
         })
 
