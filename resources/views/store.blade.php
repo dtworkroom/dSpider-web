@@ -268,7 +268,6 @@
        window.open("md/help#7","_blank")
     }).attr("title","这是什么意思?")
 
-
 </script>
 <script src="{{ url('public/js/store.js')}}"></script>
 </body>
