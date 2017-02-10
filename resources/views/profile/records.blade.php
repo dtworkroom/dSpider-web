@@ -90,7 +90,7 @@
                         <template v-for="(record, index) in data.data">
                             <tr>
                                 <td style="padding-left: 15px">@{{index+data.from}}</td>
-                                <td>@{{record.name}}</td>
+                                <td><a :href="root+'spider/'+record.spider_id"> @{{record.name}}</td>
                                 <td>
                                     <span :style='{color:record.state=="失败"?"red":"green"}'>@{{record.state}}</span>
                                 </td>
