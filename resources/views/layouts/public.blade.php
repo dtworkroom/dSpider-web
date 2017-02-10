@@ -88,7 +88,7 @@
                     <!-- Left Side Of Navbar -->
                         <li><a href="{{url("/document")}}">文档中心</a></li>
                         <li><a href="{{url("/store")}}" target="_blank">{{ config('wording.store', 'Laravel') }}</a></li>
-                        <li><a href="#">帮助</a></li>
+                        <li><a href="{{url("/md/help")}}">帮助</a></li>
 
                     <!-- Authentication Links -->
                     @if (Auth::guest())

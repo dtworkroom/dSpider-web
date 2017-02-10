@@ -87,6 +87,13 @@ class PublicController extends Controller
         $content= file_get_contents($path);
         return view('doc',compact('id','time','content'));
     }
+
+    public function md($id="help"){
+        $path=(public_path()."/docs/md/".$id.".md");
+        $time=date("Y-m-d H:i:s",filemtime($path));
+        $content= file_get_contents($path);
+        return view('md',compact('id','time','content'));
+    }
     public function downloadDoc($id){
         $path=(public_path()."/docs/".$id.".md");
         $time=date("Ymd",filemtime($path));

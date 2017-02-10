@@ -99,7 +99,7 @@
                     <li><a href="{{url("/profile/spider")}}">我的爬虫</a></li>
                     <li><a href="{{url("/store")}}" target="_blank">{{ config('wording.store', 'Laravel') }}</a></li>
                     <li><a href="{{url("/document")}}">文档中心</a></li>
-                    <li><a href="/home">帮助</a></li>
+                    <li><a href="{{url("/md/help")}}">帮助</a></li>
 
                 </ul>
 
