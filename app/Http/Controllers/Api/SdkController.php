@@ -90,7 +90,7 @@ class SdkController extends Controller
         $spider = Spider::find($sid);
         $app=AppKey::where("package",$data['package'])->first();
         if(!$app){
-            return SdkResponseData::errorResponse("The app {$data['package']} is not exist!");
+            return SdkResponseData::errorResponse("包名 {$data['package']} 不存在! 请创建该应用。");
         }
         $config = SpiderConfig::where([
             ["spider_id", $sid],
@@ -98,11 +98,11 @@ class SdkController extends Controller
         ])->first();
 
         if (!($config && ($spider->access & Spider::ACCESS_DISPATCH))) {
-            return SdkResponseData::errorResponse("No permission for this script!");
+            return SdkResponseData::errorResponse("没有该spider的权限,请确保已将该spider添加到您的应用并该爬虫允许下发。");
         }
 
         if (!$config->online) {
-            return SdkResponseData::errorResponse("The script is offline!");
+            return SdkResponseData::errorResponse("该爬虫已下线!");
         }
 
         $scripts=array_filter($spider->scripts->all(),function($item){
@@ -111,7 +111,7 @@ class SdkController extends Controller
 
         $scriptsCount=count($scripts);
         if($scriptsCount==0||$data["retry"]>$scriptsCount){
-            return SdkResponseData::errorResponse("No more script!");
+            return SdkResponseData::errorResponse("没有可用的脚本了");
         }
 
 
@@ -125,7 +125,7 @@ class SdkController extends Controller
         }
         //是否支持当前平台
         if (!($spider->support & $support)) {
-            return SdkResponseData::errorResponse("The spider doesn't support " . $platform);
+            return SdkResponseData::errorResponse("该脚本不支持 " . $platform);
         }
 
         $crawRecords = new CrawlRecord();
