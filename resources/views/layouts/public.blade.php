@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="full-screen" content="yes">
     <title>{{$title??""}}</title>
-    <script src="//cdn.bootcss.com/vue/2.1.6/vue.js"></script>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
     {{--<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.css" rel="stylesheet">--}}
     <!-- Scripts -->

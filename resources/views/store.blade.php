@@ -38,7 +38,7 @@
         padding: 20px 16px;
         height: 165px;
         border: 1px solid #e8e8e8;
-        /*transition: all .3s;*/
+        transition: all .3s;
         cursor: pointer;
 
     }
