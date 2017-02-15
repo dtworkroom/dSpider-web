@@ -243,6 +243,7 @@
 
 
         $(function () {
+            $("#footer").hide()
             $(window).on("hashchange", function () {
                 var target = $(location.hash);
                 if (target.length == 1) {

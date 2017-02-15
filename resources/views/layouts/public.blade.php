@@ -139,6 +139,9 @@
     </div><!-- /.modal -->
     @yield('content')
 </div>
+<div id="footer" style="border-top: #e8e8e8 1px solid; text-align: center; padding: 40px;line-height: 2em; margin-top: 50px; color: #777; font-size: 14px;">
+    Copyright © 2016-2017 {{config("app.name")}}(https://dspider.dtworkroom.com) All Rights Reserved.
+</div>
 <!-- Scripts -->
 <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
