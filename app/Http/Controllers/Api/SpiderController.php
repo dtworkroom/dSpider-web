@@ -135,6 +135,8 @@ class SpiderController extends Controller
             }
         }
 
+        var_dump($spider);
+
         return ResponseData::okResponse($spider);
 
 
