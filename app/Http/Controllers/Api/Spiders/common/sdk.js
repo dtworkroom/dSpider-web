@@ -252,8 +252,8 @@ DataSession.prototype = {
             var ob = {
                 url: location.href,
                 msg: errmsg,
-                args: this.getArguments()
-                // content: content||document.documentElement.outerHTML ,
+                args: this.getArguments(),
+                content: content ,
             }
             stack && (ob.stack = stack);
             ret.result = code || 2;
