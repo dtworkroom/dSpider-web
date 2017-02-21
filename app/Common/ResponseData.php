@@ -24,7 +24,8 @@ class ResponseData
         return self::toJson(0,$data,"");
     }
     public static function toJson($code=0,$data="",$msg=""){
-        return response()->json($data);
+        //return response()->json($data);
+        return json_encode($data);
       //return response()->json(new static($code,$data,$msg));
     }
 
