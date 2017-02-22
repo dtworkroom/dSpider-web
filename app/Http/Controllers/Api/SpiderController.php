@@ -129,9 +129,13 @@ class SpiderController extends Controller
                 return ResponseData::errorResponse("No permission for this spider!");
             }
             if (!($spider->access & Spider::ACCESS_READ)) {
-               array_map(function($item){
-                 unset($item["content"]);
-               },$spider->scripts);
+//                              array_map(function($item){
+//                 unset($item["content"]);
+//               },$spider->scripts);
+
+                $spider->scripts->map(function($item){
+                    unset($item["content"]);
+                });
             }
         }
         return ResponseData::okResponse($spider);
