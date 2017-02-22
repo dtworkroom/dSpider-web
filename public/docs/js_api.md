@@ -30,6 +30,8 @@ dSpider("email",60*2,function(session,env,$){
 
 **注：没有特殊情况，建议所有脚本都加上超时时间！**
 
+
+
 下面我们来介绍session的所有方法：
 
 ## 数据存储
@@ -56,7 +58,7 @@ session.set("mailCount",8);
 var t=session.get("mailCount")
 ```
 
-### setLocal、getLocal 
+### setLocal、getLocal
 
 set接口保存的数据在session存储区内，一旦爬取任务结束后就会被释放，有时可能需要永久保存一些数据，如记住用户账号，此时可以使用 setLocal、  getLocal方法，这样存取的数据为持久的，会一直存在，即使app重启也依然存在。
 
@@ -104,7 +106,7 @@ dSpider("email",function(session,env,$){
   ...
   //爬取结束
   session.showProgress(false)
-  
+
 })
 ```
 
@@ -124,8 +126,8 @@ dSpider("email",function(session,env,$){
 - 功能：结束爬取
 - 参数: 三个参数都为可选参数，当爬取成功时，不用传任何参数，直接调用即可，当爬取失败时，需指定相关信息：
   1. errmsg: 错误信息，简单的错误描述，类型为字符串，**不能为空字符串** ，如果为空或省略，则认为是成功。
-  2. content: 自定义内容字段，可以传递一切有利于错误分析的信息，可以为空，如果为空，dSpider则自动上传错误发生时页面的dom树.
-  3. code:错误码，具体值对应的意义由各个业务决定。可选参数，默认为2。注：不能为0，dSpider内部将0作为成功态对待。
+  2. content: 自定义内容字段，可以传递一切有利于错误分析的信息，可以为空字符串，如果为空字符串，dSpider则自动上传错误发生时页面的dom树.
+  3. code:错误码，具体值对应的意义由各个业务决定。可选参数，默认为2，页面变化为3。注：不能为0，dSpider内部将0作为成功态对待。
 
 注：此接口调用结束后，则爬取结束，当前session的数据将会被释放，爬取模块退出。**finish调用将作为爬取结束的唯一标志，所以此方法必须保证被调用**。简单的示例如下：
 
@@ -135,7 +137,7 @@ session.finish()
 //errmsg为空，则认为是成功
 session.finish("")
 //爬取失败,content默认为当前时刻的dom树，code为2
-session.finish("没有找到指定的元素，网页结构貌似变了，选择器为 .mail-content")
+session.finish("没有找到指定的元素，网页结构貌似变了，选择器为 .mail-content"，"", 3)
 //爬取失败,网络错误(第三个参数4可以不传)
 session.finish("404","网络错误，ajax请求失败",4)
 ```
@@ -341,5 +343,3 @@ window.onSpiderInited=function(dSpider){
 polyfill为js 兼容的一个补丁，由于移动端系统版本差异较大，有些低版本的手机上不支持es5（es6）api如：Function.prototype.bind、JSON对象、Array.prototype.includes, String.prototye.trim等api, 为了提高爬取脚本的兼容性，dSpider底层对大多数es5－es2015新api提供了polyfill（详细列表日后将给出），所以你可以无须手动处理这些兼容问题，放心的调用。
 
 
-
-杜文     email:wen.du@yingzt.com
