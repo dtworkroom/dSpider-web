@@ -28,8 +28,7 @@ function log(str) {
 
 //异常捕获
 function errorReport(e) {
-    var stack = e.stack ? e.stack.replace(/http.*?inject\.php.*?:/ig, " " + _su + ":") : e.toString();
-    var msg = "语法错误: " + e.message + "\nscript_url:" + _su + "\n" + stack
+    var msg = "语法错误: " + e.message + "\nscript_url:" + _su + "\n" + e.stack
     if (window.curSession) {
         curSession.log(msg);
         curSession.finish(e.message, "", 2, msg);
@@ -111,6 +110,39 @@ function Observe(ob, options, callback) {
     return mo;
 }
 
+var _timer,_timeOut=-1;
+
+function _startTimer(s){
+    var left=_timeOut*1000- (s.get("_pass")||0)
+    if(left<0) left=0;
+    _timer=setTimeout(function(){
+        log("time out");
+        if (!s.finished) {
+            s.finish("timeout ["+_timeOut+"s] ", "",4)
+        }
+    },left);
+    log("_Timer:"+left/1000+"s left");
+}
+function _resetTimer(show){
+    var s=window.curSession;
+    if(_timeOut==-1) return;
+    var key=show?"_show":"_hide";
+    var last=s.get("_last");
+    last=last||"_hide";
+    //显示状态没有改变则什么也不做
+    if(last==key) return;
+    var now=new Date().getTime()
+    var passed;
+    if(key=="_show"){
+        _startTimer(s)
+    }else{
+        passed=now- (s.get("_show")||now);
+        s.set("_pass", (s.get("_pass")||0)+passed);
+        clearTimeout(_timer)
+    }
+    s.set("_last",key);
+    s.set(key,now)
+}
 //爬取入口
 function dSpider(sessionKey, timeOut, callback) {
     //判断调用源,如果是在onSpiderInited中调用,则下发脚本中的dSpider函数不执行
@@ -132,24 +164,16 @@ function dSpider(sessionKey, timeOut, callback) {
         callback = timeOut;
         timeOut = -1;
     }
+
     if (timeOut != -1) {
-        var startTime = session.get("startTime")
-        var now = new Date().getTime();
-        if (!startTime) {
-            session.set("startTime", now);
-            startTime=now
+        _timeOut = timeOut;
+        if (session.get("_last") == "_show") {
+            var now = new Date().getTime()
+            var passed = now - (session.get("_show") || now);
+            session.set("_pass", (session.get("_pass") || 0) + passed);
+            session.set("_show", now);
+            _startTimer(session)
         }
-        timeOut *= 1000;
-        var passed = (now - startTime);
-        var left = timeOut -passed;
-        left = left > 0 ? left : 0;
-        log("left:"+left)
-        setTimeout(function () {
-            log("time out");
-            if (!session.finished) {
-                session.finish("timeout ["+timeOut/1000+"s] ", "",4)
-            }
-        }, left);
     }
     var extras = DataSession.getExtraData()
     extras = JSON.parse(extras || "{}")
@@ -231,7 +255,9 @@ DataSession.prototype = {
 
     showProgress: function (isShow) {
         log("showProgress called")
-        callHandler("showProgress", {show: isShow === undefined ? true : !!isShow});
+        isShow=isShow === undefined ? true : !!isShow;
+        _resetTimer(isShow)
+        callHandler("showProgress", {show: isShow});
     },
     setProgressMax: function (max) {
         log("setProgressMax called")
@@ -263,12 +289,15 @@ DataSession.prototype = {
         callHandler("finish", ret);
 
     },
-    upload: function (value, f) {
+    upload: function (value) {
         if (value instanceof Object) {
             value = JSON.stringify(value);
         }
         log("push called")
         callHandler("push", {"sessionKey": this.key, "value": value});
+    },
+    push:function(value){
+        this.upload(value)
     },
     load: function (url, headers) {
         headers = headers || {}
@@ -302,6 +331,13 @@ DataSession.prototype = {
     getLocal: function (k) {
         log("read called")
         return this.local[k];
+    },
+    showProgressExcept:function(url){
+        this.setStartUrl(url);
+    },
+    setStartUrl:function(url){
+        url=url||location.href;
+        callHandler("showProgressExcept", {url: url})
     }
 };
 var withCheck = function (attr) {

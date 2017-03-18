@@ -34,16 +34,25 @@ https://dspider.dtworkroom.com/download/android_sdk
 
 ## SDK调用
 
-### 调用
+sdk有两种调用方式：显式爬取和静默爬取，显式爬取展示爬取过程进度，会带进度ui。而静默爬取则没有ui.
 
-每一个爬取任务对应一个脚本，每一个脚本都有一个id, 我们称之为sid。每一个app都有一个appkey, 每个app可以执行多个爬取任务。appkey支持的sid需要在后台添加。
+在调用sdk之前，需要先做两件事：
+
+1. 在dspider官网注册后在控制台创建应用。
+2. 创建应用后，添加需要爬虫到你的应用。
+
+### 显式爬取
+
+#### 启动爬取
+
+每一个爬取任务对应一个脚本，每一个爬虫都有一个id, 我们称之为sid。
 
 ```java
-DSpider.build(context,appkey)
+DSpider.build(context)
        .start(sid);
 ```
 
-### 获取爬取数据
+#### 获取爬取数据
 
 ```java
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -58,24 +67,24 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
 
-## API列表
+#### API列表
 
-### build(context,String appkey)
+ **build(context)**
 
 - 功能: 创建dspider实例
 - context: 当前activity context
-- appkey: 你的appkey (后台申请)
 - 返回：DSpider实例
 
-### start(int sid)
+**start(int sid,[String title])**
 
 - 功能：启动爬取任务
 - sid: spider id, 需要执行的爬取功能id
+- title:可选参数，爬取页默认标题。
 
 
-### addArgument(String name,Object value)
+ **addArgument(String name,Object value)**
 
-- 功能：调用sdk时添加调用参数，该参数会传递到爬取脚本，各脚本所需参数请参照该脚本使用说明，默认不需要。
+- 功能：调用sdk时添加调用参数，该参数会传递到爬取脚本，脚本中可以通过session.getArguments()方法获得。
 
 假设有一个爬取邮件的spider,需要两个参数，一个关键字wd, 和需要爬取的邮件数量count，我们可以如下方式调用：
 
@@ -86,7 +95,52 @@ DSpider.build(this,"1")
        .start(sid);
 ```
 
+### 静默爬取
 
+提供了一个自定义控件DSpiderView，你可以将它放到当前界面z序的最后面，或者将其隐藏。
+
+```java
+spiderView.start(sid, spiderEventListener);
+SpiderEventListener spiderEventListener=new SpiderEventListener() {
+        @Override
+        public void onResult(String sessionKey, List<String> data) {
+          //在此获取爬取结果
+        }
+
+        @Override
+        public void onProgress(int progress, int max) {
+        }
+
+        @Override
+        public void onProgressShow(boolean isShow) {
+        }
+
+        @Override
+        public void onProgressMsg(String msg) { 
+        }
+
+        @Override
+        public void onError(final int code, final String msg) {
+           //错误处理
+        }
+    };  
+```
+
+爬取过程中，脚本会触发多次回调给端，端只需要实现关注回调接口即可。用户也可以自定义进度ui。
+
+#### API列表
+
+**void start(int sid, SpiderEventListener)** 
+
+- SpiderEventListener 为爬取过程回调，开发者只需实现感兴趣的。
+
+**boolean canRetry()**
+
+检测是否可以重试，一般在onError中调用
+
+**void retry()**
+
+重试，如果可以重试，调用此方法可以启动重试。
 
 ## 调试支持
 
@@ -97,9 +151,9 @@ dspider所有爬取脚本都是从服务器下发，但调试模式下会从本�
 2. 以调试模式启动sdk:
 
    ```java
-   DSpider.build(this,"1")
-          .setDebug(true)
-          .start(sid,"a.js","https://xx.com");
+   //显式爬取
+   DSpider.build(this)
+          .startDebug(sid,"爬取测试","a.js","https://xx.com");
+   //静默爬取
+   spiderView.startDebug("爬取测试","https://xx.com")
    ```
-
-如果你的脚本已经上传服务器（sid存在），当setDebug传false时便会加载服务端脚本，为true时则会加载本地脚本，此时DSpider会忽略sid。
