@@ -260,7 +260,7 @@
 
         $("a").attr("href", function (_, v) {
             if (!v || v == "#") {
-                return "javascript:alert('暂未上线,敬请期待')"
+                return "javascript:alert('即将上线,敬请期待')"
             }
         })
         $(".menu,.right").fadeIn(400)
