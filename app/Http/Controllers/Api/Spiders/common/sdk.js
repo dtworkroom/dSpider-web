@@ -206,18 +206,15 @@ function callHandler() {
 }
 function DataSession(key) {
     this.key = key;
-    log("start called")
     this.finished = false;
     callHandler("start", {sessionKey: key})
 }
 
 DataSession.getExtraData = function (f) {
-    log("getExtraData called")
     return callHandler("getExtraData")
 }
 
 var getArguments =function () {
-    log("getArguments called")
     return JSON.parse(callHandler("getArguments")||'{}')
 };
 
@@ -244,27 +241,22 @@ DataSession.prototype = {
     },
 
     get: function (key) {
-        log("get called")
         return this.data[key];
     },
     set: function (key, value) {
-        log("set called")
         this.data[key] = value;
         this._save();
     },
 
     showProgress: function (isShow) {
-        log("showProgress called")
         isShow=isShow === undefined ? true : !!isShow;
         _resetTimer(isShow)
         callHandler("showProgress", {show: isShow});
     },
     setProgressMax: function (max) {
-        log("setProgressMax called")
         callHandler("setProgressMax", {progress: max});
     },
     setProgress: function (progress) {
-        log("setProgress called")
         callHandler("setProgress", {progress: progress});
     },
     setProgressMsg: function (msg) {
@@ -272,7 +264,6 @@ DataSession.prototype = {
         callHandler("setProgressMsg", {msg: msg})
     },
     finish: function (errmsg, content, code, stack) {
-        log("finish called")
         var ret = {sessionKey: this.key, result: 0, msg: ""}
         if (errmsg) {
             var ob = {
@@ -293,7 +284,6 @@ DataSession.prototype = {
         if (value instanceof Object) {
             value = JSON.stringify(value);
         }
-        log("push called")
         callHandler("push", {"sessionKey": this.key, "value": value});
     },
     push:function(value){
@@ -324,12 +314,10 @@ DataSession.prototype = {
         callHandler("log", {type: type || 1, msg: str})
     },
     setLocal: function (k, v) {
-        log("save called")
         this.local[k] = v;
         callHandler("save", {key: this.key, value: JSON.stringify(this.local)})
     },
     getLocal: function (k) {
-        log("read called")
         return this.local[k];
     },
     showProgressExcept:function(url){

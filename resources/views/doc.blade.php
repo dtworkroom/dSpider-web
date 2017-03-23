@@ -161,6 +161,9 @@
         .newh3 {
             padding-left: 5px
         }
+        .newh4 {
+            padding-left: 10px
+        }
 
         .left-cap {
             display: block

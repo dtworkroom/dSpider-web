@@ -80,7 +80,8 @@ class SdkController extends Controller
             'package' => 'required',
             'retry'=>'required|Numeric',
             'sdk_version' => 'required',
-            'app_version'=>'required'
+            'app_version'=>'required',
+            'app_id'=>'required'
         ]);
 
         if ($validator->fails()) {
@@ -88,9 +89,9 @@ class SdkController extends Controller
         }
         $sid = $data["sid"];
         $spider = Spider::find($sid);
-        $app=AppKey::where("package",$data['package'])->first();
+        $app=AppKey::where([["package",$data['package']],["id",$data["app_id"]]])->first();
         if(!$app){
-            return SdkResponseData::errorResponse("包名 {$data['package']} 不存在! 请创建该应用。");
+            return SdkResponseData::errorResponse("包名: {$data['package']}, appId:{$data['app_id']} 的应用不存在! 请先在后台创建应用。");
         }
         $config = SpiderConfig::where([
             ["spider_id", $sid],

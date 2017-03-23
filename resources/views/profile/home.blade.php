@@ -30,6 +30,7 @@
                     <thead>
                     <tr>
                         <th>标号</th>
+                        <th>App Id</th>
                         <th>名称</th>
                         <th>包名</th>
                         <th>状态</th>
@@ -43,6 +44,7 @@
                     <template v-for="(appkey, index) in data.appKey">
                         <tr>
                             <td>@{{index+1}}</td>
+                            <td>@{{ appkey.id }}</td>
                             <td>@{{appkey.name}}</td>
                             <td>@{{appkey.package}}</td>
                             <td>@{{appkey.state==1?"正常":"该app被仅用,查看详情"}}</td>

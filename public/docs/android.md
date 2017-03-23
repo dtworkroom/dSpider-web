@@ -1,11 +1,13 @@
 
-# dSpider Android SDK集成文档
+# Android SDK集成文档
 
 ## Android studio集成
 
- ### 1.下载sdk 
+ ### 1.下载 
 
-https://dspider.dtworkroom.com/download/android_sdk
+sdk下载：https://dspider.dtworkroom.com/download/android_sdk
+
+demo： https://github.com/wendux/DSpiderDemo-Android
 
  ### 2. 导入aar包
 
@@ -27,62 +29,66 @@ https://dspider.dtworkroom.com/download/android_sdk
    -keepattributes *Annotation*
    -keepclassmembers class wendu.spidersdk.JavaScriptBridge {
          public *;
-      }
-   -keep class wendu.spidersdk.DSpider
-   -keep class wendu.spidersdk.DSpider.Result
+   }
 ```
 
-## SDK调用
-
-sdk有两种调用方式：显式爬取和静默爬取，显式爬取展示爬取过程进度，会带进度ui。而静默爬取则没有ui.
+sdk有两种调用方式：**显式爬取**和**静默爬取**，显式爬取展示爬取过程进度，会带进度ui。而静默爬取则没有ui.
 
 在调用sdk之前，需要先做两件事：
 
 1. 在dspider官网注册后在控制台创建应用。
 2. 创建应用后，添加需要爬虫到你的应用。
 
-### 显式爬取
+## 初始化
 
-#### 启动爬取
+无论是显式爬取还是静默爬取，调用sdk的第一步都要先初始化：
 
-每一个爬取任务对应一个脚本，每一个爬虫都有一个id, 我们称之为sid。
+```java
+DSpider.init(Context,AppId);
+```
+
+创建完应用后，系统会自动为该应用分配一个 App Id, 可在用户中心查看。
+
+## 显式爬取
+
+### 启动爬取
+
+每一个爬取任务对应一个脚本，每一个爬虫都有一个id, 我们称之为sid。title为爬取进度页标题。
 
 ```java
 DSpider.build(context)
-       .start(sid);
+       .start(title,sid);
 ```
 
-#### 获取爬取数据
+### 获取爬取数据
 
 ```java
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DSpider.REQUEST ) {
             if(resultCode == RESULT_OK) {
-                DSpider.Result resultData = DSpider.getLastResult(this)；
+                DSpider.Result resultData = DSpider.getLastResult()；
             } 
         }
        ...
-    }
+}
 ```
 
+### DSpider API列表
 
-
-#### API列表
-
- **build(context)**
+####  **build(context)**
 
 - 功能: 创建dspider实例
 - context: 当前activity context
 - 返回：DSpider实例
 
-**start(int sid,[String title])**
+#### **start(int sid,[String title])**
 
 - 功能：启动爬取任务
 - sid: spider id, 需要执行的爬取功能id
 - title:可选参数，爬取页默认标题。
 
 
- **addArgument(String name,Object value)**
+####  **addArgument(String name,Object value)**
 
 - 功能：调用sdk时添加调用参数，该参数会传递到爬取脚本，脚本中可以通过session.getArguments()方法获得。
 
@@ -95,7 +101,12 @@ DSpider.build(this,"1")
        .start(sid);
 ```
 
-### 静默爬取
+#### DSpider.Result getLastResult()
+
+- 获取上次**显式爬取**的结果
+- 返回值Result结构，包括爬取到的数据、错误码、错误信息。
+
+## 静默爬取
 
 提供了一个自定义控件DSpiderView，你可以将它放到当前界面z序的最后面，或者将其隐藏。
 
@@ -121,26 +132,42 @@ SpiderEventListener spiderEventListener=new SpiderEventListener() {
 
         @Override
         public void onError(final int code, final String msg) {
-           //错误处理
+           //错误处理，错误码见下文
         }
     };  
 ```
 
-爬取过程中，脚本会触发多次回调给端，端只需要实现关注回调接口即可。用户也可以自定义进度ui。
+爬取过程中，脚本会触发多次回调给端，端上只需要实现关注回调接口即可。用户也可以自定义进度ui。
 
-#### API列表
+### SpiderView API列表
 
-**void start(int sid, SpiderEventListener)** 
+#### **void start(int sid, SpiderEventListener)** 
 
-- SpiderEventListener 为爬取过程回调，开发者只需实现感兴趣的。
+SpiderEventListener 为爬取过程回调，开发者只需实现感兴趣的。
 
-**boolean canRetry()**
+#### **void stop()** 
+
+停止爬取
+
+#### **boolean canRetry()**
 
 检测是否可以重试，一般在onError中调用
 
-**void retry()**
+#### **void retry()**
 
 重试，如果可以重试，调用此方法可以启动重试。
+
+#### setArguments(Map<String, Object> arguments)
+
+设置传递给脚本的参数map，sdk内部会将arguments转化为json对象传递给js脚本。
+
+#### setArguments(String  jsonString)
+
+功能同上，只是参数类型变味string. 注：string必须为合法的json字符串
+
+#### clearCache()
+
+清楚爬取缓存，会清楚cookie信息等。
 
 ## 调试支持
 
@@ -157,3 +184,4 @@ dspider所有爬取脚本都是从服务器下发，但调试模式下会从本�
    //静默爬取
    spiderView.startDebug("爬取测试","https://xx.com")
    ```
+
