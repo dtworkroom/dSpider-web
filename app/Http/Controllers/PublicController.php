@@ -81,7 +81,7 @@ class PublicController extends Controller
         return view('profile.spider-records',qs(['id'=>$id,'name'=>$request->name]));
     }
 
-    public function doc($id="js_api"){
+    public function doc($id="introduction"){
         $path=(public_path()."/docs/".$id.".md");
         $time=date("Y-m-d H:i:s",filemtime($path));
         $content= file_get_contents($path);
