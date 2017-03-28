@@ -179,7 +179,7 @@
     <div class="container-fluid content">
         <div class="left">
             <a href="{{url('document/introduction')}}">DSpider 简介</a>
-            <a>IOS SDK集成</a>
+            <a href="{{url('document/ios')}}">IOS SDK集成</a>
             <a href="{{url('document/android')}}">Android SDK集成</a>
             <a href="{{url('document/js_api')}}">Javascript API文档</a>
             <div class="menu" >

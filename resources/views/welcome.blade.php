@@ -150,7 +150,7 @@
         <a href="{{url("document/android")}}" class="btn-sdk" style="border-right: #408cce 1px solid;"  title="Android sdk集成">
            <img src="{{url('public/img/android.svg')}}" style="width: 40px;"> Android
         </a>
-        <a href="javascript:alert('ios即将上线,敬请期待')" class="btn-sdk" title="Ios sdk集成">
+        <a href="{{url("document/ios")}}" class="btn-sdk" title="Ios sdk集成">
             <img src="{{url('public/img/ios.svg')}}" style="width: 40px;"> <span style="position: relative; top: 2px">IOS</span>
         </a>
         </div>
