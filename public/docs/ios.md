@@ -5,7 +5,7 @@
 
  ### 1.下载 
 
-sdk下载：https://dspider.dtworkroom.com/download/ios_sdk
+sdk下载：https://dspider.dtworkroom.com/download/open/sdk-ios
 
 demo： https://github.com/wendux/DSpiderDemo-ios
 
@@ -170,7 +170,7 @@ dspider所有爬取脚本都是从服务器下发，但调试模式下会从本�
 -(void)startDebug:(NSString *)debugScript debugUrl:(NSString *)debugUrl{
 ```
 -  debugScript为脚本源码
-- debugUrl为爬取起始页面url
+-  debugUrl为爬取起始页面url
 
 ## 错误码
 

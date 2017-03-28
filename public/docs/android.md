@@ -5,7 +5,7 @@
 
  ### 1.下载 
 
-sdk下载：https://dspider.dtworkroom.com/download/android_sdk
+sdk下载：https://dspider.dtworkroom.com/download/open/sdk-android
 
 demo： https://github.com/wendux/DSpiderDemo-Android
 
