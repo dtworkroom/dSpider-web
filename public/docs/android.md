@@ -101,10 +101,45 @@ DSpider.build(this,"1")
        .start(sid);
 ```
 
-#### DSpider.Result getLastResult()
+#### DSpider.Result  getLastResult()
 
 - 获取上次**显式爬取**的结果
 - 返回值Result结构，包括爬取到的数据、错误码、错误信息。
+
+### DSpider setOnRetryTip(int type,String msg)
+
+为保证爬取成功率，一个爬虫可以拥有多个爬取脚本，每个脚本都有一个优先级，然后会按优先级，从高到低下发(请参考帮助文档：https://dspider.dtworkroom.com/md/help)。此方法用于设置爬取脚本失败且还有其它脚本可用时给用户的提示方式和提示信息：
+
+| type        | 解释                             |
+| ----------- | ------------------------------ |
+| TYPE_TOAST  | 提示为toast形式                     |
+| TYPE_DIALOG | 提示为对话框形式，此时点“确定”则继续，点“取消”则结束爬取 |
+| TYPE_NONE   | 无提示，忽略msg,  自动重试.              |
+
+建议：最好加上提示，理由时有时爬取在走道50%失败时，此时进度条刚走到一半，爬取会从头开始，进度条又会从0开始，如果没有提示而直接重试的话，体验会很怪。
+
+### DSpider setOnRetryListener(OnRetryListener retryListener)
+
+- 设置重试策略回调。
+
+有时setOnRetryTip接口并不能满足所有需求，假设一个爬虫有五个脚本，但是我们只想让它最多尝试三次，此时可以设置此回调。
+
+```java
+  DSpider.build(this)
+ .setOnRetryListener(new OnRetryListener() {
+                int count=0;
+                 //返回true则重试，false则中断重试直接返回， code和msg分别为上次错误码和错误信息。
+                @Override
+                public boolean onRetry(int code, String msg) {
+                    count++;
+                    if(count>3){
+                        return false;
+                    }
+                    return true;
+                }
+      })
+      .start(1,"测试")
+```
 
 ## 静默爬取
 
@@ -115,25 +150,45 @@ spiderView.start(sid, spiderEventListener);
 SpiderEventListener spiderEventListener=new SpiderEventListener() {
         @Override
         public void onResult(String sessionKey, List<String> data) {
-          //在此获取爬取结果
+          //在此获取爬取结果；爬取结束且成功后会调用此回调。data为一个列表，
+          //脚本中每调用一次push,端上便将传过来的数据加入到此列表
+        }
+  
+        @Override
+        public void onError(final int code, final String msg) {
+           //错误处理，爬取失败会走到这里，错误码见下文
         }
 
         @Override
         public void onProgress(int progress, int max) {
+          //此回调供自定义进度条时使用：脚本会传递进度信息给端，当前进度值为 progress/max.
+          //静默爬取可忽略此回调.
         }
 
         @Override
         public void onProgressShow(boolean isShow) {
+          //此回调供自定义进度条时使用：脚本会动态设置是否显示进度条，但显示时isShow为true,
+          //隐藏时则为false. 静默爬取可忽略此回调.
         }
 
         @Override
         public void onProgressMsg(String msg) { 
+          //此回调供自定义进度条时使用：脚本可能会在不同爬取阶段输出不同的提示信息，
+          //端上可以在此回调中接收处理进度消息。
         }
-
+  
         @Override
-        public void onError(final int code, final String msg) {
-           //错误处理，错误码见下文
+        public void onScriptLoaded(int scriptIndex){
+          //此回调供自定义进度条时使用,也可以统计重试次数等。
+          //此回调脚本下发成功后，执行前被调用，scriptIndex表示当前下发的是第几个脚本。
+          //端上可以在此处理一些逻辑，比如scriptIndex >1时可提示 "正在重试新的方案"
         }
+  
+  		@Override
+        public void onLog(String log, int type) {
+         //脚本中每调用一次log函数，此方法都会被调用，可以在此处理日志，也可以自定义数据结构和脚本通信。
+        }
+       
     };  
 ```
 
@@ -185,3 +240,53 @@ dspider所有爬取脚本都是从服务器下发，但调试模式下会从本�
    spiderView.startDebug("爬取测试","https://xx.com")
    ```
 
+
+
+
+## 错误码
+
+错误码定义在DSpider.Result内部类中
+
+| 错误码                        | 意义                    |
+| -------------------------- | --------------------- |
+| STATE_SUCCEED              | 成功                    |
+| STATE_WEB_ERROR            | 目标网站服务器错误，可能时4xx,5xx. |
+| STATE_SCRIPT_ERROR         | 爬取脚本错误：脚本中触发了异常。      |
+| STATE_PAGE_CHANGED         | 目标网页发生变化（导致目前脚本不可用）。  |
+| STATE_TIMEOUT              | 爬取超时（超时时间在脚本中设置）      |
+| STATE_DSPIDER_SERVER_ERROR | dspider服务器连接失败        |
+| STATE_ERROR_MSG            | sdk提示类错误，此时可以输出错误信息。  |
+
+
+
+## 数据持久化接口
+
+有时，脚本中需要持久保存一些信息，下次爬取时可能会使用，比如保存用户名，下次打开登录页时，脚本自动填充进去。sdk中默认会存储在sharedPreferences中，按sessionKey隔离，这也就意味着不同sessionKey不能访问彼此的持久话数据。但是，有时候，这并不能完全满足业务需求，比如现在有关个需求是：爬取用户通话记录，端在每次调用爬取时，都会将当前用户手机号传递给脚本，假设脚本会在用户登录成功后会调用持久化接口保存用户密码（第二次爬取时就不用输入密码了），这样在客户端用户不变的时候是没有问题的，但是如果用户换账号登录，这时后手机号已经变了，脚本取出的密码还是上一个手机号的，这时就会有问题。解决这个问题的方法有两个：
+
+1. 脚本同时保存手机号＝》密码。
+2. 端上将持久化的数据根据用户uid进行隔离。
+
+第一种，脚本端逻辑比较复杂，如果同时有好几个业务，这样会带来大量的重复工作，并且也不安全（同一个脚本可以读取不同用户的信息）
+
+采用第二种方法，我们只需要在初始化时实现持久化接口就行：
+
+```java
+DSpider.setPersistenceImp(new IPersistence() {
+            //每个用户的信息存储在各自的域下,域通过userid区分
+            private SharedPreferences sharedPreferences=context. 
+                    getSharedPreferences(UserInfo.getUserId() + "_dspider", Context.MODE_PRIVATE);
+            @Override
+            public void save(String key, String value) {
+                if (TextUtils.isEmpty(value)) {
+                    sharedPreferences.edit().remove(key).commit();
+                } else {
+                    sharedPreferences.edit().putString(key, value).commit();
+                }
+            }
+  
+            @Override
+            public String read(String key) {
+                return sharedPreferences.getString(key, "");
+            }
+ });
+```

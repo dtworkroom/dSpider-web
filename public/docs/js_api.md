@@ -112,9 +112,9 @@ dSpider("email",function(session,env,$){
 
 
 
-## 数据上传
+## 数据上传(Native)
 
-### session.upload(data)
+### session.push(data)
 
 - 功能：上传数据
 - data:  需要上传的数据，类型为字符串或对象（dSpider会自动转化成json）
@@ -177,7 +177,10 @@ session.setUserAgent("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) App
 session.autoLoadImg(false)
 ```
 
-**注：在爬取电商类网站时一般都不需要图片，建议设为false，这样不仅会大大加快页面加载速度，而且省流量。**
+**注：**
+
+1. 在爬取电商类网站时一般都不需要图片，建议设为false，这样不仅会大大加快页面加载速度，而且省流量。
+2. 此接口IOS暂不支持，脚本调用后，sdk将忽略
 
 ## 其它
 
@@ -188,10 +191,10 @@ session.autoLoadImg(false)
 ### session.log(str|object,[type])
 
 - 功能：输出日志
-- 参数1：字符串或对象
-- type: 日志类型,可选参数，1为正常；2为警告；3为错误。默认为正常
+- 参数1：要输出的内容，类型：字符串或对象
+- type: 日志类型,可选参数，1为正常；2为警告；3为错误。默认为正常，用户可以自定义
 
-由于大多数网页中都有很多原有日志，这会干扰我们的代码在调试时输出的日志，log函数会自动给我们的日志加上前缀标签“ dSpider”。log函数先将错误信息打印到控制台，然后发送给端，端上会记录日志文件便于测试。
+由于大多数网页中都有很多原有日志，这会干扰我们的代码在调试时输出的日志，log函数会自动给我们的日志加上前缀标签“ dSpider”。log函数先将错误信息打印到控制台，然后发送给端，端上会记录日志文件便于测试。您也可以自己处理日志信息（用户可以自定义日志处理回调，详情查看sdk集成文档）；
 
 **注：全局的log函数会默认输出type为1的日志**
 
@@ -215,7 +218,35 @@ session.autoLoadImg(false)
 > {"sender":"招商银行"}
 ```
 
-### session.getConfig()
+###addArgument(key,value)
+
+脚本中可以动态添加参数，主要场景是跨页面参数传递；
+
+```javascript
+session.addArgument("user",{name:"Joe",age:"18"});
+```
+
+###setArguments(jsonObject)
+
+设置参数； 此方法会清楚原有的所有参数。
+
+参数为可转化为json string 的object;
+
+```javascript
+session.setArguments({
+  "phone":"1865244xxxx",
+  "user":{
+    name:"joe",
+    age:"18"
+  }
+})
+```
+
+###showProgressExcept(url)
+
+此api主要在显式爬取时和进度条展示有关：设置一个url, sdk在检测到页面跳转后会判断目标页url是不是此url,若不是，则自动弹起进度条。也就是说，每当页面发生跳转时，除了此url的页面不回弹起进度条，其余页面都会弹起进度条。假设要爬取邮箱，我们希望在邮箱登录页不要显示进度条，因为需要用户去登录，而用户登录成功后，我们可能会去各个邮件页面爬取内容，而爬取过程希望对用户透明，此时简单的做法就是将邮箱登录页url传递给此api。
+
+###getConfig()
 
 - 功能：获取配置
 - 返回值：对象，不存在时为空对象｛｝
@@ -224,7 +255,7 @@ session.autoLoadImg(false)
 
 ### session.onNavigate
 
-**注：此回调不支持ios** !
+**注：此回调暂不支持ios** !
 
 - 功能：页面发生跳转之前的回调；类型，属性，值为一个回调函数。
 
