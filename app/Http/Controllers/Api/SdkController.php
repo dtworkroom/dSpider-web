@@ -126,7 +126,7 @@ class SdkController extends Controller
         }
         //是否支持当前平台
         if (!($spider->support & $support)) {
-            return SdkResponseData::errorResponse("该脚本不支持 " . $platform);
+            return SdkResponseData::errorResponse("该爬虫不支持 " . $request->input("os"));
         }
 
         $crawRecords = new CrawlRecord();
