@@ -142,7 +142,7 @@
                     <div class="form-group code">
                         <h3>脚本源码</h3>
                         @if(isset($script->content))
-                        <pre><code>{{trim($script->content)}} </code></pre>
+                        <pre><code>{!! trim($script->content)  !!} </code></pre>
                         @else
                         作者未公开源码.
                         @endif
