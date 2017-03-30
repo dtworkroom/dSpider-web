@@ -29,6 +29,7 @@
                         <input class="form-control" v-model="app.secret" placeholder="不填时系统会自动生成随机密钥">
                     </div>
 
+
                     <div class="form-group">
                         <button type="submit" id="submit" data-loading-text="提交中..." class="btn btn-default">
                             <span class="glyphicon glyphicon-open"></span>

@@ -38,7 +38,7 @@
                     <h2>应用统计</h2>
 
                         <div id="appinfo">
-                            脚本名:<span> <a>xx</a></span>
+                            爬虫名:<span> <a>--</a></span>
                             结果:
                             <span>
                                 @{{data.total>0?"共"+data.total+"条记录。":"暂无爬取记录。"}}

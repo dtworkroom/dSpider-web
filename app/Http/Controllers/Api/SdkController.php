@@ -93,6 +93,9 @@ class SdkController extends Controller
         if(!$app){
             return SdkResponseData::errorResponse("包名: {$data['package']}, appId:{$data['app_id']} 的应用不存在! 请先在后台创建应用。");
         }
+        if($app->state!=1){
+            return SdkResponseData::errorResponse("该应用已被管理员禁用");
+        }
         $config = SpiderConfig::where([
             ["spider_id", $sid],
             ["appKey_id", $app->id]

@@ -47,7 +47,8 @@
                             <td>@{{ appkey.id }}</td>
                             <td>@{{appkey.name}}</td>
                             <td>@{{appkey.package}}</td>
-                            <td>@{{appkey.state==1?"正常":"该app被仅用,查看详情"}}</td>
+                            <td v-if="appkey.state==1" style="color: green">正常</td>
+                            <td v-else>被禁用</td>
                             <td>@{{appkey.created_at}}</td>
                             <td>
                                 <a :href="'./profile/appkey/save/'+appkey.id">
