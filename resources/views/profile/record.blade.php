@@ -199,10 +199,10 @@
                 for (var i = 1; i <= lines; i++) {
                     if(i==100){
                         $numbering.css("width",30)
-                        $(this).css("marginLeft",30);
+                        $(this).css("marginLeft",35);
                     }else if(i==999){
                         $numbering.css("width",40)
-                        $(this).css("marginLeft",40);
+                        $(this).css("marginLeft",45);
                     }
                     $numbering.append($('<li/>').text(i));
                 }
