@@ -197,6 +197,11 @@
                 var $numbering = $('<ul/>').addClass('pre-numbering');
                 $(this).addClass('has-numbering').parent().append($numbering);
                 for (var i = 1; i <= lines; i++) {
+                    if(i==100){
+                        $numbering.css("width",30)
+                    }else if(i==999){
+                        $numbering.css("width",40)
+                    }
                     $numbering.append($('<li/>').text(i));
                 }
             })
