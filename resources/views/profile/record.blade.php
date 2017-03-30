@@ -173,7 +173,8 @@
                            <span>错误信息:</span>
                            <pre><code><?php
                                     $json = json_decode($record->msg);
-                                    $a=['\\r\\n'=>"\r\n\t\t",'\\n'=>"\n"];
+                                       //'\\n'=>"\n\t\t"
+                                    $a=['\\'=>"\\",];
                                    echo  htmlentities(strtr(json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE),$a));
                                    ?></code></pre>
                         </div>
