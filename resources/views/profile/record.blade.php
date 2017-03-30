@@ -156,8 +156,7 @@
                         @if (trim($record->content)):
                         <pre><code> <?php
                                 $json = json_decode($record->content);
-                                $json=htmlentities($json);
-                                echo json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+                                echo htmlentities(json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
                                 ?></code></pre>
                         @else
                             原脚本默认
