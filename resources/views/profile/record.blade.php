@@ -150,6 +150,10 @@
                         <span>爬取时间:</span>
                         {{$record->updated_at}}
                     </div>
+                    <div>
+                        <span>爬取IP:</span>
+                        {{$record->ip}}
+                    </div>
 
                     <div class="{{$record->content?"form-group":""}} code">
                         <span>爬取配置:</span>
