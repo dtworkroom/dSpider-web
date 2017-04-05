@@ -155,7 +155,7 @@
                         <span>爬取IP:</span>
                         <a href="https://www.baidu.com/s?wd={{$record->ip}}">{{$record->ip}}</a>
                     </div>
-                    @endif;
+                    @endif
 
                     <div class="{{$record->content?"form-group":""}} code">
                         <span>爬取配置:</span>
