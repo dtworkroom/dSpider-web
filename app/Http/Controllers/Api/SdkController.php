@@ -141,6 +141,7 @@ class SdkController extends Controller
         $crawRecords->app_version = $data["app_version"];
         $crawRecords->state=CrawlRecord::STATE_CRAWLING;
         $crawRecords->os_type=$support;
+        $crawRecords->ip=$request->getClientIp();
         //分发脚本
         $spider = $crawRecords->spider;
         $spider->callCount = $spider->callCount + 1;
@@ -209,6 +210,7 @@ class SdkController extends Controller
         }
 
         $record->state = $data['state'];
+        $record->ip=$request->getClientIp();
         if (isset($data['msg'])) {
             $record->msg = $data['msg'];
         }

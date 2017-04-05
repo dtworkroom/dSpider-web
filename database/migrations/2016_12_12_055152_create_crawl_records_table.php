@@ -25,6 +25,7 @@ class CreateCrawlRecordsTable extends Migration
             $table->string("sdk_version",20)->nullable();
             $table->tinyInteger("os_type");
             $table->integer("device_id")->unsigned();
+            $table->text("ip",15)->nullable();
             $table->timestamps();
 
             $table->foreign("appKey_id")->references('id')->on('app_keys')->onDelete('cascade');

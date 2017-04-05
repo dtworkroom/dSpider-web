@@ -37,7 +37,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/spider', function () {
-   echo  \Illuminate\Support\Facades\Request::getClientIp();
     return view('welcome');
 });
 Route::get('/store',"PublicController@store");
