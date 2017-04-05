@@ -153,7 +153,7 @@
                     @if($record->ip)
                     <div>
                         <span>爬取IP:</span>
-                        {{$record->ip}}
+                        <a href="https://www.baidu.com/s?wd="{{$record->ip}}>{{$record->ip}}</a>
                     </div>
                     @endif;
 
