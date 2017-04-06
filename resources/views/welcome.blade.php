@@ -8,7 +8,7 @@
     <meta name="x5-fullscreen" content="true">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="full-screen" content="yes">
-    <title>dSpider</title>
+    <title>客户端爬取</title>
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url('public/css/index.css')}}">
 </head>
@@ -160,19 +160,24 @@
         <div class="row" style="margin-left: 0">
             <div class="col-md-8 col-md-offset-2 row">
                 <div class="col-md-4">
-                    <a href="http://www.jianshu.com/u/e3f58786fce8">
+                    <a href="https://juejin.im/user/58211b88a0bb9f0058c25b7f">
                     <div><img class="footer-img" src="{{ url('public/img/author.png')}}"></div>
                     相关博客
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <div> <img class="footer-img" src="{{ url('public/img/demons-du.png')}}" style="border-radius: 0; "></div>
-                    技术支持
+                    <a href="{{url('md/help')}}">
+                    <div> <img class="footer-img" src="{{ url('public/img/logo.png')}}" ></div>
+                    帮助
+                    </a>
                 </div>
                 <div class="col-md-4">
+                    <a href="{{url('md/cooperation')}}">
                     <div><span class="glyphicon glyphicon-phone-alt footer-img" style="font-size: 50px; line-height: 120px;  background-color: #111"></span></div>
                     商务合作
+                    </a>
                 </div>
+
             </div>
         </div>
         {{--<div style="color:#408cce; text-decoration: underline">使DSpider前必读。</div>--}}
