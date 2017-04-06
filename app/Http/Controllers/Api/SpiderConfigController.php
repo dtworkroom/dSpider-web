@@ -50,7 +50,7 @@ class SpiderConfigController extends Controller
         }
         $spider = Spider::find($data["spider_id"]);
 
-        if ($spider->user_id != $request->user()->id && $spider->public) {
+        if ($spider->user_id != $request->user()->id && !$spider->public) {
             return ResponseData::errorResponse("The spider is not public!");
         }
 
