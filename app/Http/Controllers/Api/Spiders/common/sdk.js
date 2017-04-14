@@ -328,7 +328,7 @@ DataSession.prototype = {
     setLocal: function (k, v) {
         this.local[k] = v;
         if(type!==-1) {
-            this.set("__log", this.get("__log") + "\n> " + str);
+            this.set("__log", (this.get("__log")||"") + "> " + str+"\n");
         }
         callHandler("save", {key: this.key, value: JSON.stringify(this.local)})
     },
