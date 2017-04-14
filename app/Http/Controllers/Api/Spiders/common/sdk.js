@@ -3,6 +3,15 @@
  */
 
 var $ = dQuery;
+$.onload=function(cb){
+    if(document.readyState=="complete"){
+        cb();
+    }else {
+        window.addEventListener("load",function(){
+            cb();
+        })
+    }
+}
 
 String.prototype.format = function () {
     var args = Array.prototype.slice.call(arguments);
@@ -265,11 +274,14 @@ DataSession.prototype = {
     },
     finish: function (errmsg, content, code, stack) {
         var ret = {sessionKey: this.key, result: 0, msg: ""}
+        var _log=this.get("__log");
+        _log=_log&&("\nLOG: \n"+_log);
         if (errmsg) {
             var ob = {
                 url: location.href,
                 msg: errmsg,
                 args: this.getArguments(),
+                log:_log,
                 content: content ,
             }
             stack && (ob.stack = stack);
@@ -315,6 +327,9 @@ DataSession.prototype = {
     },
     setLocal: function (k, v) {
         this.local[k] = v;
+        if(type!==-1) {
+            this.set("__log", this.get("__log") + "\n> " + str);
+        }
         callHandler("save", {key: this.key, value: JSON.stringify(this.local)})
     },
     getLocal: function (k) {
