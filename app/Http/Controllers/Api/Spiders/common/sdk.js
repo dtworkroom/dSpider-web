@@ -39,7 +39,7 @@ function log(str) {
 function errorReport(e) {
     var msg = "语法错误: " + e.message + "\nscript_url:" + _su + "\n" + e.stack
     if (window.curSession) {
-        curSession.log(msg);
+        curSession.log(msg,-1);
         curSession.finish(e.message, "", 2, msg);
     }
 }
@@ -76,7 +76,7 @@ $.errorReport = errorReport;
 function hook(fun) {
     return function () {
         if (!(arguments[0] instanceof Function)) {
-            t = arguments[0];
+            var t = arguments[0];
             log("warning: " + fun.name + " first argument should be function not string ")
             arguments[0] = function () {
                 eval(t)
@@ -184,8 +184,7 @@ function dSpider(sessionKey, timeOut, callback) {
             _startTimer(session)
         }
     }
-    var extras = DataSession.getExtraData()
-    extras = JSON.parse(extras || "{}")
+    var extras = session.getEnv()
     $(safeCallback(function () {
         $("body").on("click", "a", function () {
             $(this).attr("target", function (_, v) {
@@ -217,10 +216,6 @@ function DataSession(key) {
     this.key = key;
     this.finished = false;
     callHandler("start", {sessionKey: key})
-}
-
-DataSession.getExtraData = function (f) {
-    return callHandler("getExtraData")
 }
 
 var getArguments =function () {
@@ -282,6 +277,7 @@ DataSession.prototype = {
                 msg: errmsg,
                 args: this.getArguments(),
                 log:_log,
+                env:this.getEnv(),
                 content: content ,
             }
             stack && (ob.stack = stack);
@@ -291,6 +287,9 @@ DataSession.prototype = {
         this.finished = true;
         callHandler("finish", ret);
 
+    },
+    getEnv: function(){
+        return JSON.parse(callHandler("getExtraData")||"{}");
     },
     upload: function (value) {
         if (value instanceof Object) {
