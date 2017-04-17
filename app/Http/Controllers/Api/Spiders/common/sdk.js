@@ -323,13 +323,13 @@ DataSession.prototype = {
     log: function (str, type) {
         str = _logstr(str);
         console.log("dSpider: " + str)
+        if(type!==-1) {
+            this.set("__log", (this.get("__log")||"") + "> " + str+"\n");
+        }
         callHandler("log", {type: type || 1, msg: str})
     },
     setLocal: function (k, v) {
         this.local[k] = v;
-        if(type!==-1) {
-            this.set("__log", (this.get("__log")||"") + "> " + str+"\n");
-        }
         callHandler("save", {key: this.key, value: JSON.stringify(this.local)})
     },
     getLocal: function (k) {
