@@ -277,8 +277,8 @@ DataSession.prototype = {
                 msg: errmsg,
                 args: this.getArguments(),
                 log:_log,
-                env:this.getEnv(),
-                content: content ,
+                network:this.getEnv().network,
+                content: content||undefined,
             }
             stack && (ob.stack = stack);
             ret.result = code || 2;
