@@ -2,6 +2,7 @@
  * Created by du on 17/1/1.
  */
 function getJsBridge() {
+    window._dsf=window._dsf||{};
     return {
         call: function (method, args, cb) {
             var ret = '';
@@ -28,7 +29,15 @@ function getJsBridge() {
                 }
             }
             return ret;
+        },
+        register:function(name,fun){
+            if(typeof name=="object"){
+                Object.assign(window._dsf,name)
+            }else {
+                window._dsf[name] = fun;
+            }
         }
     }
-}
+};
+dsBridge=getJsBridge();
 
