@@ -1,18 +1,27 @@
 
 # dSpider Javascript API文档
 
-> 概述：dSpider javascript接口是爬取脚本与客户端通信的桥梁，主要功能有：数据存储、进度展示、判断执行环境、以及一些请求控制能力。dSpider 将每一个爬取任务抽象为一个session，每一个session有一个key用于标识当前爬取任务，不同的业务应有不同的key。而dSpider大多数接口都是挂载在session对象，用于表明所有的操作都是在某个session之上。
+> 概述：dSpider Javascript API是爬取脚本与客户端通信的桥梁，主要功能有：数据存储、进度展示、判断执行环境、以及一些请求控制能力。
 
+## 术语
 
-## dSpider(sessionKey,[timeOut],callback])
+### SESSION
+
+dSpider 将每一个爬取任务抽象为一个session，每一个session有一个key用于标识当前爬取任务，不同的业务应有不同的key。而dSpider大多数Javascript API都是挂载在session对象上，用于表明所有的操作都是在某个session之上。session对象会作为爬取入口函数的一个参数由爬取框架传递给爬取脚本。
+
+###  爬取入口
+
+类似于C、java等其它语言中的main函数（代码执行的入口），爬取入口函数为dSpider,它为爬取框架预定义的函数：
+
+####  dSpider(sessionKey,[timeOut],callback])
 
 - 功能: 爬取任务入口点，初始化爬取任务。
 - sessionKey: 当前爬取任务的key，类型为字符串，不同业务应有不同的key.
 - timeOut:脚本超时时间，单位为秒，如果不设置, 默认为－1，表示没有超时限制。
-- callback(session, env, dQuery):  爬取环境初始化成功后的回调，也就是真正的爬取代码的入口，需要你来提供。爬取任务初始化成功后，dSpider会回调此函数，同时将session, env, dQuery三个参数传递给callback，它们分别代表：
-  1. session: 当前爬取会话对象，也是js api的主要挂载点。
+- callback(session, env, dQuery):  爬取环境初始化成功后的回调，也就是真正的爬取代码的入口，需要你来提供。爬取任务初始化成功后**且页面加载结束**时，此回调会被执行，dSpider会将session, env, dQuery三个参数传递给callback，它们分别代表：
+  1. session: 当前爬取会话对象，通过它我们可以调用爬取脚本Js API。
   2. env : 当前爬取环境，如系统信息，sdk版本信息。
-  3. dQuery：dQuery对象。dQuery兼容jQuery3.1所有api.
+  3. dQuery：dQuery对象。dQuery兼容jQuery3.1所有api， 脚本开发者不用关心两者区别，可以完全把dQuery当成jQuery来使用。
 
 典型的爬取模版如下：
 
@@ -112,16 +121,16 @@ dSpider("email",function(session,env,$){
 
 
 
-## 数据上传(Native)
+## 数据传递与结束爬取
 
 ### session.push(data)
 
-- 功能：上传数据
-- data:  需要上传的数据，类型为字符串或对象（dSpider会自动转化成json）
+- 功能：传递数据给Native
+- data:  需要传递的数据，类型为字符串或对象（dSpider会自动转化成json）
 
 注：
 
-1. 调用此接口后，数据会传递给客户端，客户端可能会对数据进行缓存，然后等到爬取结束时整体上传，前端可以简单的认为从数据已经上传。
+1. 调用此接口后，数据会传递给客户端。
 2. 该接口替代之前的session.upload接口，脚本中不要再使用upload.
 
 ### session.finish([errmsg],[content],[code])
@@ -195,7 +204,7 @@ session.autoLoadImg(false)
 
 - 功能：输出日志
 - 参数1：要输出的内容，类型：字符串或对象
-- type: 日志类型,可选参数，1为正常；2为警告；3为错误。默认为正常，用户可以自定义
+- type: 日志类型,可选参数，1为正常；2为警告；3为错误。默认为1，用户可以自定义
 
 由于大多数网页中都有很多原有日志，这会干扰我们的代码在调试时输出的日志，log函数会自动给我们的日志加上前缀标签“ dSpider”。log函数先将错误信息打印到控制台，然后发送给端，端上会记录日志文件便于测试。您也可以自己处理日志信息（用户可以自定义日志处理回调，详情查看sdk集成文档）；
 
@@ -247,7 +256,7 @@ session.setArguments({
 
 ### showProgressExcept(url)
 
-此api主要在显式爬取时和进度条展示有关：设置一个url, sdk在检测到页面跳转后会判断目标页url是不是此url,若不是，则自动弹起进度条。也就是说，每当页面发生跳转时，除了此url的页面不回弹起进度条，其余页面都会弹起进度条。假设要爬取邮箱，我们希望在邮箱登录页不要显示进度条，因为需要用户去登录，而用户登录成功后，我们可能会去各个邮件页面爬取内容，而爬取过程希望对用户透明，此时简单的做法就是将邮箱登录页url传递给此api。
+此API在显式爬取时和进度条展示有关：设置一个url, sdk在检测到页面跳转后会判断目标页url是不是此url,若不是，则自动弹起进度条。也就是说，每当页面发生跳转时，除了此url的页面不会弹起进度条，其余页面都会弹起进度条。假设要爬取邮箱，我们希望在邮箱登录页不要显示进度条，因为需要用户去登录，而用户登录成功后，我们可能会去各个邮件页面爬取内容，而爬取过程希望对用户透明，此时简单的做法就是将邮箱登录页url传递给此api。
 
 ### getConfig()
 
@@ -296,7 +305,11 @@ os取值为“android”、“ios”
 
 ## 全局对象或函数
 
-全局对象或函数没有挂接在session上，可以直接调用
+全局对象或函数是指没有挂接在session对象上的，可以直接调用。
+
+### dQuery
+
+dQuery是基于jQuery3.1进行了定制以满足客户端爬取的特殊需求和场景，它兼容jQuery3.1所有API, 脚本开发者不用关心两者区别，可以完全把dQuery当成jQuery来使用，只是名字不一样而已，为了使用方便，爬取框架将dQuery对象作为全局对象内置，可以在脚本的任何地方使用。
 
 ### qs
 
