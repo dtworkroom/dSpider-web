@@ -221,7 +221,7 @@ session.autoLoadImg(false)
 > {"sender":"招商银行"}
 ```
 
-###addArgument(key,value)
+### addArgument(key,value)
 
 脚本中可以动态添加参数，主要场景是跨页面参数传递；
 
@@ -229,7 +229,7 @@ session.autoLoadImg(false)
 session.addArgument("user",{name:"Joe",age:"18"});
 ```
 
-###setArguments(jsonObject)
+### setArguments(jsonObject)
 
 设置参数； 此方法会清楚原有的所有参数。
 
@@ -245,11 +245,11 @@ session.setArguments({
 })
 ```
 
-###showProgressExcept(url)
+### showProgressExcept(url)
 
 此api主要在显式爬取时和进度条展示有关：设置一个url, sdk在检测到页面跳转后会判断目标页url是不是此url,若不是，则自动弹起进度条。也就是说，每当页面发生跳转时，除了此url的页面不回弹起进度条，其余页面都会弹起进度条。假设要爬取邮箱，我们希望在邮箱登录页不要显示进度条，因为需要用户去登录，而用户登录成功后，我们可能会去各个邮件页面爬取内容，而爬取过程希望对用户透明，此时简单的做法就是将邮箱登录页url传递给此api。
 
-###getConfig()
+### getConfig()
 
 - 功能：获取配置
 - 返回值：对象，不存在时为空对象｛｝
