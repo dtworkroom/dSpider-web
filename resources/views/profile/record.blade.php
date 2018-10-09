@@ -193,8 +193,8 @@
 @endsection
 
 @section('footer')
-    <link href="//cdn.bootcss.com/highlight.js/9.7.0/styles/github.min.css" rel="stylesheet">
-    <script src="//cdn.bootcss.com/highlight.js/9.7.0/highlight.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/highlightjs@9.10.0/styles/github.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs@9.10.0/highlight.pack.min.js"></script>
     <script>
         function addRowNo(data, adjust) {
             var t = $('<div></div>').html(data);
