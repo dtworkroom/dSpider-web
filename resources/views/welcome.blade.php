@@ -160,7 +160,7 @@
         <div class="row" style="margin-left: 0">
             <div class="col-md-8 col-md-offset-2 row">
                 <div class="col-md-4">
-                    <a href="https://juejin.im/user/58211b88a0bb9f0058c25b7f">
+                    <a href="https://juejin.im/user/58211b88a0bb9f0058c25b7f/posts">
                     <div><img class="footer-img" src="{{ url('public/img/author.png')}}"></div>
                     相关博客
                     </a>
