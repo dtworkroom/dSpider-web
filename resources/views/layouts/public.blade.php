@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="full-screen" content="yes">
     <title>{{$title??""}}</title>
-    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     {{--<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.css" rel="stylesheet">--}}
     <!-- Scripts -->
     <script>
@@ -143,8 +143,8 @@
     Copyright © 2016-2017 {{config("app.name")}}(https://dspider.dtworkroom.com) All Rights Reserved.
 </div>
 <!-- Scripts -->
-<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 <script src="{{ url('public/js/util.js')}}"></script>
 @yield('footer')
 </body>

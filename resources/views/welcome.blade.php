@@ -74,7 +74,7 @@
     </div>
     <div class="header-text">
         <span id="logo" class="glyphicon glyphicon-globe"></span><br>
-        客户端爬取解决方案
+        移动端爬取解决方案
     </div>
 </div>
 

@@ -111,7 +111,7 @@
 </head>
 <body>
 @yield('content')
-<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 @yield('footer')
 </body>
 </html>
